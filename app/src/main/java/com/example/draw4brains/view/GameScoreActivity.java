@@ -1,4 +1,4 @@
 package com.example.draw4brains.view;
 
-public class GameRatingActivity {
+public class GameScoreActivity {
 }

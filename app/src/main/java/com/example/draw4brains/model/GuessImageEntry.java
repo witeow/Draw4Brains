@@ -1,9 +1,9 @@
 package com.example.draw4brains.model;
 
-public class ConnectDotsEntry {
+public class GuessImageEntry {
     String guessAns;
 
-    public ConnectDotsEntry(){
+    public GuessImageEntry(){
 
     }
 
