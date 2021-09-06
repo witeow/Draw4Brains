@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "811235024160",
+    "project_id": "draw4brains",
+    "storage_bucket": "draw4brains.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:811235024160:android:720b45edf05e8c0a464b45",
+        "android_client_info": {
+          "package_name": "com.example.draw4brains"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "811235024160-dfqo5277e6r45d01tj0kadfv6urfrl9i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCdJc4-Lcb44X7AeObn7XtkaJH5RHAPK6I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "811235024160-dfqo5277e6r45d01tj0kadfv6urfrl9i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
