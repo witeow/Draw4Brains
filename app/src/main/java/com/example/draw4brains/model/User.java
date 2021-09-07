@@ -8,6 +8,7 @@ public class User {
     private String emailAddress;
     private String caretaker_email;
     private Boolean is_admin;
+    private int score;
 
     private static User userInstance = new User();
 

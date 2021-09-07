@@ -28,6 +28,7 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 import androidx.annotation.NonNull;
@@ -53,14 +54,23 @@ public class AdminLoginActivity extends AppCompatActivity {
         listView.setEmptyView(findViewById(R.id.empty_subtitle_text));
 
 
-        User.add(new User("name","gender","phone","email","caretaker",false));
+        User.add(new User("Bname","gender","phone","email1","caretaker",false));
+        User.add(new User("Aname2","gender","phone","email2","caretaker",false));
+
+        User.add(new User("Dname3","gender","phone","email3","caretaker",false));
+        User.add(new User("Cname4","gender","phone","email4","caretaker",false));
         mAdminController = new AdminController(AdminLoginActivity.this,User);
                 listView.setAdapter(mAdminController);
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-
-                        showEnableDialog(mAdminController.getItemId(position));
+                        Intent intent = new Intent(AdminLoginActivity.this, StatisticsPageActivity.class);
+                        intent.putExtra("Clinic Name",mAdminController.getItem(position).getUserName());
+                        intent.putExtra("Clinic ID",mAdminController.getItem(position).getEmailAddress());
+                        Log.d("intent", String.valueOf(intent.getStringExtra("Clinic Name")));
+                        Log.d("intent", String.valueOf(intent.getStringExtra("Clinic ID")));
+                        startActivity(intent);
+                        //showEnableDialog(mAdminController.getItemId(position));
 
                     }
                 });
@@ -71,7 +81,9 @@ public class AdminLoginActivity extends AppCompatActivity {
 //        ValueEventListener eventListener = new ValueEventListener() {
 //            @Override
 //            public void onDataChange(DataSnapshot dataSnapshot) {
-//
+//TODO: filter out all the older people not related to this caretaker, which means do not have to implement filter out caretaking seniors
+        //TODO already filtered at the first start
+
 //                for(DataSnapshot ds : dataSnapshot.getChildren()) {
 //                    String uid = ds.getKey();
 //                    Log.d("TAG", uid);
@@ -123,7 +135,7 @@ public class AdminLoginActivity extends AppCompatActivity {
         SearchView searchView = (SearchView) menuItem.getActionView();
 
         MenuItem alph = menu.findItem(R.id.arrangebyalphabetical);
-        alph.setVisible(false);
+        alph.setVisible(true);
 
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -162,6 +174,15 @@ public class AdminLoginActivity extends AppCompatActivity {
 
             return true;
         }
+        if(id==R.id.arrangebyalphabetical) {
+
+            Collections.sort(User, (p1, p2) -> p1.getUserName().compareTo(p2.getUserName()));
+            //mAdminController.clear();
+           // mAdminController.addAll(User);
+            mAdminController.notifyDataSetChanged();
+
+           return true;
+        }
         else{
 //            Intent myIntent = new Intent(getApplicationContext(), mainactivityAdmin.class);
 //            startActivityForResult(myIntent, 0);
@@ -179,9 +200,9 @@ public class AdminLoginActivity extends AppCompatActivity {
     private void showEnableDialog(final long position) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Enable User?");
+        builder.setMessage("implement Tag user and statistics page");
         //finds user in database and enables account
-        builder.setPositiveButton("Enable", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("Tag", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 //enable user and refresh page
