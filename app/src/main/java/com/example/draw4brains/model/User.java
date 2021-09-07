@@ -19,7 +19,7 @@ public class User {
     private User() {
     }
 
-    public User(String userName, String gender, String phoneNo, String emailAddress, String caretaker_email,Boolean Is_Admin){
+    public User(String userName, String gender, String phoneNo, String emailAddress, String caretaker_email,Boolean Is_Admin, int score){
         setUserName(userName);
         setGender(gender);
         //setBirthday(birthday);
@@ -27,6 +27,7 @@ public class User {
         setEmailAddress(emailAddress);
         setCaretaker_email(caretaker_email);
         setIs_admin(Is_Admin);
+        this.score = score;
     }
 
     /**
@@ -87,6 +88,10 @@ public class User {
     public Boolean getIs_admin(){return is_admin;}
 
     public void setIs_admin(Boolean is_admin){this.is_admin = is_admin;}
+
+    public int getscore(){return score;}
+
+    public void setscore(int score){this.score = score;}
 
     @Override
     public String toString() {

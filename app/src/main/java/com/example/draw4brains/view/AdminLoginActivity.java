@@ -53,22 +53,31 @@ public class AdminLoginActivity extends AppCompatActivity {
         listView = (ListView) findViewById(R.id.List_view_users);
         listView.setEmptyView(findViewById(R.id.empty_subtitle_text));
 
+        int score = 1;
+        User.add(new User("Ostrich","gender","phone","email1","caretaker",false,score));
+        User.add(new User("Flamingo","gender","phone","email2","caretaker",false,score));
+        User.add(new User("Sparrow","gender","phone","email3","caretaker",false,score));
+        User.add(new User("Rooster","gender","phone","email4","caretaker",false,score));
+        User.add(new User("Rtest","gender","phone","email4","wrong",false,score));
+        //TODO can also filter as you add to User
+        for(int i=0;i<User.size();i++){
+            if(User.get(i).getCaretaker_email()!="caretaker"){
+                User.remove(i);
+            }
+        }
 
-        User.add(new User("Bname","gender","phone","email1","caretaker",false));
-        User.add(new User("Aname2","gender","phone","email2","caretaker",false));
 
-        User.add(new User("Dname3","gender","phone","email3","caretaker",false));
-        User.add(new User("Cname4","gender","phone","email4","caretaker",false));
+
         mAdminController = new AdminController(AdminLoginActivity.this,User);
                 listView.setAdapter(mAdminController);
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                         Intent intent = new Intent(AdminLoginActivity.this, StatisticsPageActivity.class);
-                        intent.putExtra("Clinic Name",mAdminController.getItem(position).getUserName());
-                        intent.putExtra("Clinic ID",mAdminController.getItem(position).getEmailAddress());
-                        Log.d("intent", String.valueOf(intent.getStringExtra("Clinic Name")));
-                        Log.d("intent", String.valueOf(intent.getStringExtra("Clinic ID")));
+                        intent.putExtra("Name",mAdminController.getItem(position).getUserName());
+                        intent.putExtra("Score",String.valueOf(mAdminController.getItem(position).getscore()));
+                        Log.d("intent", String.valueOf(intent.getStringExtra("Name")));
+                        Log.d("intent", String.valueOf(intent.getStringExtra("Score")));
                         startActivity(intent);
                         //showEnableDialog(mAdminController.getItemId(position));
 
@@ -89,6 +98,12 @@ public class AdminLoginActivity extends AppCompatActivity {
 //                    Log.d("TAG", uid);
 //                    String email=ds.child("email").getValue(String.class);
 //                    String name=ds.child("fullName").getValue(String.class);
+
+        //       //TODO             String caretakeremail=ds.child("caretaker").getValue(String.class);
+        //      //   TODO  if(caretakeremail == authenticated one){
+//                        User.add(new User());
+//                    }
+
 //                    Boolean isDisabled = ds.child("disabled").getValue(Boolean.class);
 //                    Boolean isAdmin = ds.child("admin").getValue(Boolean.class);
 //                    if(isDisabled==null){
@@ -206,7 +221,7 @@ public class AdminLoginActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 //enable user and refresh page
-//                DatabaseReference UserToUpdate = FirebaseDatabase.getInstance().getReference("Users").child((User.get(((int)position))).getEmailAddress());
+//                DatabaseReference UserToUpdate = FirebaseDatabase.getInstance().getReference("Users").child((User.get(((int)position))).getUid());
 //                HashMap<String, Object> map = new HashMap<>();
 //                FirebaseUser firebaseUser = fAuth.getCurrentUser();
 //                String caretaker_email = fAuth.getCurrentUser().getEmail();
