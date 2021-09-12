@@ -9,10 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Draw4Brains">
-
         <activity
-            android:name=".firebaseTest"
-            android:label="@string/app_name" >
+            android:name=".firebaseTestWT"
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
