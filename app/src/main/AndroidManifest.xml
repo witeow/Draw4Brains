@@ -9,15 +9,24 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Draw4Brains">
+
         <activity
-            android:name=".firebaseTestWT"
-            android:label="@string/app_name">
+            android:name=".view.UserLoginActivity"
+            android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".view.RegisterActivity"
+            android:label="Registering New Account"
+            android:parentActivityName=".view.UserLoginActivity"
+            android:windowSoftInputMode="adjustPan"/>
+
+
+
     </application>
 
 </manifest>
