@@ -3,16 +3,36 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/witeo/Documents/GitHub/Draw4Brains/app/src/main/res/layout/activity_firebase_test_wt.xml" value="0.3333333333333333" />
-        <entry key="..\:/witeo/Documents/GitHub/Draw4Brains/app/src/main/res/layout/activity_main.xml" value="0.1796875" />
-        <entry key="..\:/witeo/Documents/GitHub/Draw4Brains/app/src/main/res/layout/testing_wt.xml" value="0.37333333333333335" />
+        <entry key="..\:/Users/limqi/StudioProjects/Draw4Brains/app/src/main/res/drawable/account_toggle.xml" value="0.34322916666666664" />
+        <entry key="..\:/Users/limqi/StudioProjects/Draw4Brains/app/src/main/res/drawable/ic_greenloginbutton.xml" value="0.34322916666666664" />
+        <entry key="..\:/Users/limqi/StudioProjects/Draw4Brains/app/src/main/res/drawable/ic_greenregisterbutton.xml" value="0.3828125" />
+        <entry key="..\:/Users/limqi/StudioProjects/Draw4Brains/app/src/main/res/drawable/ic_launcher_background.xml" value="0.3828125" />
+        <entry key="..\:/Users/limqi/StudioProjects/Draw4Brains/app/src/main/res/drawable/ic_logo.xml" value="0.3828125" />
+        <entry key="..\:/Users/limqi/StudioProjects/Draw4Brains/app/src/main/res/drawable/ic_logo_bigger_background.xml" value="0.3671875" />
+        <entry key="..\:/Users/limqi/StudioProjects/Draw4Brains/app/src/main/res/drawable/ic_usermode.xml" value="0.221875" />
+        <entry key="..\:/Users/limqi/StudioProjects/Draw4Brains/app/src/main/res/layout/activity_account_settings.xml" value="0.25" />
+        <entry key="..\:/Users/limqi/StudioProjects/Draw4Brains/app/src/main/res/layout/activity_admin_login.xml" value="0.13" />
+        <entry key="..\:/Users/limqi/StudioProjects/Draw4Brains/app/src/main/res/layout/activity_check_user_status.xml" value="0.1068840579710145" />
+        <entry key="..\:/Users/limqi/StudioProjects/Draw4Brains/app/src/main/res/layout/activity_connect_dots.xml" value="0.1068840579710145" />
+        <entry key="..\:/Users/limqi/StudioProjects/Draw4Brains/app/src/main/res/layout/activity_forget_password.xml" value="0.25" />
+        <entry key="..\:/Users/limqi/StudioProjects/Draw4Brains/app/src/main/res/layout/activity_game_score.xml" value="0.1068840579710145" />
+        <entry key="..\:/Users/limqi/StudioProjects/Draw4Brains/app/src/main/res/layout/activity_home.xml" value="0.33" />
+        <entry key="..\:/Users/limqi/StudioProjects/Draw4Brains/app/src/main/res/layout/activity_home_admin.xml" value="0.33" />
+        <entry key="..\:/Users/limqi/StudioProjects/Draw4Brains/app/src/main/res/layout/activity_home_user.xml" value="0.33" />
+        <entry key="..\:/Users/limqi/StudioProjects/Draw4Brains/app/src/main/res/layout/activity_list_page.xml" value="0.13020833333333334" />
+        <entry key="..\:/Users/limqi/StudioProjects/Draw4Brains/app/src/main/res/layout/activity_main.xml" value="0.33" />
+        <entry key="..\:/Users/limqi/StudioProjects/Draw4Brains/app/src/main/res/layout/activity_register.xml" value="0.33" />
+        <entry key="..\:/Users/limqi/StudioProjects/Draw4Brains/app/src/main/res/layout/activity_select_game.xml" value="0.264" />
+        <entry key="..\:/Users/limqi/StudioProjects/Draw4Brains/app/src/main/res/layout/activity_statistics.xml" value="0.2477355072463768" />
+        <entry key="..\:/Users/limqi/StudioProjects/Draw4Brains/app/src/main/res/layout/activity_user_feedback.xml" value="0.1068840579710145" />
+        <entry key="..\:/Users/limqi/StudioProjects/Draw4Brains/app/src/main/res/layout/activity_user_login.xml" value="0.33" />
+        <entry key="..\:/Users/limqi/StudioProjects/Draw4Brains/app/src/main/res/layout/content_list_page.xml" value="0.2477355072463768" />
+        <entry key="..\:/Users/limqi/StudioProjects/Draw4Brains/app/src/main/res/mipmap-anydpi-v26/ic_logo_bigger.xml" value="0.22135416666666666" />
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
-    <output url="file://$PROJECT_DIR$/build/classes" />
-  </component>
-  <component name="ProjectType">
-    <option name="id" value="Android" />
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/out" />
   </component>
 </project>

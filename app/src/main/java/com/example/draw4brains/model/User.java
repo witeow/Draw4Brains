@@ -6,6 +6,9 @@ public class User {
     private Time birthday = new Time();
     private String phoneNo;
     private String emailAddress;
+    private String caretaker_email;
+    private Boolean is_admin;
+    private int score;
 
     private static User userInstance = new User();
 
@@ -14,6 +17,17 @@ public class User {
      * Made private.
      */
     private User() {
+    }
+
+    public User(String userName, String gender, String phoneNo, String emailAddress, String caretaker_email,Boolean Is_Admin, int score){
+        setUserName(userName);
+        setGender(gender);
+        //setBirthday(birthday);
+        setPhoneNo(phoneNo);
+        setEmailAddress(emailAddress);
+        setCaretaker_email(caretaker_email);
+        setIs_admin(Is_Admin);
+        this.score = score;
     }
 
     /**
@@ -67,6 +81,18 @@ public class User {
         this.userName = userName;
     }
 
+    public void setCaretaker_email (String caretaker_email) {this.caretaker_email = caretaker_email;}
+
+    public String getCaretaker_email () {return caretaker_email;}
+
+    public Boolean getIs_admin(){return is_admin;}
+
+    public void setIs_admin(Boolean is_admin){this.is_admin = is_admin;}
+
+    public int getscore(){return score;}
+
+    public void setscore(int score){this.score = score;}
+
     @Override
     public String toString() {
         return "User{" +
@@ -75,6 +101,7 @@ public class User {
                 ", birthday=" + birthday +
                 ", phoneNo='" + phoneNo + '\'' +
                 ", emailAddress='" + emailAddress + '\'' +
+                ", caretaker_email='" + caretaker_email + '\'' +
                 '}';
     }
 }
