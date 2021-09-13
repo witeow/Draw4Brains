@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.RadioGroup;
+import android.widget.ToggleButton;
 
 import com.example.draw4brains.R;
 
@@ -19,6 +19,8 @@ public class UserLoginActivity extends AppCompatActivity {
     EditText lastname;
     ImageButton loginButton, forgotPassword;
     Button registerButton;
+    ToggleButton accountTypeToggle;
+    Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,11 +30,24 @@ public class UserLoginActivity extends AppCompatActivity {
         loginButton = findViewById(R.id.login_button);
         forgotPassword = findViewById(R.id.forgotPasswordButton);
         registerButton = findViewById(R.id.btn_register);
+        accountTypeToggle = findViewById(R.id.toggle_account_type);
+        accountTypeToggle.setChecked(false);
+
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                if (accountTypeToggle.isChecked()) {
+                    // Checked == Admin Mode
+                    intent = new Intent(getApplicationContext(), AdminHomeActivity.class);
+                    intent.putExtra("isAdmin",true);
+                    startActivity(intent);
+                } else {
+                    // Unchecked == User Mode
+                    intent = new Intent(getApplicationContext(), UserHomeActivity.class);
+                    intent.putExtra("isAdmin",false);
+                    startActivity(intent);
+                }
             }
         });
 
@@ -49,6 +64,7 @@ public class UserLoginActivity extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(), RegisterActivity.class));
             }
         });
+
 
     }
 }

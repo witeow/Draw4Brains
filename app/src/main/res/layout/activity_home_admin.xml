@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/Draw4Brain_MainBG">
 
-    <ImageView
+    <ImageButton
         android:id="@+id/account_button"
         android:layout_width="32dp"
         android:layout_height="33dp"
@@ -14,6 +14,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:src="@drawable/ic_account"
+        android:backgroundTint="@color/transparent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

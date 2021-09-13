@@ -24,7 +24,8 @@
         <activity
             android:name=".view.StatisticsPageActivity"
             android:label="Statistics" />
-        <activity android:name=".view.HomeActivity" />
+        <activity android:name=".view.UserHomeActivity" />
+        <activity android:name=".view.AdminHomeActivity" />
         <activity android:name=".view.ForgetPasswordActivity" />
         <activity android:name=".view.SelectGameActivity" />
         <activity android:name=".view.RegisterActivity" />

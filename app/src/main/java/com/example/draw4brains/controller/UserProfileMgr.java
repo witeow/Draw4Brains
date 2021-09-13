@@ -6,7 +6,7 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.draw4brains.model.User;
-import com.example.draw4brains.view.HomeActivity;
+import com.example.draw4brains.view.UserHomeActivity;
 
 public class UserProfileMgr {
     User user;
@@ -15,7 +15,7 @@ public class UserProfileMgr {
         user = User.getInstance();
     }
 
-    public void initialize(HomeActivity aca){
+    public void initialize(UserHomeActivity aca){
 
     }
 

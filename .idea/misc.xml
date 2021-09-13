@@ -3,6 +3,15 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/limqi/Documents/GitHub/Draw4Brains/app/src/main/res/drawable/ic_launcher_background.xml" value="0.21458333333333332" />
+        <entry key="..\:/Users/limqi/Documents/GitHub/Draw4Brains/app/src/main/res/layout/activity_account_settings.xml" value="0.26666666666666666" />
+        <entry key="..\:/Users/limqi/Documents/GitHub/Draw4Brains/app/src/main/res/layout/activity_forget_password.xml" value="0.1984375" />
+        <entry key="..\:/Users/limqi/Documents/GitHub/Draw4Brains/app/src/main/res/layout/activity_home_admin.xml" value="0.1984375" />
+        <entry key="..\:/Users/limqi/Documents/GitHub/Draw4Brains/app/src/main/res/layout/activity_home_user.xml" value="0.33" />
+        <entry key="..\:/Users/limqi/Documents/GitHub/Draw4Brains/app/src/main/res/layout/activity_list_page.xml" value="0.21331521739130435" />
+        <entry key="..\:/Users/limqi/Documents/GitHub/Draw4Brains/app/src/main/res/layout/activity_main.xml" value="0.1984375" />
+        <entry key="..\:/Users/limqi/Documents/GitHub/Draw4Brains/app/src/main/res/layout/activity_user_login.xml" value="0.25" />
+        <entry key="..\:/Users/limqi/Documents/GitHub/Draw4Brains/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.21458333333333332" />
         <entry key="..\:/Users/limqi/StudioProjects/Draw4Brains/app/src/main/res/drawable/account_toggle.xml" value="0.34322916666666664" />
         <entry key="..\:/Users/limqi/StudioProjects/Draw4Brains/app/src/main/res/drawable/ic_greenloginbutton.xml" value="0.34322916666666664" />
         <entry key="..\:/Users/limqi/StudioProjects/Draw4Brains/app/src/main/res/drawable/ic_greenregisterbutton.xml" value="0.3828125" />

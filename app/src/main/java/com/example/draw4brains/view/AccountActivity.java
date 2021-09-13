@@ -2,7 +2,6 @@ package com.example.draw4brains.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -15,12 +14,22 @@ public class AccountActivity extends AppCompatActivity {
 
     TextView emailView, nameVew, birthdayView, phoneNumberView;
     ImageButton backBtn, logoutBtn;
+    boolean isAdmin;
+    Bundle extras;
+    Intent intent;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account_settings);
+
+        // Get data of intent
+        extras = getIntent().getExtras();
+        if (extras != null) {
+            isAdmin = extras.getBoolean("isAdmin");
+            //The key argument here must match that used in the other activity
+        }
 
         // Set textview reference
         emailView = findViewById(R.id.email_text_view);
@@ -43,7 +52,17 @@ public class AccountActivity extends AppCompatActivity {
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                if (isAdmin) {
+                    // Admin is using currently
+                    intent = new Intent(getApplicationContext(), AdminHomeActivity.class);
+                    intent.putExtra("isAdmin",isAdmin);
+                    startActivity(intent);
+                } else {
+                    // User is using currently
+                    intent = new Intent(getApplicationContext(), UserHomeActivity.class);
+                    intent.putExtra("isAdmin",isAdmin);
+                    startActivity(intent);
+                }
             }
         });
 
