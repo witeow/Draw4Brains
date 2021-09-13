@@ -12,7 +12,7 @@ import com.example.draw4brains.R;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class UserLoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
 
     EditText email;
     EditText firstname;
