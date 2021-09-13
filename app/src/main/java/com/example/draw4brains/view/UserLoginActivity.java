@@ -28,4 +28,5 @@ public class UserLoginActivity extends AppCompatActivity {
     public void register(View v) {
         startActivity(new Intent(this, RegisterActivity.class));
     }
+    public void forgetPassword(View v) { startActivity(new Intent(this, ForgetPasswordActivity.class));}
 }

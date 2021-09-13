@@ -29,7 +29,11 @@
             android:label="User Home"
             android:parentActivityName=".view.UserLoginActivity"
             android:windowSoftInputMode="adjustPan"/>
-
+        <activity
+            android:name=".view.ForgetPasswordActivity"
+            android:label="Forget Password"
+            android:parentActivityName=".view.UserLoginActivity"
+            android:windowSoftInputMode="adjustPan"/>
 
     </application>
 

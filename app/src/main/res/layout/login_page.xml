@@ -21,6 +21,21 @@
         app:layout_constraintVertical_bias="0.163" />
 
     <TextView
+        android:id="@+id/forgetPwdTxtBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="44dp"
+        android:clickable="true"
+        android:onClick="forgetPassword"
+        android:text="Forget password? Click here"
+        android:textColor="#2196F3"
+        app:layout_constraintBottom_toTopOf="@+id/mainLoginBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.429"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/loginPasswordTxtInput" />
+
+    <TextView
         android:id="@+id/mainTag"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
