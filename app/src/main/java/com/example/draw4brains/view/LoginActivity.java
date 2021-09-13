@@ -17,8 +17,7 @@ public class LoginActivity extends AppCompatActivity {
     EditText email;
     EditText firstname;
     EditText lastname;
-    ImageButton loginButton, forgotPassword;
-    Button registerButton;
+    ImageButton loginButton, forgotPassword, registerButton;
     ToggleButton accountTypeToggle;
     Intent intent;
 
