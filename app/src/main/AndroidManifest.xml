@@ -24,7 +24,11 @@
             android:label="Registering New Account"
             android:parentActivityName=".view.UserLoginActivity"
             android:windowSoftInputMode="adjustPan"/>
-
+        <activity
+            android:name=".view.HomeActivity"
+            android:label="User Home"
+            android:parentActivityName=".view.UserLoginActivity"
+            android:windowSoftInputMode="adjustPan"/>
 
 
     </application>

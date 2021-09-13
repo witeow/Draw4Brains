@@ -43,13 +43,13 @@ public class User {
         this.birthday = birthday;
     }
 
-    public String getPhoneNo() {
+   /* public String getPhoneNo() {
         return phoneNo;
     }
 
     public void setPhoneNo(String phoneNo) {
         this.phoneNo = phoneNo;
-    }
+    }*/
 
     public String getEmailAddress() {
         return emailAddress;

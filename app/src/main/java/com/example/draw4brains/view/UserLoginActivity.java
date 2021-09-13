@@ -16,15 +16,13 @@ public class UserLoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_page);
-
-        /*findViewById(R.id.mainLoginBtn).setOnClickListener(new View.OnClickListener(){
-
+        findViewById(R.id.mainLoginBtn).setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 LoginMgr loginMgr = new LoginMgr();
                 loginMgr.login(UserLoginActivity.this);
             }
-        });*/
+        });
     }
 
     public void register(View v) {
