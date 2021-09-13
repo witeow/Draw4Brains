@@ -12,6 +12,7 @@
 
         <activity
             android:name=".view.LoginActivity"
+            android:exported="true"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,14 +22,21 @@
         </activity>
         <activity
             android:name=".view.StatisticsPageActivity"
-            android:label="Statistics" />
-        <activity android:name=".view.UserHomeActivity" />
-        <activity android:name=".view.AdminHomeActivity" />
-        <activity android:name=".view.ForgetPasswordActivity" />
-        <activity android:name=".view.SelectGameActivity" />
-        <activity android:name=".view.RegisterActivity" />
-        <activity android:name=".view.AccountActivity" />
-        <activity android:name=".view.UsersListActivity" android:parentActivityName=".view.AdminHomeActivity" />
+            android:label="Statistics"
+            android:exported="true"/>
+        <activity android:name=".view.UserHomeActivity" android:exported="true" />
+        <activity android:name=".view.AdminHomeActivity" android:exported="true" />
+        <activity android:name=".view.ForgetPasswordActivity" android:exported="true"/>
+        <activity android:name=".view.SelectGameActivity" android:exported="true"/>
+        <activity android:name=".view.RegisterActivity" android:exported="true"/>
+        <activity android:name=".view.AccountActivity" android:exported="true"/>
+        <activity android:name=".view.GameLevelActivity" android:exported="true"/>
+        <activity android:name=".view.EndGameActivity" android:exported="true"/>
+        <activity android:name=".view.ConnectDotsActivity" android:exported="true"/>
+        <activity
+            android:name=".view.UsersListActivity"
+            android:parentActivityName=".view.AdminHomeActivity"
+            android:exported="true"/>
     </application>
 
 </manifest>
