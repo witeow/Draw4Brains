@@ -13,6 +13,7 @@ public class SelectGameActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().hide();
         setContentView(R.layout.activity_select_game);
 
         /*selectButton = findViewById(R.id.select_button);

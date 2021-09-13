@@ -23,6 +23,7 @@ public class AdminHomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().hide();
         setContentView(R.layout.activity_home_admin);
 
         // Get data of intent
@@ -35,13 +36,13 @@ public class AdminHomeActivity extends AppCompatActivity {
         customerList = findViewById(R.id.customer_list_button);
         accountButton = findViewById(R.id.account_button);
 
-//        customerList.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                intent = new Intent(getApplicationContext(), AdminLoginActivity.class);
-//                startActivity(intent);
-//            }
-//        });
+        customerList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                intent = new Intent(getApplicationContext(), UsersListActivity.class);
+                startActivity(intent);
+            }
+        });
 
         accountButton.setOnClickListener(new View.OnClickListener() {
             @Override
