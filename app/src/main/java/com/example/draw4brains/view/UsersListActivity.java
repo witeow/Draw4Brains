@@ -16,25 +16,14 @@ import com.example.draw4brains.R;
 import com.example.draw4brains.controller.AdminController;
 import com.example.draw4brains.model.User;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
-import java.sql.Time;
-import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class AdminLoginActivity extends AppCompatActivity {
+public class UsersListActivity extends AppCompatActivity {
     ArrayList<com.example.draw4brains.model.User> User=new ArrayList<User>();
 
     AdminController mAdminController;
@@ -68,12 +57,12 @@ public class AdminLoginActivity extends AppCompatActivity {
 
 
 
-        mAdminController = new AdminController(AdminLoginActivity.this,User);
+        mAdminController = new AdminController(UsersListActivity.this,User);
                 listView.setAdapter(mAdminController);
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                        Intent intent = new Intent(AdminLoginActivity.this, StatisticsPageActivity.class);
+                        Intent intent = new Intent(UsersListActivity.this, StatisticsPageActivity.class);
                         intent.putExtra("Name",mAdminController.getItem(position).getUserName());
                         intent.putExtra("Score",String.valueOf(mAdminController.getItem(position).getscore()));
                         Log.d("intent", String.valueOf(intent.getStringExtra("Name")));
