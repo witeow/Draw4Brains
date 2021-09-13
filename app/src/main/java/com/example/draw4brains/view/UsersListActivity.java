@@ -248,12 +248,12 @@ public class UsersListActivity extends AppCompatActivity {
     /**
      *  Return back to Admin homepage
      */
-    @Override
-    public void onBackPressed() {
-//        Intent myIntent = new Intent(getApplicationContext(), mainactivityAdmin.class);
-//        startActivityForResult(myIntent, 0);
-        super.onBackPressed();
-    }
+//    @Override
+//    public void onBackPressed() {
+//        Intent myIntent = new Intent(getApplicationContext(), AdminHomeActivity.class);
+//        startActivity(myIntent);
+//        super.onBackPressed();
+//    }
 
 
 }

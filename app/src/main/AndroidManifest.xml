@@ -28,7 +28,7 @@
         <activity android:name=".view.SelectGameActivity" />
         <activity android:name=".view.RegisterActivity" />
         <activity android:name=".view.AccountActivity" />
-        <activity android:name=".view.UsersListActivity" />
+        <activity android:name=".view.UsersListActivity" android:parentActivityName=".view.AdminHomeActivity" />
     </application>
 
 </manifest>
