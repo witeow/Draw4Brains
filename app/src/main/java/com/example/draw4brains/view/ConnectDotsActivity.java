@@ -11,8 +11,8 @@ import com.example.draw4brains.R;
 
 public class ConnectDotsActivity extends AppCompatActivity {
 
-    Button giveUpButton, completeGameButton;
-    Intent intent;
+    private Button btnGiveUp, btnSubmit;
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,10 +20,10 @@ public class ConnectDotsActivity extends AppCompatActivity {
         getSupportActionBar().hide();
         setContentView(R.layout.activity_connect_dots);
 
-        completeGameButton = findViewById(R.id.complete_game_button);
-        giveUpButton = findViewById(R.id.give_up_button);
+        btnSubmit = findViewById(R.id.btn_submit);
+        btnGiveUp = findViewById(R.id.btn_give_up);
 
-        completeGameButton.setOnClickListener(new View.OnClickListener() {
+        btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 intent = new Intent(ConnectDotsActivity.this, EndGameActivity.class);
@@ -31,7 +31,7 @@ public class ConnectDotsActivity extends AppCompatActivity {
             }
         });
 
-        giveUpButton.setOnClickListener(new View.OnClickListener() {
+        btnGiveUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 intent = new Intent(ConnectDotsActivity.this, EndGameActivity.class);

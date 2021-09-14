@@ -11,7 +11,7 @@ import com.example.draw4brains.R;
 
 public class EndGameActivity extends AppCompatActivity {
 
-    Button mainMenuButton;
+    private Button btnMainMenu;
     Intent intent;
 
     @Override
@@ -20,9 +20,9 @@ public class EndGameActivity extends AppCompatActivity {
         getSupportActionBar().hide();
         setContentView(R.layout.activity_end_game);
 
-        mainMenuButton = findViewById(R.id.return_to_main_menu_button);
+        btnMainMenu = findViewById(R.id.btn_main_menu);
 
-        mainMenuButton.setOnClickListener(new View.OnClickListener() {
+        btnMainMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 intent = new Intent(EndGameActivity.this, UserHomeActivity.class);

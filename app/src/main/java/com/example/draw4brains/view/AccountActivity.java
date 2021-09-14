@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -12,12 +13,11 @@ import com.example.draw4brains.R;
 
 public class AccountActivity extends AppCompatActivity {
 
-    TextView emailView, nameVew, birthdayView, phoneNumberView;
-    ImageButton backBtn, logoutBtn;
-    boolean isAdmin;
-    Bundle extras;
-    Intent intent;
-
+    private TextView tvEmail, tvName, tvBirthday, tvPhone;
+    private ImageButton btnBack, btnLogout;
+    private boolean isAdmin;
+    private Bundle extras;
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,24 +33,24 @@ public class AccountActivity extends AppCompatActivity {
         }
 
         // Set textview reference
-        emailView = findViewById(R.id.email_text_view);
-        nameVew = findViewById(R.id.name_text_view);
-        birthdayView = findViewById(R.id.birthday_text_view);
-        phoneNumberView = findViewById(R.id.phone_text_view);
+        tvEmail = findViewById(R.id.tv_email);
+        tvName = findViewById(R.id.tv_name);
+        tvBirthday = findViewById(R.id.tv_birthday);
+        tvPhone = findViewById(R.id.tv_phone);
 
-        backBtn = findViewById(R.id.back_button);
-        logoutBtn = findViewById(R.id.logout_button);
+        btnBack = findViewById(R.id.btn_back);
+        btnLogout = findViewById(R.id.btn_logout);
 
 
         // Set onClick Listeners
-        logoutBtn.setOnClickListener(new View.OnClickListener() {
+        btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getApplicationContext(), LoginActivity.class));
             }
         });
 
-        backBtn.setOnClickListener(new View.OnClickListener() {
+        btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (isAdmin) {

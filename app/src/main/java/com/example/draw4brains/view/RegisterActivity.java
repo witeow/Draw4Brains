@@ -11,7 +11,7 @@ import com.example.draw4brains.R;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    private ImageButton registerButton, backButton;
+    private ImageButton btnRegister, btnBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,17 +19,17 @@ public class RegisterActivity extends AppCompatActivity {
         getSupportActionBar().hide();
         setContentView(R.layout.activity_register);
 
-        registerButton = findViewById(R.id.register_button);
-        backButton = findViewById(R.id.back_button);
+        btnRegister = findViewById(R.id.btn_register);
+        btnBack = findViewById(R.id.btn_back);
 
-        registerButton.setOnClickListener(new View.OnClickListener() {
+        btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getApplicationContext(), LoginActivity.class));
             }
         });
 
-        backButton.setOnClickListener(new View.OnClickListener() {
+        btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getApplicationContext(), LoginActivity.class));

@@ -40,7 +40,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <Button
-        android:id="@+id/give_up_button"
+        android:id="@+id/btn_give_up"
         android:layout_width="115dp"
         android:layout_height="58dp"
         android:layout_marginTop="24dp"
@@ -59,7 +59,7 @@
         android:layout_marginTop="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/give_up_button">
+        app:layout_constraintTop_toBottomOf="@+id/btn_give_up">
 
         <EditText
             android:id="@+id/et_answer"
@@ -72,7 +72,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/complete_game_button"
+            android:id="@+id/btn_submit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"

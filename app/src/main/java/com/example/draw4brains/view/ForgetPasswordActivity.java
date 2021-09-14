@@ -11,7 +11,7 @@ import com.example.draw4brains.R;
 
 public class ForgetPasswordActivity extends AppCompatActivity {
 
-    ImageButton loginButton, backButton;
+    private ImageButton btnReset, btnBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,17 +19,17 @@ public class ForgetPasswordActivity extends AppCompatActivity {
         getSupportActionBar().hide();
         setContentView(R.layout.activity_forget_password);
 
-        loginButton = findViewById(R.id.login_button);
-        backButton = findViewById(R.id.back_button);
+        btnReset = findViewById(R.id.btn_reset);
+        btnBack = findViewById(R.id.btn_back);
 
-        loginButton.setOnClickListener(new View.OnClickListener() {
+        btnReset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getApplicationContext(), LoginActivity.class));
             }
         });
 
-        backButton.setOnClickListener(new View.OnClickListener() {
+        btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getApplicationContext(), LoginActivity.class));

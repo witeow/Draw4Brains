@@ -19,7 +19,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ToggleButton
-        android:id="@+id/toggle_account_type"
+        android:id="@+id/btn_acc_type"
         android:layout_width="75dp"
         android:layout_height="43dp"
         android:layout_marginEnd="172dp"
@@ -29,15 +29,15 @@
         android:focusable="true"
         android:textOff="@string/empty_string"
         android:textOn="@string/empty_string"
-        app:layout_constraintBottom_toBottomOf="@+id/textView_account_type"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_acc_type"
 
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textView_account_type"
+        app:layout_constraintTop_toTopOf="@+id/tv_acc_type"
         app:layout_constraintVertical_bias="0.375" />
     <!--        app:layout_constraintEnd_EndOf="parent"-->
     
     <TextView
-        android:id="@+id/textView_email"
+        android:id="@+id/tv_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -46,10 +46,10 @@
         android:text="Email:"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_account_type" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_acc_type" />
 
     <TextView
-        android:id="@+id/textView_account_type"
+        android:id="@+id/tv_acc_type"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -61,7 +61,7 @@
         app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
     <EditText
-        android:id="@+id/editTextTextEmailAddress"
+        android:id="@+id/et_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -69,15 +69,15 @@
         android:ems="10"
         android:focusable="true"
         android:inputType="textEmailAddress"
-        app:layout_constraintBottom_toBottomOf="@+id/textView_email"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_email"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.65"
-        app:layout_constraintStart_toEndOf="@+id/textView_email"
-        app:layout_constraintTop_toTopOf="@+id/textView_email"
+        app:layout_constraintStart_toEndOf="@+id/tv_email"
+        app:layout_constraintTop_toTopOf="@+id/tv_email"
         app:layout_constraintVertical_bias="0.384" />
 
     <EditText
-        android:id="@+id/editTextTextPassword"
+        android:id="@+id/et_password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -85,15 +85,15 @@
         android:ems="10"
         android:focusable="true"
         android:inputType="textPassword"
-        app:layout_constraintBottom_toBottomOf="@+id/textView_password"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_password"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.547"
-        app:layout_constraintStart_toEndOf="@+id/textView_password"
-        app:layout_constraintTop_toTopOf="@+id/textView_password"
+        app:layout_constraintStart_toEndOf="@+id/tv_password"
+        app:layout_constraintTop_toTopOf="@+id/tv_password"
         app:layout_constraintVertical_bias="0.23" />
 
     <TextView
-        android:id="@+id/textView_password"
+        android:id="@+id/tv_password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -102,10 +102,10 @@
         android:text="Password:"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_email" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_email" />
 
     <ImageButton
-        android:id="@+id/login_button"
+        android:id="@+id/btn_login"
         android:layout_width="300dp"
         android:layout_height="45dp"
         android:layout_marginTop="44dp"
@@ -114,10 +114,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_password" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_password" />
 
     <ImageButton
-        android:id="@+id/forgotPasswordButton"
+        android:id="@+id/btn_forgot_pw"
         android:layout_width="200dp"
         android:layout_height="20dp"
         android:layout_marginTop="24dp"
@@ -138,6 +138,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/login_button" />
+        app:layout_constraintTop_toBottomOf="@+id/btn_login" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

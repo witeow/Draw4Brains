@@ -12,7 +12,7 @@ import com.example.draw4brains.R;
 
 public class GameLevelActivity extends AppCompatActivity {
 
-    Button testLevel1, backButton;
+    private Button btnLevel1, btnBack;
     Intent intent;
 
     @Override
@@ -21,10 +21,10 @@ public class GameLevelActivity extends AppCompatActivity {
         getSupportActionBar().hide();
         setContentView(R.layout.activity_select_game_level);
 
-        backButton = findViewById(R.id.btn_back_game);
-        testLevel1 = findViewById(R.id.level_1_button);
+        btnBack = findViewById(R.id.btn_back);
+        btnLevel1 = findViewById(R.id.btn_level1);
 
-        testLevel1.setOnClickListener(new View.OnClickListener() {
+        btnLevel1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 intent = new Intent(GameLevelActivity.this, ConnectDotsActivity.class);
@@ -32,7 +32,7 @@ public class GameLevelActivity extends AppCompatActivity {
             }
         });
 
-        backButton.setOnClickListener(new View.OnClickListener() {
+        btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 intent = new Intent(GameLevelActivity.this, SelectGameActivity.class);

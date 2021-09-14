@@ -14,11 +14,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class LoginActivity extends AppCompatActivity {
 
-    EditText email;
-    EditText firstname;
-    EditText lastname;
-    ImageButton loginButton, forgotPassword, registerButton;
-    ToggleButton accountTypeToggle;
+    private EditText email;
+    //EditText firstname;
+    //EditText lastname;
+    private ImageButton btnLogin, btnForgotPW, btnRegister;
+    private ToggleButton btnAccType;
     Intent intent;
 
     @Override
@@ -27,17 +27,17 @@ public class LoginActivity extends AppCompatActivity {
         getSupportActionBar().hide();
         setContentView(R.layout.activity_user_login);
 
-        loginButton = findViewById(R.id.login_button);
-        forgotPassword = findViewById(R.id.forgotPasswordButton);
-        registerButton = findViewById(R.id.btn_register);
-        accountTypeToggle = findViewById(R.id.toggle_account_type);
-        accountTypeToggle.setChecked(false);
+        btnLogin = findViewById(R.id.btn_login);
+        btnForgotPW = findViewById(R.id.btn_forgot_pw);
+        btnRegister = findViewById(R.id.btn_register);
+        btnAccType = findViewById(R.id.btn_acc_type);
+        btnAccType.setChecked(false);
 
 
-        loginButton.setOnClickListener(new View.OnClickListener() {
+        btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (accountTypeToggle.isChecked()) {
+                if (btnAccType.isChecked()) {
                     // Checked == Admin Mode
                     intent = new Intent(getApplicationContext(), AdminHomeActivity.class);
                     intent.putExtra("isAdmin",true);
@@ -51,14 +51,14 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        forgotPassword.setOnClickListener(new View.OnClickListener() {
+        btnForgotPW.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getApplicationContext(), ForgetPasswordActivity.class));
             }
         });
 
-        registerButton.setOnClickListener(new View.OnClickListener() {
+        btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getApplicationContext(), RegisterActivity.class));

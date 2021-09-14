@@ -7,7 +7,7 @@
     android:background="@color/Draw4Brain_MainBG">
 
     <ImageButton
-        android:id="@+id/account_button"
+        android:id="@+id/btn_acc_info"
         android:layout_width="32dp"
         android:layout_height="33dp"
         android:layout_marginTop="16dp"
@@ -32,7 +32,7 @@
 
 
     <ImageButton
-        android:id="@+id/customer_list_button"
+        android:id="@+id/btn_customer_list"
         android:layout_width="150dp"
         android:layout_height="50dp"
         android:layout_marginTop="60dp"

@@ -27,7 +27,7 @@ public class UsersListActivity extends AppCompatActivity {
     ArrayList<com.example.draw4brains.model.User> User=new ArrayList<User>();
 
     AdminController mAdminController;
-    ListView listView;
+    private ListView lvUsers;
     FirebaseAuth fAuth=FirebaseAuth.getInstance();
     String newtext;
 
@@ -39,8 +39,8 @@ public class UsersListActivity extends AppCompatActivity {
 
 
         //initialize the views
-        listView = (ListView) findViewById(R.id.List_view_users);
-        listView.setEmptyView(findViewById(R.id.empty_subtitle_text));
+        lvUsers = (ListView) findViewById(R.id.lv_users);
+        lvUsers.setEmptyView(findViewById(R.id.tv_empty));
 
         int score = 1;
         User.add(new User("Ostrich","gender","phone","email1","caretaker",false,score));
@@ -58,8 +58,8 @@ public class UsersListActivity extends AppCompatActivity {
 
 
         mAdminController = new AdminController(UsersListActivity.this,User);
-                listView.setAdapter(mAdminController);
-                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                lvUsers.setAdapter(mAdminController);
+                lvUsers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                         Intent intent = new Intent(UsersListActivity.this, StatisticsPageActivity.class);

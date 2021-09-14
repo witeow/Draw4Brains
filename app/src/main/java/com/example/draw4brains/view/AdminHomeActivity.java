@@ -14,8 +14,7 @@ import java.security.AccessControlContext;
 
 public class AdminHomeActivity extends AppCompatActivity {
 
-    ImageButton customerList;
-    ImageButton accountButton;
+    private ImageButton btnCustomerList, btnAccInfo;
     boolean isAdmin;
     Bundle extras;
     Intent intent;
@@ -33,10 +32,10 @@ public class AdminHomeActivity extends AppCompatActivity {
             //The key argument here must match that used in the other activity
         }
 
-        customerList = findViewById(R.id.customer_list_button);
-        accountButton = findViewById(R.id.account_button);
+        btnCustomerList = findViewById(R.id.btn_customer_list);
+        btnAccInfo = findViewById(R.id.btn_acc_info);
 
-        customerList.setOnClickListener(new View.OnClickListener() {
+        btnCustomerList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 intent = new Intent(getApplicationContext(), UsersListActivity.class);
@@ -44,7 +43,7 @@ public class AdminHomeActivity extends AppCompatActivity {
             }
         });
 
-        accountButton.setOnClickListener(new View.OnClickListener() {
+        btnAccInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 intent = new Intent(getApplicationContext(), AccountActivity.class);

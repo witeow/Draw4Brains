@@ -14,9 +14,7 @@ import java.security.AccessControlContext;
 
 public class UserHomeActivity extends AppCompatActivity {
 
-    ImageButton selectButton;
-    ImageButton accountButton;
-    ImageButton statisticButton;
+    private ImageButton btnSelectGame, btnStats, btnAccInfo;
 
     boolean isAdmin;
     Bundle extras;
@@ -35,12 +33,12 @@ public class UserHomeActivity extends AppCompatActivity {
             //The key argument here must match that used in the other activity
         }
 
-        selectButton = findViewById(R.id.select_button);
-        accountButton = findViewById(R.id.account_button);
-        statisticButton = findViewById(R.id.statistic_button);
+        btnSelectGame = findViewById(R.id.btn_select_game);
+        btnAccInfo = findViewById(R.id.btn_acc_info);
+        btnStats = findViewById(R.id.btn_stats);
 
 
-        selectButton.setOnClickListener(new View.OnClickListener() {
+        btnSelectGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 intent = new Intent(getApplicationContext(), SelectGameActivity.class);
@@ -48,7 +46,7 @@ public class UserHomeActivity extends AppCompatActivity {
             }
         });
 
-        accountButton.setOnClickListener(new View.OnClickListener() {
+        btnAccInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 intent = new Intent(getApplicationContext(), AccountActivity.class);
@@ -57,7 +55,7 @@ public class UserHomeActivity extends AppCompatActivity {
             }
         });
 
-        statisticButton.setOnClickListener(new View.OnClickListener() {
+        btnStats.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         Intent intent = new Intent(UserHomeActivity.this, StatisticsPageActivity.class);

@@ -29,7 +29,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/game1_button"
+        android:id="@+id/btn_game1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
@@ -46,6 +46,6 @@
         android:text="Back to Home"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/game1_button" />
+        app:layout_constraintTop_toBottomOf="@+id/btn_game1" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
