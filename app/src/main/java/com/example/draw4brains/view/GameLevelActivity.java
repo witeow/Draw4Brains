@@ -12,8 +12,7 @@ import com.example.draw4brains.R;
 
 public class GameLevelActivity extends AppCompatActivity {
 
-    ImageButton backButton;
-    Button testLevel1;
+    Button testLevel1, backButton;
     Intent intent;
 
     @Override
@@ -22,7 +21,7 @@ public class GameLevelActivity extends AppCompatActivity {
         getSupportActionBar().hide();
         setContentView(R.layout.activity_select_game_level);
 
-        backButton = findViewById(R.id.back_button);
+        backButton = findViewById(R.id.btn_back_game);
         testLevel1 = findViewById(R.id.level_1_button);
 
         testLevel1.setOnClickListener(new View.OnClickListener() {
