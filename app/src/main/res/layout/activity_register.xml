@@ -6,13 +6,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/Draw4Brain_MainBG">
 
-    <ImageView
-        android:id="@+id/back_button"
+    <ImageButton
+        android:id="@+id/btn_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
+        android:backgroundTint="@color/transparent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:src="@drawable/back_arrow"/>
@@ -41,7 +42,7 @@
         tools:layout_editor_absoluteX="10dp">
 
         <EditText
-            android:id="@+id/signup_email"
+            android:id="@+id/et_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -49,7 +50,7 @@
             android:inputType="textEmailAddress" />
 
         <EditText
-            android:id="@+id/signup_firstName"
+            android:id="@+id/et_first_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -57,7 +58,7 @@
             android:inputType="textPersonName" />
 
         <EditText
-            android:id="@+id/signup_lastName"
+            android:id="@+id/et_last_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -78,7 +79,7 @@
                 android:weightSum="2">
 
                 <RadioButton
-                    android:id="@+id/gender_male_button"
+                    android:id="@+id/btn_male"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -86,7 +87,7 @@
                     android:text="Male" />
 
                 <RadioButton
-                    android:id="@+id/gender_female_button"
+                    android:id="@+id/btn_female"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -100,7 +101,7 @@
 
 
         <EditText
-            android:id="@+id/signup_pwd"
+            android:id="@+id/et_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -109,7 +110,7 @@
             android:maxLength="16" />
 
         <EditText
-            android:id="@+id/signup_pwd2"
+            android:id="@+id/et_password2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
@@ -125,7 +126,7 @@
             android:weightSum="2">
 
             <TextView
-                android:id="@+id/pwd_strength_title"
+                android:id="@+id/tv_password_strength"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -134,7 +135,7 @@
                 android:text=" PASSWORD STRENGTH:" />
 
             <TextView
-                android:id="@+id/pwd_strength_text"
+                android:id="@+id/tv_password_strength2"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -147,7 +148,7 @@
 
 
         <ProgressBar
-            android:id="@+id/progressBar"
+            android:id="@+id/pb_password_strength"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -155,7 +156,7 @@
             android:layout_marginRight="35dp" />
 
         <EditText
-            android:id="@+id/signup_phone_number"
+            android:id="@+id/et_phone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -163,7 +164,7 @@
             android:inputType="phone" />
 
         <EditText
-            android:id="@+id/signup_dob"
+            android:id="@+id/et_birthday"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="false"
@@ -178,7 +179,7 @@
     </LinearLayout>
 
     <ImageButton
-        android:id="@+id/register_button"
+        android:id="@+id/btn_register"
         android:layout_width="312dp"
         android:layout_height="56dp"
         android:layout_marginTop="16dp"

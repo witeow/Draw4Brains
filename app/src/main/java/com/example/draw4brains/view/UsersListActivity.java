@@ -16,29 +16,25 @@ import com.example.draw4brains.R;
 import com.example.draw4brains.controller.AdminController;
 import com.example.draw4brains.model.User;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.sql.Time;
-import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class AdminLoginActivity extends AppCompatActivity {
+import static com.google.firebase.database.FirebaseDatabase.getInstance;
+
+public class UsersListActivity extends AppCompatActivity {
     ArrayList<com.example.draw4brains.model.User> User=new ArrayList<User>();
 
     AdminController mAdminController;
-    ListView listView;
+    private ListView lvUsers;
     FirebaseAuth fAuth=FirebaseAuth.getInstance();
     String newtext;
 
@@ -50,8 +46,8 @@ public class AdminLoginActivity extends AppCompatActivity {
 
 
         //initialize the views
-        listView = (ListView) findViewById(R.id.List_view_users);
-        listView.setEmptyView(findViewById(R.id.empty_subtitle_text));
+        lvUsers = (ListView) findViewById(R.id.lv_users);
+        lvUsers.setEmptyView(findViewById(R.id.tv_empty));
 
         int score = 1;
         User.add(new User("Ostrich","gender","phone","email1","caretaker",false,score));
@@ -60,20 +56,40 @@ public class AdminLoginActivity extends AppCompatActivity {
         User.add(new User("Rooster","gender","phone","email4","caretaker",false,score));
         User.add(new User("Rtest","gender","phone","email4","wrong",false,score));
         //TODO can also filter as you add to User
-        for(int i=0;i<User.size();i++){
-            if(User.get(i).getCaretaker_email()!="caretaker"){
-                User.remove(i);
-            }
-        }
+//        for(int i=0;i<User.size();i++){
+//            if(User.get(i).getCaretaker_email()!="caretaker"){
+//                User.remove(i);
+//            }
+//        }
 
 
 
-        mAdminController = new AdminController(AdminLoginActivity.this,User);
-                listView.setAdapter(mAdminController);
-                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+
+        DatabaseReference rootRef = getInstance("https://draw4brains-default-rtdb.asia-southeast1.firebasedatabase.app").getReference();
+        DatabaseReference usersdRef = rootRef.child("User");
+//        //get list of users, making sure that they aren't already disabled, an admin, or a clinic admin
+        ValueEventListener eventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                for(DataSnapshot ds : dataSnapshot.getChildren()) {
+                    String uid = ds.getKey();
+                    Log.d("TAG", uid);
+                    String email=ds.child("userEmail").getValue(String.class);
+                    String name=ds.child("userName").getValue(String.class);
+
+                        User.add(new User(name,"gender","phone",email,"caretaker",false,score));
+
+
+                }
+
+                mAdminController = new AdminController(UsersListActivity.this,User);
+                lvUsers.setAdapter(mAdminController);
+                lvUsers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                        Intent intent = new Intent(AdminLoginActivity.this, StatisticsPageActivity.class);
+                        Intent intent = new Intent(UsersListActivity.this, StatisticsPageActivity.class);
                         intent.putExtra("Name",mAdminController.getItem(position).getUserName());
                         intent.putExtra("Score",String.valueOf(mAdminController.getItem(position).getscore()));
                         Log.d("intent", String.valueOf(intent.getStringExtra("Name")));
@@ -84,58 +100,12 @@ public class AdminLoginActivity extends AppCompatActivity {
                     }
                 });
 
-//        DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
-//        DatabaseReference usersdRef = rootRef.child("Users");
-//        //get list of users, making sure that they aren't already disabled, an admin, or a clinic admin
-//        ValueEventListener eventListener = new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//TODO: filter out all the older people not related to this caretaker, which means do not have to implement filter out caretaking seniors
-        //TODO already filtered at the first start
+            }
 
-//                for(DataSnapshot ds : dataSnapshot.getChildren()) {
-//                    String uid = ds.getKey();
-//                    Log.d("TAG", uid);
-//                    String email=ds.child("email").getValue(String.class);
-//                    String name=ds.child("fullName").getValue(String.class);
-
-        //       //TODO             String caretakeremail=ds.child("caretaker").getValue(String.class);
-        //      //   TODO  if(caretakeremail == authenticated one){
-//                        User.add(new User());
-//                    }
-
-//                    Boolean isDisabled = ds.child("disabled").getValue(Boolean.class);
-//                    Boolean isAdmin = ds.child("admin").getValue(Boolean.class);
-//                    if(isDisabled==null){
-//                        isDisabled = ds.child("Disabled").getValue(Boolean.class);
-//                    }
-//                    if(isAdmin==null){
-//                        isAdmin = ds.child("Admin").getValue(Boolean.class);
-//                    }
-//
-//                    if(isAdmin==false && isDisabled==true){
-//                        User.add(new User(name,email,0, "nil",uid,true,false,false,"nil","nil"));
-//                    }
-//
-//                }
-//
-//                mAdminController = new AdminController(AdminLoginActivity.this,User);
-//                listView.setAdapter(mAdminController);
-//                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//                    @Override
-//                    public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-//
-//                        showEnableDialog(mAdminController.getItemId(position));
-//
-//                    }
-//                });
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {}
-//        };
-        //usersdRef.addListenerForSingleValueEvent(eventListener);
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+        };
+        usersdRef.addListenerForSingleValueEvent(eventListener);
 
 
     }
@@ -259,12 +229,12 @@ public class AdminLoginActivity extends AppCompatActivity {
     /**
      *  Return back to Admin homepage
      */
-    @Override
-    public void onBackPressed() {
-//        Intent myIntent = new Intent(getApplicationContext(), mainactivityAdmin.class);
-//        startActivityForResult(myIntent, 0);
-        super.onBackPressed();
-    }
+//    @Override
+//    public void onBackPressed() {
+//        Intent myIntent = new Intent(getApplicationContext(), AdminHomeActivity.class);
+//        startActivity(myIntent);
+//        super.onBackPressed();
+//    }
 
 
 }

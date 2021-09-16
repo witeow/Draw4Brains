@@ -6,37 +6,39 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import com.example.draw4brains.R;
 
-public class ConnectDotsActivity extends AppCompatActivity {
+public class GameLevelActivity extends AppCompatActivity {
 
-    private Button btnGiveUp, btnSubmit;
-    private Intent intent;
+    private Button btnLevel1, btnBack;
+    Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().hide();
-        setContentView(R.layout.activity_connect_dots);
+        setContentView(R.layout.activity_select_game_level);
 
-        btnSubmit = findViewById(R.id.btn_submit);
-        btnGiveUp = findViewById(R.id.btn_give_up);
+        btnBack = findViewById(R.id.btn_back);
+        btnLevel1 = findViewById(R.id.btn_level1);
 
-        btnSubmit.setOnClickListener(new View.OnClickListener() {
+        btnLevel1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                intent = new Intent(ConnectDotsActivity.this, EndGameActivity.class);
+                intent = new Intent(GameLevelActivity.this, ConnectDotsActivity.class);
                 startActivity(intent);
             }
         });
 
-        btnGiveUp.setOnClickListener(new View.OnClickListener() {
+        btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                intent = new Intent(ConnectDotsActivity.this, EndGameActivity.class);
+                intent = new Intent(GameLevelActivity.this, SelectGameActivity.class);
                 startActivity(intent);
             }
         });
+
     }
 }

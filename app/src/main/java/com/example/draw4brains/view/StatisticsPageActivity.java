@@ -13,15 +13,14 @@ public class StatisticsPageActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_statistics);
 
         String Name = getIntent().getStringExtra("Name");
         String Score = getIntent().getStringExtra("Score");
 
-        TextView t_score = (TextView) findViewById(R.id.statistic);
-        TextView t_name = (TextView) findViewById(R.id.name);
+        TextView t_score = (TextView) findViewById(R.id.tv_stats);
+        TextView t_name = (TextView) findViewById(R.id.tv_name);
 
         t_name.setText(Name);
         t_score.setText(Score);
