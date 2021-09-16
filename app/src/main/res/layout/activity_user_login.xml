@@ -41,10 +41,11 @@
         android:textOff="@string/empty_string"
         android:textOn="@string/empty_string"
         app:layout_constraintBottom_toBottomOf="@+id/textView_account_type"
-        app:layout_constraintEnd_EndOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/textView_account_type"
         app:layout_constraintVertical_bias="0.375" />
+<!--        app:layout_constraintEnd_EndOf="parent"-->
+
 
     <TextView
         android:id="@+id/textView_email"

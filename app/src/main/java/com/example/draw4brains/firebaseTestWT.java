@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewDebug;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -29,6 +30,8 @@ public class firebaseTestWT extends AppCompatActivity {
     private EditText birthday;
     private EditText nokName;
     private EditText nokNum;
+    private Integer score;
+    private String adminId;
 
     private Button register;
 
@@ -49,6 +52,8 @@ public class firebaseTestWT extends AppCompatActivity {
         birthday = findViewById(R.id.birthday);
         nokName = findViewById(R.id.nokName);
         nokNum = findViewById(R.id.nokPhoneNum);
+        score = 0;
+
 
         register = findViewById(R.id.register);
 
@@ -65,6 +70,7 @@ public class firebaseTestWT extends AppCompatActivity {
                 String txtBirthday = birthday.getText().toString();
                 String txtNokName = nokName.getText().toString();
                 String txtNokNum = nokNum.getText().toString();
+                String txtScore = score.toString();
 
                 if(TextUtils.isEmpty(txtName) || TextUtils.isEmpty(txtPassword) ||
                         TextUtils.isEmpty(txtAddress) || TextUtils.isEmpty(txtPhoneNum) ||
