@@ -69,6 +69,7 @@ public class RegisterActivity extends AppCompatActivity {
         String admin_email = getIntent().getStringExtra("Admin_email");
         String admin_uid = getIntent().getStringExtra("Admin_uid");
 
+
         btnRegister = findViewById(R.id.btn_register);
         btnBack = findViewById(R.id.btn_back);
         email = findViewById(R.id.et_email);
@@ -90,6 +91,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         if(admin_email!=null){
             choose_admin.setText(admin_email);
+            Log.d("admin_uid", admin_uid);
         }
 
         choose_admin.setOnClickListener(new View.OnClickListener() {

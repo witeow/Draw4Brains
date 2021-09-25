@@ -49,9 +49,10 @@ public class UsersListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_list_page);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 //TODO
-//        fAuth = FirebaseAuth.getInstance();
-//        //FirebaseUser firebaseUser = fAuth.getCurrentUser();
-//        uid = fAuth.getCurrentUser().getUid();
+        fAuth = FirebaseAuth.getInstance();
+        //FirebaseUser firebaseUser = fAuth.getCurrentUser();
+        uid = fAuth.getCurrentUser().getUid();
+        Log.d("Admin's uidddddddddd", uid);
 //        DatabaseReference User_cred = FirebaseDatabase.getInstance().getReference("Admin").child(uid);
 //        User_cred.addValueEventListener(new ValueEventListener() {
 //            @Override
@@ -65,7 +66,7 @@ public class UsersListActivity extends AppCompatActivity {
 
 //        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 //        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Admin");
-//        // opens up the current user's database reference
+////        // opens up the current user's database reference
 //        final DatabaseReference currentUser = databaseReference.child(firebaseUser.getUid());
 
 
@@ -102,13 +103,16 @@ public class UsersListActivity extends AppCompatActivity {
                     Log.d("TAG", uid);
                     String email=ds.child("userEmail").getValue(String.class);
                     String name=ds.child("userName").getValue(String.class);
+                    String score = ds.child("userScore").getValue(String.class);
+
+
 
                     //TODO String caretaker_uid=ds.child("caretaker").getValue(String.class);
                     String caretaker_uid = "1";
                     uid = "1";
                     
                     if (caretaker_uid==uid) {
-                        User.add(new User(name, "gender", "phone", email, "caretaker", false, score));
+                        User.add(new User(name, "gender", score, email, "caretaker", false, 1));
                     }
 
                 }
@@ -120,7 +124,7 @@ public class UsersListActivity extends AppCompatActivity {
                     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                         Intent intent = new Intent(UsersListActivity.this, StatisticsPageActivity.class);
                         intent.putExtra("Name",mAdminController.getItem(position).getUserName());
-                        intent.putExtra("Score",String.valueOf(mAdminController.getItem(position).getscore()));
+                        intent.putExtra("Score",String.valueOf(mAdminController.getItem(position).getPhoneNo()));
                         Log.d("intent", String.valueOf(intent.getStringExtra("Name")));
                         Log.d("intent", String.valueOf(intent.getStringExtra("Score")));
                         startActivity(intent);
