@@ -263,9 +263,9 @@ public class RegisterActivity extends AppCompatActivity {
                                 newUserRef.updateChildren(registerUser);
                                 String userRefId = newUserRef.getKey();
                                 updateAdmin(userRefId, strAdmin);
-//                                Toast.makeText(RegisterActivity.this, "Registration Successful!", Toast.LENGTH_SHORT).show();
-//                                startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
-//                                finish();
+                                Toast.makeText(RegisterActivity.this, "Registration Successful!", Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+                                finish();
                             } else{
                                 Toast.makeText(RegisterActivity.this, "Registration Failed", Toast.LENGTH_SHORT).show();
                             }
