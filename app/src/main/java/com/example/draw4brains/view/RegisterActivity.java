@@ -1,13 +1,18 @@
 package com.example.draw4brains.view;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.location.Address;
 import android.os.Bundle;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
@@ -36,6 +41,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.time.Year;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -45,10 +52,10 @@ import java.util.regex.Matcher;
 public class RegisterActivity extends AppCompatActivity {
 
     private ImageButton btnRegister, btnBack;
-    private Button choose_admin;
-    private EditText email, firstName, lastName, pass, rePass, phoneNo, birthday, adminEdit;
+    private RadioButton gender, maleBtn, femaleBtn;
+    private EditText email, firstName, lastName, pass, rePass, phoneNo, homePhoneNo, address, birthday, nokName, nokPhone, chooseAdmin;
+    private DatePickerDialog picker;
     private RadioGroup genderChoice;
-    private AutoCompleteTextView adminView;
 
     private ArrayList<String> attList = new ArrayList<>();
 
@@ -57,13 +64,24 @@ public class RegisterActivity extends AppCompatActivity {
     private FirebaseDatabase db = FirebaseDatabase.getInstance(realtimedatabase);
 
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().hide();
         setContentView(R.layout.activity_register);
+
+//        ADD on from wt
+//        String intentEmail = getIntent().getStringExtra("Stored_Email");
+//        String intentFirstName = getIntent().getStringExtra("Stored_First_Name");
+//        String intentLastName = getIntent().getStringExtra("Stored_Last_Name");
+//        String intentPass = (getIntent().getStringExtra("Stored_Password"));
+//        String intentRePass = (getIntent().getStringExtra("Stored_Re_Password"));
+//        String intentPhone = (getIntent().getStringExtra("Stored_Phone"));
+//        String intentHome = (getIntent().getStringExtra("Stored_Home"));
+//        String intentAddress = (getIntent().getStringExtra("Stored_Address"));
+//        String intentBirthday = (getIntent().getStringExtra("Stored_Birthday"));
+//        String intentNokName= (getIntent().getStringExtra("Stored_Nok_Name"));
+//        String intentNokPhone = (getIntent().getStringExtra("Stored_Nok_Phone"));
 
         //TODO Russell
         String admin_email = getIntent().getStringExtra("Admin_email");
@@ -77,25 +95,90 @@ public class RegisterActivity extends AppCompatActivity {
         genderChoice = findViewById(R.id.gender_group);
         pass = findViewById(R.id.et_password);
         rePass = findViewById(R.id.et_password2);
-//        admin = findViewById(R.id.)
-//        passStrength = findViewById(R.id.pb_password_strength);
         phoneNo = findViewById(R.id.et_phone);
+        homePhoneNo = findViewById(R.id.et_home_phone);
+        address = findViewById(R.id.et_address);
         birthday = findViewById(R.id.et_birthday);
-        choose_admin = findViewById(R.id.button_chooseadmin);
+        nokName = findViewById(R.id.et_nok_name);
+        nokPhone = findViewById(R.id.et_nok_phone);
+        chooseAdmin = findViewById(R.id.et_chooseadmin);
+
+        birthday.setInputType(InputType.TYPE_NULL);
+        chooseAdmin.setInputType(InputType.TYPE_NULL);
 
         auth = FirebaseAuth.getInstance();
 
+        maleBtn = findViewById(R.id.btn_male);
+        femaleBtn = findViewById(R.id.btn_female);
 
-//        Fill AutoCompleteTextView
+
+        birthday.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Calendar cldr = Calendar.getInstance();
+                int day = cldr.get(Calendar.DAY_OF_MONTH);
+                int month = cldr.get(Calendar.MONTH);
+                int year = cldr.get(Calendar.YEAR);
+                // date picker dialog
+                picker = new DatePickerDialog(RegisterActivity.this,
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                birthday.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+                            }
+                        }, year, month, day);
+                picker.getDatePicker().setMaxDate(System.currentTimeMillis());
+                picker.show();
+            }
+        });
 
         if(admin_email!=null){
-            choose_admin.setText(admin_email);
+            email.setText(getIntent().getStringExtra("Stored_Email"));
+            firstName.setText(getIntent().getStringExtra("Stored_First_Name"));
+            lastName.setText(getIntent().getStringExtra("Stored_Last_Name"));
+            Log.d("gender in tent", getIntent().getStringExtra("Stored_Gender"));
+            if (TextUtils.equals(getIntent().getStringExtra("Stored_Gender"), "Male")){
+                maleBtn.setChecked(true);
+                femaleBtn.setChecked(false);
+            }else{
+                femaleBtn.setChecked(true);
+                maleBtn.setChecked(false);
+            }
+//            gender.setText(getIntent().getStringExtra("Stored_Gender"));
+            pass.setText(getIntent().getStringExtra("Stored_Password"));
+            rePass.setText(getIntent().getStringExtra("Stored_Re_Password"));
+            phoneNo.setText(getIntent().getStringExtra("Stored_Phone"));
+            homePhoneNo.setText(getIntent().getStringExtra("Stored_Home"));
+            address.setText(getIntent().getStringExtra("Stored_Address"));
+            birthday.setText(getIntent().getStringExtra("Stored_Birthday"));
+            nokName.setText(getIntent().getStringExtra("Stored_Nok_Name"));
+            nokPhone.setText(getIntent().getStringExtra("Stored_Nok_Phone"));
+
+            chooseAdmin.setText(admin_email);
         }
 
-        choose_admin.setOnClickListener(new View.OnClickListener() {
+        chooseAdmin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(RegisterActivity.this, ChooseAdminActivity.class));
+                Intent loadUsers = new Intent(RegisterActivity.this, ChooseAdminActivity.class);
+                loadUsers.putExtra("Stored_Email",email.getText().toString());
+                loadUsers.putExtra("Stored_First_Name",firstName.getText().toString());
+                loadUsers.putExtra("Stored_Last_Name",lastName.getText().toString());
+                Integer intGender = genderChoice.getCheckedRadioButtonId();
+                gender = findViewById(intGender);
+                loadUsers.putExtra("Stored_Gender",gender.getText().toString());
+                Log.d("gender before change", gender.getText().toString());
+                loadUsers.putExtra("Stored_Password",pass.getText().toString());
+                loadUsers.putExtra("Stored_Re_Password",rePass.getText().toString());
+                loadUsers.putExtra("Stored_Phone",phoneNo.getText().toString());
+                loadUsers.putExtra("Stored_Home",homePhoneNo.getText().toString());
+                loadUsers.putExtra("Stored_Address", address.getText().toString());
+                loadUsers.putExtra("Stored_Birthday",birthday.getText().toString());
+                loadUsers.putExtra("Stored_Nok_Name",nokName.getText().toString());
+                loadUsers.putExtra("Stored_Nok_Phone",nokPhone.getText().toString());
+                startActivity(loadUsers);
+
+//                startActivity(new Intent(RegisterActivity.this, ChooseAdminActivity.class));
             }
         });
 
@@ -107,23 +190,31 @@ public class RegisterActivity extends AppCompatActivity {
                 String regEmail = email.getText().toString();
                 String regFirstName = firstName.getText().toString();
                 String regLastName = lastName.getText().toString();
-                int intGender = genderChoice.getCheckedRadioButtonId();
-//                gender = findViewById(intGender);
+
+                Integer intGender = genderChoice.getCheckedRadioButtonId();
+                gender = findViewById(intGender);
+                String regGender = gender.getText().toString();
+                Log.d("register", "gender: " + regGender);
+
                 String regPass = pass.getText().toString();
                 String regRePass = rePass.getText().toString();
                 String regPhoneNo = phoneNo.getText().toString();
+                String regHomeNo = homePhoneNo.getText().toString();
+                String regAddress = address.getText().toString();
                 String regBirthday = birthday.getText().toString();
+                String regNokName = nokName.getText().toString();
+                String regNokPhone = nokPhone.getText().toString();
+                String regAdmin = chooseAdmin.getText().toString();
 
 
-                Boolean checkOutcome = CredentialsCheck(regEmail, regFirstName, regLastName, intGender, regPass, regRePass, regPhoneNo,
-                                                        regBirthday);
+                Boolean checkOutcome = CredentialsCheck(regEmail, regFirstName, regLastName, regPass, regRePass, regPhoneNo,
+                        regHomeNo, regAddress, regBirthday,regNokName,regNokPhone, regAdmin);
                 if (checkOutcome){
-                    registerUser(regEmail, regFirstName, regLastName, intGender, regPass, regRePass, regPhoneNo,
-                                regBirthday);
+                    registerUser(regEmail, regFirstName, regLastName, regGender, regPass, regRePass, regPhoneNo,
+                            regHomeNo, regAddress, regBirthday,regNokName,regNokPhone, regAdmin);
                 } else{
                     Toast.makeText(RegisterActivity.this, "Invalid Fields Detected", Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
 
@@ -141,10 +232,11 @@ public class RegisterActivity extends AppCompatActivity {
 //        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
 //    }
 
-    private void registerUser(String strEmail, String strFirstName, String strLastName, Integer intGender, String strPass,
-                              String strRePass, String strPhoneNo, String strBirthday){
+    private void registerUser(String strEmail, String strFirstName, String strLastName, String strGender, String strPass,
+                              String strRePass, String strPhoneNo, String strHomeNo, String strAddress, String strBirthday,
+                              String strNokName, String strNokPhone, String strAdmin){
 //            Check if email used before
-        DatabaseReference userRef = FirebaseDatabase.getInstance(realtimedatabase).getReference("User");
+        DatabaseReference userRef = db.getReference("User");
         Query query = userRef.orderByChild("userEmail").equalTo(strEmail);
         query.addValueEventListener(new ValueEventListener() {
             @Override
@@ -158,26 +250,21 @@ public class RegisterActivity extends AppCompatActivity {
                             if (task.isSuccessful()){
                                 HashMap<String, Object> registerUser = new HashMap<>();
                                 String[] userAttributes = {"userEmail", "userName", "userGender", "userPassword", "userPhoneNum",
-                                        "userHouseNum", "userAddress", "userBirthday", "userScore",  "userNokName", "userNokNum"};
+                                        "userHouseNum", "userAddress", "userBirthday", "userScore",  "userNokName", "userNokNum", "userAdmin"};
 
-                                String strGender;
-                                if (intGender==1){
-                                    strGender = "Female";
-                                }else{
-                                    strGender = "Male";
-                                }
                                 String[] regAttributes = {strEmail, strFirstName + " " + strLastName, strGender, strPass,
-                                        strPhoneNo, "6999999", "Pending Address from GUI", strBirthday, "0", "Pending NokName from Gui",
-                                        "Pending NokPhoneNum from GUI"};
+                                        strPhoneNo, strHomeNo, strAddress, strBirthday, "0", strNokName, strNokPhone, strAdmin};
 
                                 for(int attributeNo=0; attributeNo<userAttributes.length; attributeNo++){
                                     addToHashMap(registerUser, userAttributes[attributeNo], regAttributes[attributeNo]);
                                 }
                                 DatabaseReference newUserRef = FirebaseDatabase.getInstance(realtimedatabase).getReference("User").push();
                                 newUserRef.updateChildren(registerUser);
-                                Toast.makeText(RegisterActivity.this, "Registration Successful!", Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
-                                finish();
+                                String userRefId = newUserRef.getKey();
+                                updateAdmin(userRefId, strAdmin);
+//                                Toast.makeText(RegisterActivity.this, "Registration Successful!", Toast.LENGTH_SHORT).show();
+//                                startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+//                                finish();
                             } else{
                                 Toast.makeText(RegisterActivity.this, "Registration Failed", Toast.LENGTH_SHORT).show();
                             }
@@ -196,116 +283,129 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
+    private void updateAdmin(String userRefId, String strAdmin) {
+        Log.d("userRefId", userRefId);
+        Log.d("strAdmin", strAdmin);
+        DatabaseReference adminRef = db.getReference("Admin");
+        Query query =adminRef.orderByChild("adminEmail").equalTo(strAdmin);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()){
+                    for(DataSnapshot datas: snapshot.getChildren()){
+                        String adminUid =datas.getKey();
+                        Log.d("adminUid", adminUid);
+                        String userString = datas.child("arrayUserId").getValue().toString();
+                        Log.d("userString", userString);
+                        if (TextUtils.isEmpty(userString)){
+                            userString = userRefId;
+                        }else{
+                            userString += ", " + userRefId;
+                        }
+                        adminRef.child(adminUid).child("arrayUserId").setValue(userString);
+                    }
+//                    String userString = snapshot.child("arrayUserId").toString();
+//                    Log.d("userString", userString);
+//                    String adminUid = snapshot.getKey();
+//                    Log.d("adminUid", adminUid);
+//                    if (TextUtils.isEmpty(userString)){
+//                        userString = userRefId;
+//                    }else{
+//                        userString += ", " + userRefId;
+//                    }
+//                    db.getReference(adminUid).child("arrayUserId").setValue(userString).addOnCompleteListener(new OnCompleteListener<Void>() {
+//                        @Override
+//                        public void onComplete(@NonNull Task<Void> task) {
+//                            Log.d("Update", "Database has been successfully updated!");
+//                        }
+//                    });
+                }else{
+                    Toast.makeText(RegisterActivity.this, "No such Caretaker exists!", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(RegisterActivity.this, "Error connecting to the database", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     private void addToHashMap(HashMap<String, Object> hashMap, String attributeType, String attribute) {
         hashMap.put(attributeType, attribute);
     }
 
-    private Boolean CredentialsCheck(String strEmail, String strFirstName, String strLastName, Integer intGender, String strPass,
-                                    String strRePass, String strPhoneNo, String strBirthday){
+    private Boolean CredentialsCheck(String strEmail, String strFirstName, String strLastName, String strPass,
+                                     String strRePass, String strPhoneNo, String strHomeNo, String strAddress, String strBirthday,
+                                     String strNokName, String strNokPhone, String strAdmin){
 
         boolean credentialCheck = true;
         // no string is blank
-        Log.d("Register", strEmail);
-        if (TextUtils.isEmpty(strEmail)){
-            email.setError("Email is not filled!");
-            credentialCheck = false;
-        }
-        if (TextUtils.isEmpty(strFirstName)){
-            firstName.setError("First Name is not filled!");
-            credentialCheck = false;
-        }
-        if (TextUtils.isEmpty(strLastName)){
-            lastName.setError("Last Name is not filled!");
-            credentialCheck = false;
-        }
-        if (TextUtils.isEmpty(strPass)) {
-//            pass.setError("Password is not filled!");
-            pass.setError("Password should contain the following:\n1. 6 to 12 characters\n2. alphanumeric\n3. Special Character !.@#$%^-+");
-            credentialCheck = false;
-        }else{
-//            String passwordChecker = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&-+=()])(?=\\\\S+$).{8, 20}$";
-            if (!validPassword(strPass)){
-                pass.setError("Password should contain the following:\n1. 6 to 12 characters\n2. alphanumeric\n3. Special Character !.@#$%^-+");
-                credentialCheck = false;
-            }
+        boolean emptyStringCheck = emptyStringChecker(strEmail,  strFirstName,  strLastName, strPass, strRePass,  strPhoneNo,  strHomeNo,
+                strAddress,  strBirthday, strNokName,  strNokPhone,  strAdmin);
+        
+        boolean passwordCheck = passwordChecker(strPass, strRePass);
+        
+        boolean numberCheck = phoneNumberChecker(strPhoneNo, strHomeNo, strNokPhone);
 
-        }
-        if (TextUtils.isEmpty(strRePass)){
-            rePass.setError("Re-enter Password is not filled!");
+        if (!emptyStringCheck || !passwordCheck || !numberCheck){
             credentialCheck = false;
-
-            if (!TextUtils.equals(strPass, strRePass)){
-                rePass.setError("Password is not the same!");
-                credentialCheck = false;
-            }
         }
-        if (TextUtils.isEmpty(strPhoneNo)){
-            phoneNo.setError("Phone Number is not filled!\neg. 91234567");
-//            birthday.setError("Phone Number should be filled as 91234567");
-            credentialCheck = false;
-            if (!TextUtils.isDigitsOnly(strPhoneNo) && (strPhoneNo.length()!=8)){
-                credentialCheck = false;
-            }
-        }
-        if (TextUtils.isEmpty(strBirthday)){
-            birthday.setError("Brithday is not filled!\n eg. 01-02-1930");
-//            birthday.setError("Birthday should be filled as DD-MM-YYYY\neg. 01-02-1930");
-            credentialCheck = false;
-        } else{
-            if (strBirthday.length()==10){
-                int day = Integer.valueOf(strBirthday.substring(0,2));
-                int month = Integer.valueOf(strBirthday.substring(3,5));
-                int year = Integer.valueOf(strBirthday.substring(6,10));
-
-                if (strBirthday.charAt(2)=='-' && strBirthday.charAt(5)=='-'){
-                    if (year > 1900 && year < 2022){
-                        if (month >= 1 && month <= 12){
-                            if (month == 1 || month == 3 || month == 5 || month == 6 || month == 8 || month == 10 || month == 12){
-                                if (day < 1 || day > 31){
-                                    credentialCheck = false;
-                                }
-                            }else if (month == 4 || month == 7 || month == 9 || month == 11){
-                                if (day < 1 || day > 30){
-                                    credentialCheck = false;
-                                }
-                            }else{
-                                if (year%4==0){
-                                    if (day < 1 || day > 29){
-                                        credentialCheck = false;
-                                    }
-                                }else{
-                                    if (day < 1 || day > 28){
-                                        credentialCheck = false;
-                                    }
-                                }
-                            }
-                        }else{
-                            credentialCheck = false;
-                        }
-                    }
-                    else{
-                        credentialCheck = false;
-                    }
-                }else{
-                    credentialCheck = false;
-                }
-            }else{
-                credentialCheck = false;
-            }
-        }
-//        for userid
-//        if (TextUtils.isEmpty(strUserId)){
-//            email.setError("UserId is is not filled!");
-//            credentialCheck = false;
-//        }
-        // check if strEmail in database
 
         return credentialCheck;
 
     }
 
+    private boolean phoneNumberChecker(String strPhoneNo, String strHomeNo, String strNokPhone) {
+        String[] phones = {strPhoneNo, strHomeNo, strNokPhone};
+        EditText[] editPhones = {phoneNo, homePhoneNo, nokPhone};
+        String[] errorPhones = {"Phone Number", "Home Number", "Next-Of-Kin Phone Number"};
+        boolean phoneCheck = true;
+        for(int phone = 0; phone<phones.length; phone++){
+            if (!TextUtils.isDigitsOnly(phones[phone]) || phones[phone].length()!=8){
+                editPhones[phone].setError(errorPhones[phone] + " needs to have 8 numbers!");
+                phoneCheck = false;
+            }else if (!(phones[phone].charAt(0)== '6' || phones[phone].charAt(0)== '9' || phones[phone].charAt(0)== '8')){
+                editPhones[phone].setError(errorPhones[phone] + " needs to start with either a 6, 8 or 9!");
+                phoneCheck = false;
+            }
+        }
+        return phoneCheck;
+    }
 
-//    Ensure password has 6-12 chars long, alphanumeric, and contain 1 special character
+    private boolean passwordChecker(String strPass, String strRePass) {
+        boolean passwordcheck = true;
+        if (!validPassword(strPass)){
+            pass.setError("Password should contain the following:\n1. 6 to 12 characters\n2. alphanumeric\n3. Special Character !.@#$%^-+");
+            passwordcheck = false;
+        }
+        if (!TextUtils.equals(strPass, strRePass)) {
+            rePass.setError("Password is not the same!");
+            passwordcheck = false;
+        }
+        return passwordcheck;
+    }
+
+    private boolean emptyStringChecker(String strEmail, String strFirstName, String strLastName, String strPass, String strRePass, String strPhoneNo,
+                                       String strHomeNo, String strAddress, String strBirthday, String strNokName, String strNokPhone, String strAdmin) {
+        String[] inputField = {strEmail, strFirstName, strLastName, strPass, strRePass, strPhoneNo, strHomeNo, strAddress, strBirthday, strNokName, strNokPhone, strAdmin};
+        String[] errorVariable = {"Email", "First Name", "Last Name", "Password", "Re-Type Password", "Phone Number", "Home Number", "Address", "Birthday", "Next-Of-Kin Name",
+                "Next-Of-Kin Phone Number", "Caretaker"};
+        EditText[] inputText = {email, firstName, lastName, pass, rePass, phoneNo, homePhoneNo, address, birthday, nokName, nokPhone, chooseAdmin};
+        String emptyStringError = " is not filled!";
+        
+        boolean stringChecker = true;
+        for(int textfield = 0; textfield<inputField.length; textfield++){
+            if(TextUtils.isEmpty(inputField[textfield])){
+                inputText[textfield].setError(errorVariable[textfield] + emptyStringError);
+                stringChecker = false;
+            }
+        }
+        return stringChecker;
+    }
+
+
+    //    Ensure password has 6-12 chars long, alphanumeric, and contain 1 special character
     private boolean validPassword(String regPass) {
         boolean passwordFlag = true;
         String[] specialChars = {"!", "@", "#", "$", "%", "^", "&", "*", ".", ","};
@@ -343,29 +443,29 @@ public class RegisterActivity extends AppCompatActivity {
         return passwordFlag;
     }
 
-//    Retrieve list of admins from database
-    private void attributeList(DatabaseReference dbRef, String dbAttribute){
-        Query query = dbRef.orderByChild(dbAttribute);
-        query.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()){
-                    ArrayList<String> tempAttList = new ArrayList<>();
-                    for(DataSnapshot attributeCounter : snapshot.getChildren()){
-                        String attributeVal = attributeCounter.child(dbAttribute).toString();
-                        tempAttList.add(attributeVal);
-                    }
-                    attList = tempAttList;
-
-                }
-                else{
-                    Toast.makeText(RegisterActivity.this, "There are no Caretakers in the database", Toast.LENGTH_SHORT).show();
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(RegisterActivity.this, "Error connecting to the database", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
+////    Retrieve list of admins from database
+//    private void attributeList(DatabaseReference dbRef, String dbAttribute){
+//        Query query = dbRef.orderByChild(dbAttribute);
+//        query.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                if (snapshot.exists()){
+//                    ArrayList<String> tempAttList = new ArrayList<>();
+//                    for(DataSnapshot attributeCounter : snapshot.getChildren()){
+//                        String attributeVal = attributeCounter.child(dbAttribute).toString();
+//                        tempAttList.add(attributeVal);
+//                    }
+//                    attList = tempAttList;
+//
+//                }
+//                else{
+//                    Toast.makeText(RegisterActivity.this, "There are no Caretakers in the database", Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//                Toast.makeText(RegisterActivity.this, "Error connecting to the database", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//    }
 }

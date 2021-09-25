@@ -54,12 +54,6 @@ public class ChooseAdminActivity extends AppCompatActivity {
         lvUsers = (ListView) findViewById(R.id.lv_users);
         lvUsers.setEmptyView(findViewById(R.id.tv_empty));
 
-
-
-
-
-
-
         DatabaseReference rootRef = getInstance("https://draw4brains-default-rtdb.asia-southeast1.firebasedatabase.app").getReference();
         DatabaseReference usersdRef = rootRef.child("Admin");
 //        //get list of users, making sure that they aren't already disabled, an admin, or a clinic admin
@@ -85,10 +79,17 @@ public class ChooseAdminActivity extends AppCompatActivity {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                         Intent intent = new Intent(ChooseAdminActivity.this, RegisterActivity.class);
+//                        Intent intent = getIntent();
+                        Bundle bundle = getIntent().getExtras();
+                        if (bundle != null) {
+                            intent.putExtras(bundle);
+                        }
                         intent.putExtra("Admin_email",mAdminController.getItem(position).getEmailAddress());
                         intent.putExtra("Admin_uid",String.valueOf(mAdminController.getItem(position).getCaretaker_email()));
                         Log.d("intent", String.valueOf(intent.getStringExtra("Admin_name")));
                         Log.d("intent", String.valueOf(intent.getStringExtra("Admin_uid")));
+
+//                        onBackPressed();
                         startActivity(intent);
                         //showEnableDialog(mAdminController.getItemId(position));
 

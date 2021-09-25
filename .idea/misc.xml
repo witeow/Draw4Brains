@@ -73,7 +73,7 @@
         <entry key="..\:/witeo/Documents/GitHub/Draw4Brains/app/src/main/res/layout/activity_account_settings.xml" value="0.1" />
         <entry key="..\:/witeo/Documents/GitHub/Draw4Brains/app/src/main/res/layout/activity_list_page.xml" value="0.1" />
         <entry key="..\:/witeo/Documents/GitHub/Draw4Brains/app/src/main/res/layout/activity_main.xml" value="0.190625" />
-        <entry key="..\:/witeo/Documents/GitHub/Draw4Brains/app/src/main/res/layout/activity_register.xml" value="0.3333333333333333" />
+        <entry key="..\:/witeo/Documents/GitHub/Draw4Brains/app/src/main/res/layout/activity_register.xml" value="0.23186608803471792" />
         <entry key="..\:/witeo/Documents/GitHub/Draw4Brains/app/src/main/res/layout/activity_register_custom_progress.xml" value="0.3671875" />
         <entry key="..\:/witeo/Documents/GitHub/Draw4Brains/app/src/main/res/layout/activity_statistics.xml" value="0.20208333333333334" />
         <entry key="..\:/witeo/Documents/GitHub/Draw4Brains/app/src/main/res/layout/activity_user_login.xml" value="0.4416243654822335" />
@@ -81,6 +81,7 @@
         <entry key="..\:/witeo/Documents/GitHub/Draw4Brains/app/src/main/res/layout/item_layout_in_list.xml" value="0.1" />
         <entry key="..\:/witeo/Documents/GitHub/Draw4Brains/app/src/main/res/layout/login_page.xml" value="0.21851851851851853" />
         <entry key="..\:/witeo/Documents/GitHub/Draw4Brains/app/src/main/res/layout/main_page.xml" value="0.1" />
+        <entry key="..\:/witeo/Documents/GitHub/Draw4Brains/app/src/main/res/layout/register_page.xml" value="0.20572916666666666" />
         <entry key="..\:/witeo/Documents/GitHub/Draw4Brains/app/src/main/res/menu/menu.xml" value="0.21851851851851853" />
       </map>
     </option>

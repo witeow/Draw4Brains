@@ -1,9 +1,10 @@
 package com.example.draw4brains.model;
 
 public class Admin {
-    private String AdminName;
-    private String phoneNo;
-    private String emailAddress;
+    private String adminName;
+    private String adminPhone;
+    private String adminEmail;
+    private String adminPass;
 
     private static Admin AdminInstance = new Admin();
 
@@ -26,32 +27,32 @@ public class Admin {
     }
 
     public String getPhoneNo() {
-        return phoneNo;
+        return adminPhone;
     }
-    public void setPhoneNo(String phoneNo) {
-        this.phoneNo = phoneNo;
+    public void setPhoneNo(String adminPhone) {
+        this.adminPhone = adminPhone;
     }
 
     public String getEmailAddress() {
-        return emailAddress;
+        return adminEmail;
     }
-    public void setEmailAddress(String emailAddress) {
-        this.emailAddress = emailAddress;
+    public void setEmailAddress(String adminEmail) {
+        this.adminEmail = adminEmail;
     }
 
     public String getAdminName() {
-        return AdminName;
+        return adminName;
     }
-    public void setAdminName(String AdminName) {
-        this.AdminName = AdminName;
+    public void setAdminName(String adminName) {
+        this.adminName = adminName;
     }
 
     @Override
     public String toString() {
         return "Admin{" +
-                "AdminName='" + AdminName + '\'' +
-                ", phoneNo='" + phoneNo + '\'' +
-                ", emailAddress='" + emailAddress + '\'' +
+                "AdminName='" + adminName + '\'' +
+                ", phoneNo='" + adminPhone + '\'' +
+                ", emailAddress='" + adminEmail + '\'' +
                 '}';
     }
 }
