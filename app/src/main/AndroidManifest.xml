@@ -33,6 +33,7 @@
         <activity android:name=".view.GameLevelActivity" android:exported="true"/>
         <activity android:name=".view.EndGameActivity" android:exported="true"/>
         <activity android:name=".view.ConnectDotsActivity" android:exported="true"/>
+        <activity android:name=".view.ChooseAdminActivity" android:exported="true"/>
         <activity
             android:name=".view.UsersListActivity"
             android:parentActivityName=".view.AdminHomeActivity"

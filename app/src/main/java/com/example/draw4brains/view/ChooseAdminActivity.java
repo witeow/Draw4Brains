@@ -31,7 +31,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import static com.google.firebase.database.FirebaseDatabase.getInstance;
 
-public class UsersListActivity extends AppCompatActivity {
+public class ChooseAdminActivity extends AppCompatActivity {
 
     ArrayList<com.example.draw4brains.model.User> User=new ArrayList<User>();
 
@@ -48,50 +48,20 @@ public class UsersListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_page);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//TODO
-//        fAuth = FirebaseAuth.getInstance();
-//        //FirebaseUser firebaseUser = fAuth.getCurrentUser();
-//        uid = fAuth.getCurrentUser().getUid();
-//        DatabaseReference User_cred = FirebaseDatabase.getInstance().getReference("Admin").child(uid);
-//        User_cred.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                admin_email=snapshot.child("email").getValue(String.class);
-//            }
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//            }
-//        });
-
-//        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-//        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Admin");
-//        // opens up the current user's database reference
-//        final DatabaseReference currentUser = databaseReference.child(firebaseUser.getUid());
 
 
         //initialize the views
         lvUsers = (ListView) findViewById(R.id.lv_users);
         lvUsers.setEmptyView(findViewById(R.id.tv_empty));
 
-        int score = 1;
-//        User.add(new User("Ostrich","gender","phone","email1","caretaker",false,score));
-//        User.add(new User("Flamingo","gender","phone","email2","caretaker",false,score));
-//        User.add(new User("Sparrow","gender","phone","email3","caretaker",false,score));
-//        User.add(new User("Rooster","gender","phone","email4","caretaker",false,score));
-//        User.add(new User("Rtest","gender","phone","email4","wrong",false,score));
-        //TODO can also filter as you add to User
-//        for(int i=0;i<User.size();i++){
-//            if(User.get(i).getCaretaker_email()!="caretaker"){
-//                User.remove(i);
-//            }
-//        }
+
 
 
 
 
 
         DatabaseReference rootRef = getInstance("https://draw4brains-default-rtdb.asia-southeast1.firebasedatabase.app").getReference();
-        DatabaseReference usersdRef = rootRef.child("User");
+        DatabaseReference usersdRef = rootRef.child("Admin");
 //        //get list of users, making sure that they aren't already disabled, an admin, or a clinic admin
         ValueEventListener eventListener = new ValueEventListener() {
             @Override
@@ -100,29 +70,25 @@ public class UsersListActivity extends AppCompatActivity {
                 for(DataSnapshot ds : dataSnapshot.getChildren()) {
                     String uid = ds.getKey();
                     Log.d("TAG", uid);
-                    String email=ds.child("userEmail").getValue(String.class);
-                    String name=ds.child("userName").getValue(String.class);
+                    String email=ds.child("adminEmail").getValue(String.class);
+                    String name=ds.child("adminName").getValue(String.class);
 
-                    //TODO String caretaker_uid=ds.child("caretaker").getValue(String.class);
-                    String caretaker_uid = "1";
-                    uid = "1";
-                    
-                    if (caretaker_uid==uid) {
-                        User.add(new User(name, "gender", "phone", email, "caretaker", false, score));
-                    }
+
+                        User.add(new User(name, "gender", "phone", email, uid, false, 1));
+
 
                 }
 
-                mAdminController = new AdminController(UsersListActivity.this,User);
+                mAdminController = new AdminController(ChooseAdminActivity.this,User);
                 lvUsers.setAdapter(mAdminController);
                 lvUsers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                        Intent intent = new Intent(UsersListActivity.this, StatisticsPageActivity.class);
-                        intent.putExtra("Name",mAdminController.getItem(position).getUserName());
-                        intent.putExtra("Score",String.valueOf(mAdminController.getItem(position).getscore()));
-                        Log.d("intent", String.valueOf(intent.getStringExtra("Name")));
-                        Log.d("intent", String.valueOf(intent.getStringExtra("Score")));
+                        Intent intent = new Intent(ChooseAdminActivity.this, RegisterActivity.class);
+                        intent.putExtra("Admin_email",mAdminController.getItem(position).getEmailAddress());
+                        intent.putExtra("Admin_uid",String.valueOf(mAdminController.getItem(position).getCaretaker_email()));
+                        Log.d("intent", String.valueOf(intent.getStringExtra("Admin_name")));
+                        Log.d("intent", String.valueOf(intent.getStringExtra("Admin_uid")));
                         startActivity(intent);
                         //showEnableDialog(mAdminController.getItemId(position));
 
@@ -192,10 +158,10 @@ public class UsersListActivity extends AppCompatActivity {
 
             Collections.sort(User, (p1, p2) -> p1.getUserName().compareTo(p2.getUserName()));
             //mAdminController.clear();
-           // mAdminController.addAll(User);
+            // mAdminController.addAll(User);
             mAdminController.notifyDataSetChanged();
 
-           return true;
+            return true;
         }
         else{
 //            Intent myIntent = new Intent(getApplicationContext(), mainactivityAdmin.class);

@@ -185,12 +185,24 @@
         android:id="@+id/btn_register"
         android:layout_width="312dp"
         android:layout_height="56dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="4dp"
         android:backgroundTint="@color/transparent"
         android:src="@drawable/ic_register_long"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.493"
+        app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
+        app:layout_constraintTop_toBottomOf="@+id/button_chooseadmin" />
+
+    <Button
+        android:id="@+id/button_chooseadmin"
+        android:layout_width="312dp"
+        android:layout_height="56dp"
+        android:layout_marginTop="4dp"
+        android:text="Choose Admin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

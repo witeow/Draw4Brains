@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
@@ -44,6 +45,7 @@ import java.util.regex.Matcher;
 public class RegisterActivity extends AppCompatActivity {
 
     private ImageButton btnRegister, btnBack;
+    private Button choose_admin;
     private EditText email, firstName, lastName, pass, rePass, phoneNo, birthday, adminEdit;
     private RadioGroup genderChoice;
     private AutoCompleteTextView adminView;
@@ -63,6 +65,10 @@ public class RegisterActivity extends AppCompatActivity {
         getSupportActionBar().hide();
         setContentView(R.layout.activity_register);
 
+        //TODO Russell
+        String admin_email = getIntent().getStringExtra("Admin_email");
+        String admin_uid = getIntent().getStringExtra("Admin_uid");
+
         btnRegister = findViewById(R.id.btn_register);
         btnBack = findViewById(R.id.btn_back);
         email = findViewById(R.id.et_email);
@@ -75,13 +81,23 @@ public class RegisterActivity extends AppCompatActivity {
 //        passStrength = findViewById(R.id.pb_password_strength);
         phoneNo = findViewById(R.id.et_phone);
         birthday = findViewById(R.id.et_birthday);
+        choose_admin = findViewById(R.id.button_chooseadmin);
 
         auth = FirebaseAuth.getInstance();
 
 
 //        Fill AutoCompleteTextView
 
+        if(admin_email!=null){
+            choose_admin.setText(admin_email);
+        }
 
+        choose_admin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(RegisterActivity.this, ChooseAdminActivity.class));
+            }
+        });
 
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
