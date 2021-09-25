@@ -40,7 +40,7 @@ public class UsersListActivity extends AppCompatActivity {
     //FirebaseAuth fAuth=FirebaseAuth.getInstance();
     String newtext;
     FirebaseAuth fAuth;
-    String uid;
+    //String uid;
     String admin_email;
 
     @Override
@@ -49,14 +49,18 @@ public class UsersListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_list_page);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 //TODO
-//        fAuth = FirebaseAuth.getInstance();
-//        //FirebaseUser firebaseUser = fAuth.getCurrentUser();
-//        uid = fAuth.getCurrentUser().getUid();
+        fAuth = FirebaseAuth.getInstance();
+        //FirebaseUser firebaseUser = fAuth.getCurrentUser();
+        admin_email = fAuth.getCurrentUser().getEmail();
+        Log.d("Admin's uidddddddddd", admin_email);
 //        DatabaseReference User_cred = FirebaseDatabase.getInstance().getReference("Admin").child(uid);
+//        uid=User_cred
+//        Log.d("Admin's uidddddddddd", uid);
 //        User_cred.addValueEventListener(new ValueEventListener() {
 //            @Override
 //            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                admin_email=snapshot.child("email").getValue(String.class);
+//                uid = snapshot.getKey();
+//                Log.d("Admin's uidddddddddd", uid);
 //            }
 //            @Override
 //            public void onCancelled(@NonNull DatabaseError error) {
@@ -65,7 +69,7 @@ public class UsersListActivity extends AppCompatActivity {
 
 //        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 //        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Admin");
-//        // opens up the current user's database reference
+////        // opens up the current user's database reference
 //        final DatabaseReference currentUser = databaseReference.child(firebaseUser.getUid());
 
 
@@ -73,7 +77,7 @@ public class UsersListActivity extends AppCompatActivity {
         lvUsers = (ListView) findViewById(R.id.lv_users);
         lvUsers.setEmptyView(findViewById(R.id.tv_empty));
 
-        int score = 1;
+        //int score = 1;
 //        User.add(new User("Ostrich","gender","phone","email1","caretaker",false,score));
 //        User.add(new User("Flamingo","gender","phone","email2","caretaker",false,score));
 //        User.add(new User("Sparrow","gender","phone","email3","caretaker",false,score));
@@ -98,16 +102,18 @@ public class UsersListActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 for(DataSnapshot ds : dataSnapshot.getChildren()) {
-                    String uid = ds.getKey();
-                    Log.d("TAG", uid);
+                    String child_uid = ds.getKey();
+                    Log.d("TAG", child_uid);
                     String email=ds.child("userEmail").getValue(String.class);
                     String name=ds.child("userName").getValue(String.class);
+                    String score = ds.child("userScore").getValue(String.class);
 
-                    //TODO String caretaker_uid=ds.child("caretaker").getValue(String.class);
-                    String caretaker_uid = "1";
-                    uid = "1";
+
+                    String caretaker_email = "wlim095@e.ntu.edu.sg";
+                    //TODO  caretaker_email=ds.child("caretaker_email").getValue(String.class);
+
                     
-                    if (caretaker_uid==uid) {
+                    if (admin_email.equals(caretaker_email)) {
                         User.add(new User(name, "gender", "phone", email, "caretaker", false, score));
                     }
 
@@ -120,7 +126,7 @@ public class UsersListActivity extends AppCompatActivity {
                     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                         Intent intent = new Intent(UsersListActivity.this, StatisticsPageActivity.class);
                         intent.putExtra("Name",mAdminController.getItem(position).getUserName());
-                        intent.putExtra("Score",String.valueOf(mAdminController.getItem(position).getscore()));
+                        intent.putExtra("Score",mAdminController.getItem(position).getscores());
                         Log.d("intent", String.valueOf(intent.getStringExtra("Name")));
                         Log.d("intent", String.valueOf(intent.getStringExtra("Score")));
                         startActivity(intent);

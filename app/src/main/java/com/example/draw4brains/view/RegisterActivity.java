@@ -87,6 +87,7 @@ public class RegisterActivity extends AppCompatActivity {
         String admin_email = getIntent().getStringExtra("Admin_email");
         String admin_uid = getIntent().getStringExtra("Admin_uid");
 
+
         btnRegister = findViewById(R.id.btn_register);
         btnBack = findViewById(R.id.btn_back);
         email = findViewById(R.id.et_email);
