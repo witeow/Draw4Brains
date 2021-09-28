@@ -5,12 +5,16 @@
       <map>
         <entry key="..\:/Users/limqi/Documents/GitHub/Draw4Brains/app/src/main/res/drawable/ic_launcher_background.xml" value="0.21458333333333332" />
         <entry key="..\:/Users/limqi/Documents/GitHub/Draw4Brains/app/src/main/res/layout/activity_account_settings.xml" value="0.26666666666666666" />
+        <entry key="..\:/Users/limqi/Documents/GitHub/Draw4Brains/app/src/main/res/layout/activity_connect_dots.xml" value="0.20520833333333333" />
         <entry key="..\:/Users/limqi/Documents/GitHub/Draw4Brains/app/src/main/res/layout/activity_forget_password.xml" value="0.1984375" />
+        <entry key="..\:/Users/limqi/Documents/GitHub/Draw4Brains/app/src/main/res/layout/activity_guess_image.xml" value="0.33" />
         <entry key="..\:/Users/limqi/Documents/GitHub/Draw4Brains/app/src/main/res/layout/activity_home_admin.xml" value="0.1984375" />
         <entry key="..\:/Users/limqi/Documents/GitHub/Draw4Brains/app/src/main/res/layout/activity_home_user.xml" value="0.33" />
         <entry key="..\:/Users/limqi/Documents/GitHub/Draw4Brains/app/src/main/res/layout/activity_list_page.xml" value="0.21331521739130435" />
         <entry key="..\:/Users/limqi/Documents/GitHub/Draw4Brains/app/src/main/res/layout/activity_main.xml" value="0.1984375" />
+        <entry key="..\:/Users/limqi/Documents/GitHub/Draw4Brains/app/src/main/res/layout/activity_register.xml" value="0.14564336372847012" />
         <entry key="..\:/Users/limqi/Documents/GitHub/Draw4Brains/app/src/main/res/layout/activity_user_login.xml" value="0.25" />
+        <entry key="..\:/Users/limqi/Documents/GitHub/Draw4Brains/app/src/main/res/layout/register_page.xml" value="0.20572916666666666" />
         <entry key="..\:/Users/limqi/Documents/GitHub/Draw4Brains/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.21458333333333332" />
         <entry key="..\:/Users/limqi/StudioProjects/Draw4Brains/app/src/main/res/drawable/account_toggle.xml" value="0.34322916666666664" />
         <entry key="..\:/Users/limqi/StudioProjects/Draw4Brains/app/src/main/res/drawable/ic_greenloginbutton.xml" value="0.34322916666666664" />
@@ -73,7 +77,7 @@
         <entry key="..\:/witeo/Documents/GitHub/Draw4Brains/app/src/main/res/layout/activity_account_settings.xml" value="0.1" />
         <entry key="..\:/witeo/Documents/GitHub/Draw4Brains/app/src/main/res/layout/activity_list_page.xml" value="0.1" />
         <entry key="..\:/witeo/Documents/GitHub/Draw4Brains/app/src/main/res/layout/activity_main.xml" value="0.190625" />
-        <entry key="..\:/witeo/Documents/GitHub/Draw4Brains/app/src/main/res/layout/activity_register.xml" value="0.1" />
+        <entry key="..\:/witeo/Documents/GitHub/Draw4Brains/app/src/main/res/layout/activity_register.xml" value="0.3333333333333333" />
         <entry key="..\:/witeo/Documents/GitHub/Draw4Brains/app/src/main/res/layout/activity_register_custom_progress.xml" value="0.3671875" />
         <entry key="..\:/witeo/Documents/GitHub/Draw4Brains/app/src/main/res/layout/activity_statistics.xml" value="0.20208333333333334" />
         <entry key="..\:/witeo/Documents/GitHub/Draw4Brains/app/src/main/res/layout/activity_user_login.xml" value="0.4416243654822335" />
@@ -81,7 +85,6 @@
         <entry key="..\:/witeo/Documents/GitHub/Draw4Brains/app/src/main/res/layout/item_layout_in_list.xml" value="0.1" />
         <entry key="..\:/witeo/Documents/GitHub/Draw4Brains/app/src/main/res/layout/login_page.xml" value="0.21851851851851853" />
         <entry key="..\:/witeo/Documents/GitHub/Draw4Brains/app/src/main/res/layout/main_page.xml" value="0.1" />
-        <entry key="..\:/witeo/Documents/GitHub/Draw4Brains/app/src/main/res/layout/register_page.xml" value="0.20572916666666666" />
         <entry key="..\:/witeo/Documents/GitHub/Draw4Brains/app/src/main/res/menu/menu.xml" value="0.21851851851851853" />
       </map>
     </option>
