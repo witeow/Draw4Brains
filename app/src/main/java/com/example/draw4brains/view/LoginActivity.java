@@ -42,6 +42,17 @@ public class LoginActivity extends AppCompatActivity {
         btnAccType = findViewById(R.id.btn_acc_type);
         btnAccType.setChecked(false);
 
+        // For testing purposes
+        Button shortcutToGame = findViewById(R.id.shortcutGame);
+        shortcutToGame.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                intent = new Intent(getApplicationContext(), ConnectDotsActivity.class);
+                intent.putExtra("isAdmin",true);
+                startActivity(intent);
+            }
+        });
+
         auth = FirebaseAuth.getInstance();
 
 
