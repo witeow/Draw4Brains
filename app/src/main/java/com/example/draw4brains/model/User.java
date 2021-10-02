@@ -10,6 +10,7 @@ public class User {
     private Boolean is_admin;
     private int score;
     private String scores;
+    private String number_played;
 
     private static User userInstance = new User();
 
@@ -28,10 +29,10 @@ public class User {
         setEmailAddress(emailAddress);
         setCaretaker_email(caretaker_email);
         setIs_admin(Is_Admin);
-        this.score = score;
+        setscore(score);
     }
 
-    public User(String userName, String gender, String phoneNo, String emailAddress, String caretaker_email,Boolean Is_Admin, String scores){
+    public User(String userName, String gender, String phoneNo, String emailAddress, String caretaker_email,Boolean Is_Admin, String scores, String number_played){
         setUserName(userName);
         setGender(gender);
         //setBirthday(birthday);
@@ -39,7 +40,7 @@ public class User {
         setEmailAddress(emailAddress);
         setCaretaker_email(caretaker_email);
         setIs_admin(Is_Admin);
-        this.score = score;
+        setscores(scores);
     }
 
     /**
@@ -108,6 +109,10 @@ public class User {
     public String getscores(){return scores;}
 
     public void setscores(String scores){this.scores = scores;}
+
+    public String getNumber_played(){return number_played;}
+
+    public void setNumber_played(String number_played){this.number_played = number_played;}
 
     @Override
     public String toString() {

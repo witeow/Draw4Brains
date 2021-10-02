@@ -107,14 +107,16 @@ public class UsersListActivity extends AppCompatActivity {
                     String email=ds.child("userEmail").getValue(String.class);
                     String name=ds.child("userName").getValue(String.class);
                     String score = ds.child("userScore").getValue(String.class);
+                    String number_played = "5";
+                    //ds.child("number_played").getValue(String.class);
 
 
-                    String caretaker_email = "wlim095@e.ntu.edu.sg";
-                    //TODO  caretaker_email=ds.child("caretaker_email").getValue(String.class);
+                    //String caretaker_email = "wlim095@e.ntu.edu.sg";
+                    String caretaker_email=ds.child("userAdmin").getValue(String.class);
 
                     
                     if (admin_email.equals(caretaker_email)) {
-                        User.add(new User(name, "gender", "phone", email, "caretaker", false, score));
+                        User.add(new User(name, "gender", "phone", email, caretaker_email, false, score,number_played));
                     }
 
                 }
@@ -127,8 +129,7 @@ public class UsersListActivity extends AppCompatActivity {
                         Intent intent = new Intent(UsersListActivity.this, StatisticsPageActivity.class);
                         intent.putExtra("Name",mAdminController.getItem(position).getUserName());
                         intent.putExtra("Score",mAdminController.getItem(position).getscores());
-                        Log.d("intent", String.valueOf(intent.getStringExtra("Name")));
-                        Log.d("intent", String.valueOf(intent.getStringExtra("Score")));
+                        intent.putExtra("number_played",mAdminController.getItem(position).getNumber_played());
                         startActivity(intent);
                         //showEnableDialog(mAdminController.getItemId(position));
 
