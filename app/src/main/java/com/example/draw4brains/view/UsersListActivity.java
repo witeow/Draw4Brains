@@ -127,7 +127,7 @@ public class UsersListActivity extends AppCompatActivity {
                     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                         Intent intent = new Intent(UsersListActivity.this, StatisticsPageActivity.class);
                         intent.putExtra("Name",mAdminController.getItem(position).getUserName());
-                        intent.putExtra("Score",mAdminController.getItem(position).getscores());
+                        intent.putExtra("Score",mAdminController.getItem(position).getTotalScore());
                         intent.putExtra("number_played",mAdminController.getItem(position).getNumber_played());
                         startActivity(intent);
                         //showEnableDialog(mAdminController.getItemId(position));

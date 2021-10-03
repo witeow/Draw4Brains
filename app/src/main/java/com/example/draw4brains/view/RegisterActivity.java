@@ -251,10 +251,10 @@ public class RegisterActivity extends AppCompatActivity {
                             if (task.isSuccessful()){
                                 HashMap<String, Object> registerUser = new HashMap<>();
                                 String[] userAttributes = {"userEmail", "userName", "userGender", "userPassword", "userPhoneNum",
-                                        "userHouseNum", "userAddress", "userBirthday", "userScore",  "userNokName", "userNokNum", "userAdmin"};
+                                        "userHouseNum", "userAddress", "userBirthday", "userScore",  "userNokName", "userNokNum", "userAdmin", "userNumGamesPlayed"};
 
                                 String[] regAttributes = {strEmail, strFirstName + " " + strLastName, strGender, strPass,
-                                        strPhoneNo, strHomeNo, strAddress, strBirthday, "0", strNokName, strNokPhone, strAdmin};
+                                        strPhoneNo, strHomeNo, strAddress, strBirthday, "0", strNokName, strNokPhone, strAdmin, "0"};
 
                                 for(int attributeNo=0; attributeNo<userAttributes.length; attributeNo++){
                                     addToHashMap(registerUser, userAttributes[attributeNo], regAttributes[attributeNo]);
