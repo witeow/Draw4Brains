@@ -107,8 +107,7 @@ public class UsersListActivity extends AppCompatActivity {
                     String email=ds.child("userEmail").getValue(String.class);
                     String name=ds.child("userName").getValue(String.class);
                     String score = ds.child("userScore").getValue(String.class);
-                    String number_played = "5";
-                    //ds.child("number_played").getValue(String.class);
+                    int number_played = ds.child("userNumGamesPlayed").getValue(int.class);
 
 
                     //String caretaker_email = "wlim095@e.ntu.edu.sg";

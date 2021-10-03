@@ -18,12 +18,22 @@ public class StatisticsPageActivity extends AppCompatActivity {
 
         String Name = getIntent().getStringExtra("Name");
         String Score = getIntent().getStringExtra("Score");
-        String number_played = getIntent().getStringExtra("number_played");
+        int number_played = getIntent().getIntExtra("number_played",0);
+        int average_score=0;
+        int i=Integer.parseInt(Score);
+        if (number_played != 0) {
+           average_score = i/number_played;
+        }
 
         TextView t_score = (TextView) findViewById(R.id.tv_stats);
         TextView t_name = (TextView) findViewById(R.id.tv_name);
+        TextView t_games_played = (TextView) findViewById(R.id.no_games_played);
+
+        String s_score = String.valueOf(average_score);
+        String s_played = String.valueOf(number_played);
 
         t_name.setText(Name);
-        t_score.setText(Score);
+        t_score.setText(Integer.toString(average_score));
+        t_games_played.setText(Integer.toString(number_played));
     }
 }
