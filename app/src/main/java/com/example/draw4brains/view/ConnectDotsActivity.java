@@ -12,12 +12,14 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Chronometer;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -64,6 +66,12 @@ public class ConnectDotsActivity extends AppCompatActivity {
     private static final String LEVEL = "3"; // Testing purposes until intent is passed from other activity
     private static final String FILE_NAME = "nodeData.json"; // Testing purposes until intent is passed from other activity
 
+    // Chronometer
+    private Chronometer chronometer;
+    private long pauseOffset;
+    private boolean isRunning;
+
+
     // Constants
     private static final int PERCENTAGE_FILL_REQUIRED = 80; // To check if the nodes are spaced big enough
     private static final float SCALING_FACTOR = 1f;
@@ -89,6 +97,45 @@ public class ConnectDotsActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        chronometer = findViewById(R.id.chronometer);
+
+//        Button startBtn = findViewById(R.id.startBtn);
+//        Button pauseBtn = findViewById(R.id.pauseBtn);
+//        Button resetBtn = findViewById(R.id.resetBtn);
+//        startBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (!isRunning){
+//                    chronometer.setBase(SystemClock.elapsedRealtime() - pauseOffset);
+//                    chronometer.start();
+//                    isRunning = true;
+//                }
+//                Log.d("start clicked", "yes");
+//            }
+//        });
+//
+//        pauseBtn.setOnClickListener((new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (isRunning){
+//                    chronometer.stop();
+//                    pauseOffset = SystemClock.elapsedRealtime() - chronometer.getBase();
+//                    isRunning = false;
+//                }
+//                Log.d("pause clicked", "yes");
+//
+//            }
+//        }));
+//
+//        resetBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                chronometer.setBase(SystemClock.elapsedRealtime());
+//                pauseOffset = 0;
+//                Log.d("reset clicked", "yes");
+//            }
+//        });
     }
 
     @Override
@@ -155,13 +202,13 @@ public class ConnectDotsActivity extends AppCompatActivity {
                     }
                     Log.d("ArrayNode", preprocessedArray.toString());
                     initialize_level(preprocessedArray);
-
+                    chronometer.start();
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                Log.d("DatabaseError", "Error in database level load");
             }
         };
 //        Log.d("JSON", "Before test");
@@ -233,8 +280,6 @@ public class ConnectDotsActivity extends AppCompatActivity {
                 //    this.resetTouched();
                 this.canvasView.invalidate();
                 break;
-            case MotionEvent.ACTION_HOVER_MOVE:
-                Log.d("IS_ON_POINT: ", "YES");
         }
         return true;
     }
@@ -271,11 +316,12 @@ public class ConnectDotsActivity extends AppCompatActivity {
 
         for (Node node : this.nodeMgr.getNodeList()) {
             ImageView circleImage = node.getNodeImage();
-            double dist = Math.sqrt(Math.pow(circleImage.getX() + 62.5d - x, 2.0d) + Math.pow(circleImage.getY() + 62.5d - y, 2.0d));
+
+            double dist = Math.sqrt(Math.pow(circleImage.getX() + (diameterForGame/2.0d) - x, 2.0d) + Math.pow(circleImage.getY() + (diameterForGame/2.0d) - y, 2.0d));
 
             ColorDrawable colorDrawable = (ColorDrawable) circleImage.getBackground();
 
-            if (((colorDrawable == null) || (colorDrawable.getColor() != Color.GREEN)) && dist < 62.5d) {
+            if (((colorDrawable == null) || (colorDrawable.getColor() != Color.GREEN)) && dist < (diameterForGame/2.0d)) {
                 if (this.circleStartX == 0 && this.circleStartY == 0) {
                     this.circleStartX = circleImage.getX();
                     this.circleStartY = circleImage.getY();
@@ -427,7 +473,7 @@ public class ConnectDotsActivity extends AppCompatActivity {
 
         // Calculate the original bound width and height of nodes before calibration
         int originalBoundX, originalBoundY, originalDisplacementFromOriginX, originalDisplacementFromOriginY;
-        int[] originalBoundInfo = getBoundDimensions(nodesList);
+        int[] originalBoundInfo = getBoundDimensions(nodesList, true);
         originalBoundX=originalBoundInfo[0];
         originalBoundY=originalBoundInfo[1];
         // Get the ideal filled bounds required to scale up (or down) to.
@@ -465,7 +511,7 @@ public class ConnectDotsActivity extends AppCompatActivity {
             while (true) {
                 // Scale and Get Bounds
                 scaledNodes = scaleProcessingNodes(nodesList, originalDisplacementFromOriginX, originalDisplacementFromOriginY, scaleFactor);
-                int[] scaledBoundInfo = getBoundDimensions(scaledNodes);
+                int[] scaledBoundInfo = getBoundDimensions(scaledNodes, false);
                 int scaledBoundWidth = scaledBoundInfo[0];
                 int scaledBoundHeight = scaledBoundInfo[1];
                 Log.d("Initialization", String.format("Scaling - scaledBoundWidth: %d, scaledBoundHeight: %d", scaledBoundWidth, scaledBoundHeight));
@@ -487,7 +533,7 @@ public class ConnectDotsActivity extends AppCompatActivity {
 
                 // Scale and Get Bounds
                 scaledNodes = scaleProcessingNodes(nodesList, originalDisplacementFromOriginX, originalDisplacementFromOriginY, scaleFactor);
-                int[] scaledBoundInfo = getBoundDimensions(scaledNodes);
+                int[] scaledBoundInfo = getBoundDimensions(scaledNodes, false);
                 int scaledBoundWidth = scaledBoundInfo[0];
                 int scaledBoundHeight = scaledBoundInfo[1];
                 Log.d("Initialization", String.format("Scaling - scaledBoundWidth: %d, scaledBoundHeight: %d", scaledBoundWidth, scaledBoundHeight));
@@ -521,7 +567,7 @@ public class ConnectDotsActivity extends AppCompatActivity {
      * @return Diameter that the nodes will use
      */
     private float getDiameterForNodes(ArrayList<Node> nodesList) {
-        int[] boundInfo = getBoundDimensions(nodesList);
+        int[] boundInfo = getBoundDimensions(nodesList, false);
         int boundWidth = boundInfo[0];
         int boundHeight = boundInfo[1];
         int noOfNodes = nodesList.size();
@@ -543,7 +589,7 @@ public class ConnectDotsActivity extends AppCompatActivity {
     private ArrayList<Node> transformNodeAutomatic(ArrayList<Node> nodesList, int canvasWidth, int canvasHeight, int percentageFillRequired) {
         // The bound has been displaced to origin. Now we have to transform the nodes appropriately back and try to center it on the screen.
 
-        int[] finalBound = getBoundDimensions(nodesList);
+        int[] finalBound = getBoundDimensions(nodesList, false);
         float scaledPercentageX = ((float)finalBound[0]/canvasWidth * 100);
         float scaledPercentageY = ((float)finalBound[1]/canvasHeight * 100);
         Log.d("Percentage", String.format("finalBoundX, finalBoundY: %d, %d", finalBound[0], finalBound[1]));
@@ -655,20 +701,31 @@ public class ConnectDotsActivity extends AppCompatActivity {
      * @param nodesList The list containing the nodes.
      * @return Width and Height of bounds in the format [width, height]
      */
-    private int[] getBoundDimensions(ArrayList<Node> nodesList) {
+    private int[] getBoundDimensions(ArrayList<Node> nodesList, boolean isForGeometric) {
         // Determine the bounds in pixel scale. Does not return the lowestX or lowestY because the bound we are checking has already been displaced earlier
         int lowestX = Integer.MAX_VALUE;
         int lowestY = Integer.MAX_VALUE;
         int highestX = Integer.MIN_VALUE;
         int highestY = Integer.MIN_VALUE;
 
-        for (Node node : nodesList) {
-            int scaledX = node.getCenter_x();
-            int scaledY = node.getCenter_y();
-            if (scaledX < lowestX) lowestX = scaledX;
-            if (scaledY < lowestY) lowestY = scaledY;
-            if (scaledX > highestX) highestX = scaledX;
-            if (scaledY > highestY) highestY = scaledY;
+        if (isForGeometric) {
+            for (Node node : nodesList) {
+                int originalX = node.getGeometric_x();
+                int originalY = node.getGeometric_y();
+                if (originalX < lowestX) lowestX = originalX;
+                if (originalY < lowestY) lowestY = originalY;
+                if (originalX > highestX) highestX = originalX;
+                if (originalY > highestY) highestY = originalY;
+            }
+        } else {
+            for (Node node : nodesList) {
+                int scaledX = node.getCenter_x();
+                int scaledY = node.getCenter_y();
+                if (scaledX < lowestX) lowestX = scaledX;
+                if (scaledY < lowestY) lowestY = scaledY;
+                if (scaledX > highestX) highestX = scaledX;
+                if (scaledY > highestY) highestY = scaledY;
+            }
         }
 
         // Transform the x boundaries and y boundaries

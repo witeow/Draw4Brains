@@ -24,17 +24,12 @@ public class User {
     private String caretaker_email;
     private Boolean is_admin;
     private int score;
-<<<<<<< Updated upstream
     private String scores;
-    private int number_played;
-=======
     private int totalScore;
     private int number_played;
     private String userID;
     private String nokName;
     private String nokNum;
-
->>>>>>> Stashed changes
 
     private static User userInstance = new User();
 
@@ -109,13 +104,12 @@ public class User {
         setEmailAddress(emailAddress);
         setCaretaker_email(caretaker_email);
         setIs_admin(Is_Admin);
-<<<<<<< Updated upstream
-        setscores(scores);
+
         setNumber_played(number_played);
-=======
-        setTotalScore(Integer.parseInt(scores), Integer.parseInt(number_played));
+
+        setTotalScore(Integer.parseInt(scores), number_played);
 //        setTotalScore(scores);
->>>>>>> Stashed changes
+
     }
 
     /**
