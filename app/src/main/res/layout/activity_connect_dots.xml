@@ -13,7 +13,7 @@
         android:background="@color/light_blue"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" >
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/tv_game_header"
@@ -34,29 +34,18 @@
             android:layout_width="111dp"
             android:layout_height="42dp"
             android:layout_marginTop="4dp"
-            android:layout_marginEnd="4dp"
+            android:layout_marginBottom="4dp"
             android:backgroundTint="@color/red"
             android:text="Give Up"
             android:textColor="@color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintHorizontal_bias="0.946"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-<!--    <TextView-->
-<!--        android:id="@+id/pointView"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="Points:"-->
-<!--        android:textColor="@color/black"-->
-<!--        android:textSize="20dp"-->
-<!--        android:textStyle="bold"-->
-<!--        android:gravity="center"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintHorizontal_bias="0.0"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/topPanel" />-->
-
 
     <RelativeLayout
         android:id="@+id/relativeLayout"
@@ -76,7 +65,63 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentBottom="true"
             android:background="@color/Draw4Brain_MainBG" />
+
+        <Chronometer
+            android:id="@+id/chronometer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="30sp"
+            android:translationX="300dp"
+            android:translationY="5dp" />
+
+        <Button
+            android:id="@+id/startBtn"
+            android:layout_width="83dp"
+            android:layout_height="37dp"
+            android:text="start"
+            android:textSize="7dp"
+            android:translationX="5dp"
+            android:translationY="5dp" />
+
+        <Button
+            android:id="@+id/resetBtn"
+            android:layout_width="83dp"
+            android:layout_height="42dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginLeft="5dp"
+            android:text="reset"
+            android:textSize="7dp"
+            android:translationX="5dp"
+            android:translationY="85dp"
+            app:layout_constraintStart_toEndOf="@+id/canvasView" />
+
+        <Button
+            android:id="@+id/pauseBtn"
+            android:layout_width="83dp"
+            android:layout_height="42dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginLeft="5dp"
+            android:text="pause"
+            android:textSize="7dp"
+            android:translationX="5dp"
+            android:translationY="40dp"
+            app:layout_constraintStart_toEndOf="@+id/canvasView" />
+
     </RelativeLayout>
+
+    <!--    <TextView-->
+<!--        android:id="@+id/pointView"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Points:"-->
+<!--        android:textColor="@color/black"-->
+<!--        android:textSize="20dp"-->
+<!--        android:textStyle="bold"-->
+<!--        android:gravity="center"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.0"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/topPanel" />-->
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

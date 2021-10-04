@@ -8,19 +8,23 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.draw4brains.R;
 import com.example.draw4brains.controller.JsonMgr;
 import com.example.draw4brains.controller.NodeMgr;
+import com.example.draw4brains.model.ConnectDots;
 import com.example.draw4brains.model.Node;
 
 import java.util.ArrayList;
@@ -45,6 +49,8 @@ public class ConnectDotsActivity extends AppCompatActivity {
 
     // Used in initialization
     float diameterForGame;
+
+    float X1, Y1, X2, Y2;
 
     // Change FILE AND LEVEL HERE
     private static final String LEVEL = "3"; // Testing purposes until intent is passed from other activity
@@ -116,132 +122,106 @@ public class ConnectDotsActivity extends AppCompatActivity {
         return dimensions;
     }
 
-//    @Override
-//    public boolean onTouchEvent(MotionEvent event) {
-//        float raw_x = event.getRawX();
-//        float raw_y = event.getRawY();
-//        int offset = getYOffset(relLayout);
-//        float x = raw_x;
-//        float y = raw_y - offset;
-//
-//        switch (event.getActionMasked()) {
-//            case MotionEvent.ACTION_DOWN:
-//                X1 = x;
-//                Y1 = y;
-//                this.canvasView.startTouch(x, y);
-//                Log.d("Pos X: ", String.valueOf(x));
-//                Log.d("Pos Y: ", String.valueOf(y));
-//                checkCircles(x, y);
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        float raw_x = event.getRawX();
+        float raw_y = event.getRawY();
+
+        int offset = getYOffset(relLayout);
+        float x = raw_x;
+        float y = raw_y - offset;
+
+        switch (event.getActionMasked()) {
+            case MotionEvent.ACTION_DOWN:
+                X1 = x;
+                Y1 = y;
+                this.canvasView.startTouch(x, y);
+                Log.d("Pos X: ", String.valueOf(x));
+                Log.d("Pos Y: ", String.valueOf(y));
+                checkCircles(x, y);
+                this.canvasView.invalidate();
+                break;
+            case MotionEvent.ACTION_MOVE:
+                checkCircles(x, y);
+                this.canvasView.moveTouch(x, y);
+                this.canvasView.invalidate();
+                break;
+            case MotionEvent.ACTION_UP:
+                X2 = x;
+                Y2 = y;
+                this.canvasView.upTouch(true);
+                this.canvasView.drawLine(X1,Y1, X2, Y2);
 //                this.canvasView.invalidate();
-//                break;
-//            case MotionEvent.ACTION_MOVE:
-//                checkCircles(x, y);
-//                this.canvasView.moveTouch(x, y);
-//                this.canvasView.invalidate();
-//                break;
-//            case MotionEvent.ACTION_UP:
-//                X2 = x;
-//                Y2 = y;
-//                this.canvasView.upTouch(true);
-//                this.canvasView.drawLine(X1,Y1, X2, Y2);
-////                this.canvasView.invalidate();
-////                this.canvasView.clearCanvas();
-//                if (this.ggezwin) {
-//                    this.canvasView.clearCanvas();
-//                    this.resetCanvas();
-//                }
-//                else
-//                    this.resetTouched();
-//                this.canvasView.invalidate();
-//                break;
-//            case MotionEvent.ACTION_HOVER_MOVE:
-//                Log.d("IS_ON_POINT: ", "YES");
-//        }
-//
-//        return true;
-//    }
+//                this.canvasView.clearCanvas();
+                if (this.ggezwin) {
+                    this.canvasView.clearCanvas();
+                    Toast.makeText(ConnectDotsActivity.this, "You Win!", Toast.LENGTH_LONG).show();
+                }
+                //else
+                //    this.resetTouched();
+                this.canvasView.invalidate();
+                break;
+            case MotionEvent.ACTION_HOVER_MOVE:
+                Log.d("IS_ON_POINT: ", "YES");
+        }
+        return true;
+    }
 
-//    private int getYOffset(RelativeLayout view) {
-//        int offset;
-//        int[] location = new int[2];
-//        view.getLocationOnScreen(location);
-//        offset = location[1];
-//        return offset;
-//    }
+    private int getYOffset(RelativeLayout view) {
+        int offset;
+        int[] location = new int[2];
+        view.getLocationOnScreen(location);
+        offset = location[1];
+        return offset;
+    }
 
-//    private void resetTouched() {
-//
-//        for (Node node : this.nodeMgr.getNodeList()) {
-//            ImageView circleImage = node.getNodeImage();
-//            circleImage.setBackgroundColor(Color.TRANSPARENT);
-//        }
-//        this.circleStartX = 0;
-//        this.circleStartY = 0;
-//    }
-
-
-//    private void checkCircles(float x, float y) {
-//
-//        for (Node node : this.nodeMgr.getNodeList()) {
-//            ImageView circleImage = node.getNodeImage();
-//            double dist = Math.sqrt(Math.pow(circleImage.getX() + 62.5d - x, 2.0d) + Math.pow(circleImage.getY() + 62.5d - y, 2.0d));
-//            if (dist < 62.5d) {
-//                if (this.circleStartX == 0 && this.circleStartY == 0) {
-//                    this.circleStartX = circleImage.getX();
-//                    this.circleStartY = circleImage.getY();
-//                    circleImage.setBackgroundColor(Color.GREEN);
-//                } else if (circleImage.getX() != this.circleStartX && circleImage.getY() != this.circleStartY) {
-//                    circleImage.setBackgroundColor(Color.GREEN);
-//                    this.ggezwin = true;
-//                }
-//            }
-//
-//        }
-//    }
-
-
-
-//    private void resetCanvas() { // Not needed
+//    private void resetCanvas() {
 //        this.ggezwin = false;
+//        this.circlePos.clear();
 //        this.circleStartX = 0;
 //        this.circleStartY = 0;
 //
-//        for (Node node : this.nodeMgr.getNodeList()) {
-//            ImageView circleImage = node.getNodeImage();
-//            relLayout.removeView(circleImage);
-//        }
-//
-//        // Read in from node information and then create circles (add scaling of points into here)
-//        String json = this.get_json("nodeData.json");
-//        JSONObject levelInformation = getNodesObject(json, "1");
-//        try {
-//            int noOfNodes = Integer.valueOf(levelInformation.getString("node_count"));
-//            JSONArray nodeArray = levelInformation.getJSONArray("nodes");
-//            for (int i=1; i<=noOfNodes; i++) {
-//                JSONObject nodeInArray = nodeArray.getJSONObject(i-1);
-//                int node_num = Integer.valueOf(nodeInArray.getString("node_num"));
-//                int x = Integer.valueOf(nodeInArray.getString("x"));
-//                int y = Integer.valueOf(nodeInArray.getString("y"));
-//                Node node = null;
-//                if (node_num == 1) {
-//                    this.createCircle(node_num, x, y, true, false, this.diameterForGame);
-//                } else if (node_num == noOfNodes) {
-//                    this.createCircle(node_num, x, y, false, true, this.diameterForGame); // Need to update
-//                } else {
-//                    this.createCircle(node_num, x, y,false, false, this.diameterForGame); // Need to update
-//                }
-//                this.displayCircle(relLayout, node);
-//            }
-//        } catch (JSONException e)   {
-//            Log.d("JSON", "Error during creation of circle");
-//            e.printStackTrace();
-//        }
 //    }
 
-//        private void updateScore(TextView pointView) {
-//        // Some game metric calculation passed into here.
-//
-//    }
+
+    private void resetTouched() {
+
+        for (Node node : this.nodeMgr.getNodeList()) {
+            ImageView circleImage = node.getNodeImage();
+            circleImage.setBackgroundColor(Color.TRANSPARENT);
+        }
+        this.circleStartX = 0;
+        this.circleStartY = 0;
+    }
+
+
+    private void checkCircles(float x, float y) {
+
+        for (Node node : this.nodeMgr.getNodeList()) {
+            ImageView circleImage = node.getNodeImage();
+            double dist = Math.sqrt(Math.pow(circleImage.getX() + 62.5d - x, 2.0d) + Math.pow(circleImage.getY() + 62.5d - y, 2.0d));
+
+            ColorDrawable colorDrawable = (ColorDrawable) circleImage.getBackground();
+
+            if (((colorDrawable == null) || (colorDrawable.getColor() != Color.GREEN)) && dist < 62.5d) {
+                if (this.circleStartX == 0 && this.circleStartY == 0) {
+                    this.circleStartX = circleImage.getX();
+                    this.circleStartY = circleImage.getY();
+                    circleImage.setBackgroundColor(Color.GREEN);
+                    Log.d("checked dot: ", "YES");
+                } else if (circleImage.getX() != this.circleStartX && circleImage.getY() != this.circleStartY) {
+                    circleImage.setBackgroundColor(Color.GREEN);
+                    this.ggezwin = true;
+                }
+            }
+
+        }
+    }
+
+        private void updateScore(TextView pointView) {
+        // Some game metric calculation passed into here.
+
+    }
 
 
 
