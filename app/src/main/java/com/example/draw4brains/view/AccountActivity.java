@@ -41,6 +41,11 @@ public class AccountActivity extends AppCompatActivity {
         btnBack = findViewById(R.id.btn_back);
         btnLogout = findViewById(R.id.btn_logout);
 
+        tvEmail.setText(LoginActivity.currentUser.getEmailAddress());
+        tvName.setText(LoginActivity.currentUser.getUserName());
+        tvBirthday.setText(LoginActivity.currentUser.getBirthday());
+        tvPhone.setText(LoginActivity.currentUser.getPhoneNo());
+
 
         // Set onClick Listeners
         btnLogout.setOnClickListener(new View.OnClickListener() {

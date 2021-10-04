@@ -11,6 +11,8 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.example.draw4brains.R;
+import com.example.draw4brains.model.Admin;
+import com.example.draw4brains.model.User;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -26,6 +28,8 @@ public class LoginActivity extends AppCompatActivity {
     private ImageButton btnLogin, btnForgotPW, btnRegister;
     private ToggleButton btnAccType;
     private FirebaseAuth auth;
+    public static User currentUser;
+    public static Admin currentAdmin;
     Intent intent;
 
     @Override
@@ -71,11 +75,14 @@ public class LoginActivity extends AppCompatActivity {
                             // Checked == Admin Mode
                             intent = new Intent(getApplicationContext(), AdminHomeActivity.class);
                             intent.putExtra("isAdmin",true);
+                            currentAdmin = new Admin(str_email);
                             startActivity(intent);
                         } else {
                             // Unchecked == User Mode
                             intent = new Intent(getApplicationContext(), UserHomeActivity.class);
                             intent.putExtra("isAdmin",false);
+                            currentUser = new User(str_email);
+                            Log.d("UserDEBUG", "User has logged in!");
                             startActivity(intent);
                         }
                     }
