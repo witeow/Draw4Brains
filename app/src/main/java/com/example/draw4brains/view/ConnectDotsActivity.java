@@ -1,5 +1,6 @@
 package com.example.draw4brains.view;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -11,6 +12,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -26,6 +28,12 @@ import com.example.draw4brains.controller.JsonMgr;
 import com.example.draw4brains.controller.NodeMgr;
 import com.example.draw4brains.model.ConnectDots;
 import com.example.draw4brains.model.Node;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -92,9 +100,73 @@ public class ConnectDotsActivity extends AppCompatActivity {
         canvasWidth = dimensions[0];
         canvasHeight = dimensions[1];
         canvasView.createCanvas(relLayout, canvasWidth, canvasHeight);
-        ArrayList<Node> processingNodes = JsonMgr.getNodeInfoFromSource(getApplicationContext(), FILE_NAME, LEVEL);
+        getNodeFromFirebase("testing2");
         Log.d("Initialization", "Get processing node");
-        this.initialize_level(processingNodes);
+//        this.initialize_level(processingNodes);
+    }
+
+    private void getNodeFromFirebase(String gameId){
+        ArrayList<Node> preprocessedArray = new ArrayList<Node>();
+        DatabaseReference dotsDb = FirebaseDatabase.getInstance("https://draw4brains-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("ConnectDots");
+        Query query = dotsDb.orderByChild("gameId").equalTo(gameId);
+        ValueEventListener newTest = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Log.d("TEST", "Enter Test");
+                for (DataSnapshot ds : snapshot.getChildren()) {
+                    String gameId = ds.getKey();
+                    String dotsArray = ds.child("arrayDotsPosition").getValue().toString();
+                    String imageId = ds.child("imageId").getValue().toString();
+                    String imageName = ds.child("imageName").getValue().toString();
+                    Log.d("DEBUG", gameId);
+                    Log.d("DEBUG", ds.getValue().toString());
+                    Log.d("dotsArray", dotsArray);
+                    Log.d("imageId", imageId);
+                    Log.d("imageName", imageName);
+
+                    dotsArray = dotsArray.replace("[", "").replace("]", "").replace("x", "")
+                            .replace("y", "").replace("=", "")
+                            .replace("{", "").replace("}", "")
+                            .replaceAll("\\s", "");
+
+                    String[] cordString = TextUtils.split(dotsArray, ",");
+                    ArrayList<Integer> xCord = new ArrayList<Integer>();
+                    ArrayList<Integer> yCord = new ArrayList<Integer>();
+                    for (int coord = 0; coord < cordString.length; coord++) {
+//                        Log.d("cordString", cordString[coord].toString());
+                        int intCoord = Integer.parseInt(cordString[coord]);
+                        if (coord % 2 == 0) {
+                            xCord.add(intCoord);
+                        } else {
+                            yCord.add(intCoord);
+                        }
+                    }
+
+                    Log.d("xCord", xCord.toString());
+                    Log.d("yCord", yCord.toString());
+
+                    for (int node_int = 0; node_int < xCord.size(); node_int++) {
+                        String node_num = Integer.toString(node_int + 1);
+                        Node node = new Node(node_num, xCord.get(node_int), yCord.get(node_int));
+                        Log.d("Node Num", (node_num));
+                        Log.d("xCord", xCord.get(node_int).toString());
+                        Log.d("yCord", yCord.get(node_int).toString());
+                        preprocessedArray.add(node);
+                    }
+                    Log.d("ArrayNode", preprocessedArray.toString());
+                    initialize_level(preprocessedArray);
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
+//        Log.d("JSON", "Before test");
+        query.addListenerForSingleValueEvent(newTest);
+//        Log.d("JSON", "test end");
     }
 
     private void initialize_level(ArrayList<Node> processingNodes) {
