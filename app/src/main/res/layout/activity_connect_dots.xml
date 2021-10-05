@@ -58,13 +58,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/topPanel">
 
+        <ImageView
+            android:id="@+id/image_bg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
         <com.example.draw4brains.view.CanvasView
             android:id="@+id/canvasView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentTop="true"
-            android:layout_alignParentBottom="true"
-            android:background="@color/Draw4Brain_MainBG" />
+            android:layout_alignParentBottom="true"/>
+<!--            android:background="@color/Draw4Brain_MainBG" -->
 
         <Chronometer
             android:id="@+id/chronometer"

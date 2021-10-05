@@ -11,6 +11,7 @@ import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.TextUtils;
@@ -25,17 +26,22 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.draw4brains.R;
 import com.example.draw4brains.controller.JsonMgr;
 import com.example.draw4brains.controller.NodeMgr;
 import com.example.draw4brains.model.ConnectDots;
 import com.example.draw4brains.model.Node;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,6 +85,17 @@ public class ConnectDotsActivity extends AppCompatActivity {
     private static final float DIAMETER_LIMIT_MIN = 70f;
     private static final float DIAMETER_CALCULATION_TOLERANCE_FACTOR = 1.5f;
 
+    // Load image from storage
+    FirebaseStorage storage;
+    StorageReference storageReference;
+
+    // view for image view
+    private ImageView imageView;
+
+    // Uri indicates, where the image will be picked from
+//    private Uri filePath;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,6 +104,14 @@ public class ConnectDotsActivity extends AppCompatActivity {
         relLayout = findViewById(R.id.relativeLayout);
         canvasView = findViewById(R.id.canvasView);
         giveUpButton = findViewById(R.id.btn_give_up);
+
+        // get the Firebase  storage reference
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReference();
+        imageView = findViewById(R.id.image_bg);
+
+        GameLevelActivity.gameId = "testing1";
+        SelectImage();
 
         giveUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -138,6 +163,24 @@ public class ConnectDotsActivity extends AppCompatActivity {
 //        });
     }
 
+    // Select and Display Image method
+    private void SelectImage() {
+        Log.d("SelectImage", "Enter Function");
+        storage = FirebaseStorage.getInstance();
+        String storageUrl = "gs://draw4brains.appspot.com/";
+        storageUrl = storageUrl + GameLevelActivity.gameId + ".jpg";
+        storageReference = storage.getReferenceFromUrl(storageUrl);
+        storageReference.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
+                Uri url = task.getResult();
+                Glide.with(getApplicationContext()).load(url).centerCrop().into(imageView);
+                Log.d("SelectImage", "Exit Function");
+            }
+        });
+
+    }
+
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         // TODO Auto-generated method stub
@@ -147,7 +190,7 @@ public class ConnectDotsActivity extends AppCompatActivity {
         canvasWidth = dimensions[0];
         canvasHeight = dimensions[1];
         canvasView.createCanvas(relLayout, canvasWidth, canvasHeight);
-        getNodeFromFirebase("testing2");
+        getNodeFromFirebase(GameLevelActivity.gameId);
         Log.d("Initialization", "Get processing node");
 //        this.initialize_level(processingNodes);
     }

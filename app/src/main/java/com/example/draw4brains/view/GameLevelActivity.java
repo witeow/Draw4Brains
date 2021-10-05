@@ -13,6 +13,7 @@ import com.example.draw4brains.R;
 public class GameLevelActivity extends AppCompatActivity {
 
     private Button btnLevel1, btnBack;
+    public static String gameId;
     Intent intent;
 
     @Override
@@ -20,6 +21,7 @@ public class GameLevelActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         getSupportActionBar().hide();
         setContentView(R.layout.activity_select_game_level);
+        gameId = "";
 
         btnBack = findViewById(R.id.btn_back);
         btnLevel1 = findViewById(R.id.btn_level1);
@@ -28,6 +30,7 @@ public class GameLevelActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 intent = new Intent(GameLevelActivity.this, ConnectDotsActivity.class);
+                gameId = "testing1";
                 startActivity(intent);
             }
         });
