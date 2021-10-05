@@ -17,7 +17,7 @@ public class StatisticsPageActivity extends AppCompatActivity {
         setContentView(R.layout.activity_statistics);
 
         String Name = getIntent().getStringExtra("Name");
-        String Score = getIntent().getStringExtra("Score");
+        int Score = getIntent().getIntExtra("Score",0);
         int number_played = getIntent().getIntExtra("number_played",0);
 //        int average_score=0;
 //        int i=Integer.parseInt(Score);
@@ -32,7 +32,7 @@ public class StatisticsPageActivity extends AppCompatActivity {
 
 
         t_name.setText(Name);
-        t_score.setText(Score);
+        t_score.setText(Integer.toString(Score));
         t_games_played.setText(Integer.toString(number_played));
     }
 }
