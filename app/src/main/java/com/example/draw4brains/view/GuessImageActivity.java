@@ -12,6 +12,8 @@ import android.widget.Toast;
 
 import com.example.draw4brains.R;
 
+import java.util.Random;
+
 public class GuessImageActivity extends AppCompatActivity {
 
     String wordToGuess = "sunny";
@@ -21,6 +23,8 @@ public class GuessImageActivity extends AppCompatActivity {
     boolean occupied[] = new boolean[WORD_LENGTH];
     String answerArray[] = new String[WORD_LENGTH];
 
+
+
     Intent intent;
 
     @Override
@@ -29,7 +33,7 @@ public class GuessImageActivity extends AppCompatActivity {
         setContentView(R.layout.activity_guess_image);
 
         for (int i=0; i < WORD_LENGTH; i++) {
-            answerArray[i] = "_";
+            answerArray[i] = "-";
             occupied[i]  = false;
         }
         String answerString = formatAnswerString(answerArray);
@@ -140,11 +144,28 @@ public class GuessImageActivity extends AppCompatActivity {
 
     private void tempSetButtonText(Button[] arr, String wordToGuess) {
         int index = 0;
-        for (char c : wordToGuess.toCharArray()) {
-            Button button = arr[index];
-            button.setText(String.valueOf(c));
+        String letters = "abcdefghijklmnopqrstuvwxyz";
+        Random rand = new Random();
+        while (wordToGuess.length()<14){
+            wordToGuess += letters.charAt(rand.nextInt(25));
+        }
+        int[] array = {0,1,2,3,4,5,6,7,8,9,10,11,12,13};
+        for (int i = 0; i < array.length; i++) {
+            int randomIndexToSwap = rand.nextInt(array.length);
+            int temp = array[randomIndexToSwap];
+            array[randomIndexToSwap] = array[i];
+            array[i] = temp;
+        }
+        for (int i : array){
+            Button button = arr[i];
+            button.setText(String.valueOf(wordToGuess.charAt(index)));
             index++;
         }
+//        for (char c : wordToGuess.toCharArray()) {
+//            Button button = arr[index];
+//            button.setText(String.valueOf(c));
+//            index++;
+//        }
     }
 
     private String formatAnswerString(String[] arr) {
