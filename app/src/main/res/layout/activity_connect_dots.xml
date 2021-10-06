@@ -80,33 +80,21 @@
             android:translationY="5dp" />
 
         <Button
-            android:id="@+id/startBtn"
+            android:id="@+id/undoBtn"
             android:layout_width="83dp"
             android:layout_height="37dp"
-            android:text="start"
+            android:text="Undo"
             android:textSize="7dp"
             android:translationX="5dp"
             android:translationY="5dp" />
 
         <Button
-            android:id="@+id/resetBtn"
+            android:id="@+id/redoBtn"
             android:layout_width="83dp"
             android:layout_height="42dp"
             android:layout_marginStart="5dp"
             android:layout_marginLeft="5dp"
-            android:text="reset"
-            android:textSize="7dp"
-            android:translationX="5dp"
-            android:translationY="85dp"
-            app:layout_constraintStart_toEndOf="@+id/canvasView" />
-
-        <Button
-            android:id="@+id/pauseBtn"
-            android:layout_width="83dp"
-            android:layout_height="42dp"
-            android:layout_marginStart="5dp"
-            android:layout_marginLeft="5dp"
-            android:text="pause"
+            android:text="Redo"
             android:textSize="7dp"
             android:translationX="5dp"
             android:translationY="40dp"

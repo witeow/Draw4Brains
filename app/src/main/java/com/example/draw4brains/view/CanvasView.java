@@ -10,6 +10,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -28,6 +29,9 @@ public class CanvasView extends View {
     private RelativeLayout relLayout;
 
     private float startX, startY, stopX, stopY;
+
+    ArrayList<Path> paths = new ArrayList<Path>();
+    ArrayList<Path> undonePaths = new ArrayList<Path>();
 
 
     public CanvasView(Context c, AttributeSet attrs) {
@@ -56,6 +60,9 @@ public class CanvasView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        for (Path p : paths){
+            canvas.drawPath(p, mPaint);
+        }
         // draw the mPath with the mPaint on the canvas when onDraw
         canvas.drawPath(mPath, mPaint);
         canvas.drawLine(startX, startY, stopX, stopY, mPaint);
@@ -63,6 +70,7 @@ public class CanvasView extends View {
 
     // when ACTION_DOWN start touch according to the x,y values
     public void startTouch(float x, float y) {
+        undonePaths.clear();
         mPath.moveTo(x, y);
         mX = x;
         mY = y;
@@ -88,6 +96,9 @@ public class CanvasView extends View {
     public void upTouch(boolean drawPath) {
         if (drawPath) {
             mPath.lineTo(mX, mY);
+            paths.add(mPath);
+            mPath = new Path();
+
         } else {
             // Do nothing
         }
@@ -108,6 +119,31 @@ public class CanvasView extends View {
         mCanvas.drawLine(startX, startY, stopX, stopY, temp);
     }
 
+    public void onClickUndo () {
+        if (paths.size()>0)
+        {
+            undonePaths.add(paths.remove(paths.size()-1));
+            invalidate();
+        }
+        else
+        {
+            Toast.makeText(context, "No more strokes to undo!", Toast.LENGTH_LONG).show();
+        }
+        //toast the user
+    }
+
+    public void onClickRedo (){
+        if (undonePaths.size()>0)
+        {
+            paths.add(undonePaths.remove(undonePaths.size()-1));
+            invalidate();
+        }
+        else
+        {
+            Toast.makeText(context, "No more strokes to redo!", Toast.LENGTH_LONG).show();
+        }
+        //toast the user
+    }
 
 }
 
