@@ -73,7 +73,7 @@ public class ConnectDotsActivity extends AppCompatActivity {
     private static int startNode;
     static int previousCircleX=0;
     static int previousCircleY=0;
-    private static List<ImageView> circleToUndo = new ArrayList<>();
+    private static List<ImageView> circleToUndo;
 
     // The following information will be integrated into Node class and stored in NodeMgr
     private NodeMgr nodeMgr = new NodeMgr();
@@ -134,6 +134,7 @@ public class ConnectDotsActivity extends AppCompatActivity {
 //        GameLevelActivity.gameName = "star";
 //        SelectImage();
         startNode = 0;
+        circleToUndo = new ArrayList<>();
 
 
         giveUpButton.setOnClickListener(new View.OnClickListener() {
@@ -466,10 +467,10 @@ public class ConnectDotsActivity extends AppCompatActivity {
                     nextCircleToCheckY = (int) nextCircleImage.getY();
                     Log.d("previousCx", String.valueOf(previousCircleX));
                     Log.d("previousCy", String.valueOf(previousCircleY));
-                    if ((nextCircleToCheckX - 111d <= x && x <= nextCircleToCheckX + 111d) &&
-                            (nextCircleToCheckY - 111d <= y && y <= nextCircleToCheckY + 111d) &&
-                            (circleToCheckX - 100d <= previousCircleX && previousCircleX <= circleToCheckX + 111d) &&
-                            (circleToCheckY - 111d <= previousCircleY && previousCircleY <= circleToCheckY + 111d)){
+                    if ((nextCircleToCheckX - 60d <= x && x <= nextCircleToCheckX + 60d) &&
+                            (nextCircleToCheckY - 60d <= y && y <= nextCircleToCheckY + 60d) &&
+                            (circleToCheckX - 60d <= previousCircleX && previousCircleX <= circleToCheckX + 60d) &&
+                            (circleToCheckY - 60d <= previousCircleY && previousCircleY <= circleToCheckY + 60d)){
 
                         checkPos.add(nextCircleToCheckX);
                         checkPos.add(nextCircleToCheckY);
@@ -861,46 +862,81 @@ public class ConnectDotsActivity extends AppCompatActivity {
      * @param canvasHeight Height of canvas in which the nodes are allowed to be placed on
      * @param percentageFillRequired Percentage of the canvas expected to be filled by the nodes.
      */
+
     private ArrayList<Node> transformNodeAutomatic(ArrayList<Node> nodesList, int canvasWidth, int canvasHeight, int percentageFillRequired) {
         // The bound has been displaced to origin. Now we have to transform the nodes appropriately back and try to center it on the screen.
 
         int[] finalBound = getBoundDimensions(nodesList, false);
-        float scaledPercentageX = ((float)finalBound[0]/canvasWidth * 100);
-        float scaledPercentageY = ((float)finalBound[1]/canvasHeight * 100);
-        Log.d("Percentage", String.format("finalBoundX, finalBoundY: %d, %d", finalBound[0], finalBound[1]));
-        Log.d("Percentage", String.format("PercentX, PercentY: %f, %f", scaledPercentageX, scaledPercentageY));
-        float higher = scaledPercentageX > scaledPercentageY ? scaledPercentageX : scaledPercentageY;
 
-        Log.d("Percentage", "Lower" + String.valueOf(higher));
-        Log.d("Percentage", "Required" + String.valueOf(percentageFillRequired));
-        if ((percentageFillRequired - higher) > percentageFillRequired/4f) { // If the scaled percentage is less than 1/3 of required, then do transformation
-            Log.d("Scaling", String.format("Final Bound: (%d , %d)", finalBound[0], finalBound[1]));
-            int transformX = Math.round((canvasWidth-finalBound[0])/2f);
-            int transformY = Math.round((canvasHeight-finalBound[1])/2f);
-            Log.d("Scaling", String.format("Canvas WidthHeight Check: (%d , %d)", canvasWidth, canvasHeight));
-            Log.d("Scaling", String.format("FinalTransformX: (%d)", transformX));
-            Log.d("Scaling", String.format("FinalTransformY: (%d)", transformY));
+        int transformX = Math.round((canvasWidth-finalBound[0])/2f);
+        int transformY = Math.round((canvasHeight-finalBound[1])/2f);
 
-
-            for (Node node: nodesList) {
-                int x = node.getCenter_x() + transformX;
-                int y = node.getCenter_y() + transformY;
-                node.setCenter(x,y);
-            }
-        } else {
-            // Just shift a little
-            int transformX = Math.round((canvasWidth-finalBound[0])/10f);
-            int transformY = Math.round((canvasHeight-finalBound[1])/10f);
-
-            for (Node node: nodesList) {
-                int x = node.getCenter_x() + transformX;
-                int y = node.getCenter_y() + transformY;
-                node.setCenter(x, y);
-            }
+        for (Node node: nodesList) {
+            int x = node.getCenter_x() + transformX;
+            int y = node.getCenter_y() + transformY;
+            node.setCenter(x,y);
         }
-
         return nodesList;
+
     }
+
+//    private ArrayList<Node> transformNodeAutomatic(ArrayList<Node> nodesList, int canvasWidth, int canvasHeight, int percentageFillRequired) {
+//        // The bound has been displaced to origin. Now we have to transform the nodes appropriately back and try to center it on the screen.
+//
+//        int[] finalBound = getBoundDimensions(nodesList, false);
+//        float scaledPercentageX = ((float)finalBound[0]/canvasWidth * 100);
+//        float scaledPercentageY = ((float)finalBound[1]/canvasHeight * 100);
+//        Log.d("Percentage", String.format("finalBoundX, finalBoundY: %d, %d", finalBound[0], finalBound[1]));
+//        Log.d("Percentage", String.format("PercentX, PercentY: %f, %f", scaledPercentageX, scaledPercentageY));
+////        float higher = scaledPercentageX > scaledPercentageY ? scaledPercentageX : scaledPercentageY;
+//
+////        Log.d("Percentage", "Lower" + String.valueOf(higher));
+////        Log.d("Percentage", "Required" + String.valueOf(percentageFillRequired));
+//
+//        // Transform along X
+//        if ((percentageFillRequired - scaledPercentageX) > percentageFillRequired/4f) { // If the scaled percentage is less than 1/3 of required, then do transformation
+//            Log.d("Scaling", String.format("Final Bound: (%d , %d)", finalBound[0], finalBound[1]));
+//            int transformX = Math.round((canvasWidth-finalBound[0])/2f);
+//            Log.d("Scaling", String.format("Canvas WidthHeight Check: (%d , %d)", canvasWidth, canvasHeight));
+//            Log.d("Scaling", String.format("FinalTransformX: (%d)", transformX));
+//
+//            for (Node node: nodesList) {
+//                int x = node.getCenter_x() + transformX;
+//                node.setCenter(x,node.getCenter_y());
+//            }
+//        } else {
+//            // Just shift a little
+//            int transformX = Math.round((canvasWidth-finalBound[0])/8f);
+//
+//            for (Node node: nodesList) {
+//                int x = node.getCenter_x() + transformX;
+//                node.setCenter(x,node.getCenter_y());
+//            }
+//        }
+//
+//        // Transform along Y
+//        if ((percentageFillRequired - scaledPercentageY) > percentageFillRequired/4f) { // If the scaled percentage is less than 1/3 of required, then do transformation
+//            Log.d("Scaling", String.format("Final Bound: (%d , %d)", finalBound[0], finalBound[1]));
+//            int transformY = Math.round((canvasHeight-finalBound[1])/2f);
+//            Log.d("Scaling", String.format("Canvas WidthHeight Check: (%d , %d)", canvasWidth, canvasHeight));
+//            Log.d("Scaling", String.format("FinalTransformX: (%d)", transformY));
+//
+//            for (Node node: nodesList) {
+//                int y = node.getCenter_y() + transformY;
+//                node.setCenter(node.getCenter_x(), y);
+//            }
+//        } else {
+//            // Just shift a little
+//            int transformY = Math.round((canvasHeight-finalBound[1])/8f);
+//
+//            for (Node node: nodesList) {
+//                int y = node.getCenter_y() + transformY;
+//                node.setCenter(node.getCenter_x(),y);
+//            }
+//        }
+//
+//        return nodesList;
+//    }
 
     /**
      * To scale the nodes based on a certain scale factor and reassign the center x,y coordinates for the node position in pixels

@@ -54,7 +54,7 @@ public class CanvasView extends View {
         this.relLayout = relLayout;
         mBitmap = Bitmap.createBitmap(canvasWidth, canvasHeight, Bitmap.Config.ARGB_8888);
         mCanvas = new Canvas(mBitmap);
-        mCanvas.drawColor(Color.TRANSPARENT);
+//        mCanvas.drawColor(Color.TRANSPARENT);
     }
 
     // override onDraw
