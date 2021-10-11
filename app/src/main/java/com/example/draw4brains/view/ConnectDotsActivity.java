@@ -3,6 +3,8 @@ package com.example.draw4brains.view;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -11,8 +13,9 @@ import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
-import android.os.SystemClock;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -25,20 +28,32 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.draw4brains.R;
-import com.example.draw4brains.controller.JsonMgr;
 import com.example.draw4brains.controller.NodeMgr;
 import com.example.draw4brains.model.ConnectDots;
 import com.example.draw4brains.model.Node;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
 
 public class ConnectDotsActivity extends AppCompatActivity {
 
@@ -50,7 +65,15 @@ public class ConnectDotsActivity extends AppCompatActivity {
     // For Game Logic Checking
     private List<List<Integer>> circlePos = new ArrayList<>();
     private float circleStartX, circleStartY; // To track and check circle
-    private boolean ggezwin;
+    boolean ggezwin;
+    private int circleCheckingCounter = 0;
+    int winningCount = 0;
+    private static List<List<Integer>> checkCircle;
+    private static List<Integer> checkPos = new ArrayList<>();
+    private static int startNode;
+    static int previousCircleX=0;
+    static int previousCircleY=0;
+    private static List<ImageView> circleToUndo = new ArrayList<>();
 
     // The following information will be integrated into Node class and stored in NodeMgr
     private NodeMgr nodeMgr = new NodeMgr();
@@ -79,6 +102,19 @@ public class ConnectDotsActivity extends AppCompatActivity {
     private static final float DIAMETER_LIMIT_MIN = 70f;
     private static final float DIAMETER_CALCULATION_TOLERANCE_FACTOR = 1.5f;
 
+    //
+    public static ConnectDots newGame;
+    // Load image from storage
+    FirebaseStorage storage;
+    StorageReference storageReference;
+
+    // view for image view
+    private ImageView imageView;
+
+    // Uri indicates, where the image will be picked from
+//    private Uri filePath;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,6 +123,18 @@ public class ConnectDotsActivity extends AppCompatActivity {
         relLayout = findViewById(R.id.relativeLayout);
         canvasView = findViewById(R.id.canvasView);
         giveUpButton = findViewById(R.id.btn_give_up);
+
+
+
+        // get the Firebase  storage reference
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReference();
+        imageView = findViewById(R.id.image_bg);
+
+//        GameLevelActivity.gameName = "star";
+//        SelectImage();
+        startNode = 0;
+
 
         giveUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,7 +184,53 @@ public class ConnectDotsActivity extends AppCompatActivity {
 //                Log.d("reset clicked", "yes");
 //            }
 //        });
+
+
+
+          Button undoBtn = findViewById(R.id.undoBtn);
+          Button redoBtn = findViewById(R.id.redoBtn);
+          undoBtn.setOnClickListener(new View.OnClickListener() {
+              @Override
+              public void onClick(View v) {
+                  ImageView circle;
+                  canvasView.onClickUndo();
+                  Log.d("undoC", String.valueOf(circleToUndo));
+                  circle = circleToUndo.get(startNode);
+                  circle.setBackgroundColor(Color.TRANSPARENT);
+                  if (startNode != 0){
+                      startNode--;
+                  }
+              }
+          });
+          redoBtn.setOnClickListener(new View.OnClickListener() {
+              @Override
+              public void onClick(View v) {
+                  canvasView.onClickRedo();
+              }
+          });
     }
+
+    // Select and Display Image method
+//    private void SelectImage() {
+//        Log.d("SelectImage", "Enter Function");
+//        storage = FirebaseStorage.getInstance();
+//        String storageUrl = "gs://draw4brains.appspot.com/";
+//        storageUrl = storageUrl + GameLevelActivity.gameName + ".jpg";
+//        storageReference = storage.getReferenceFromUrl(storageUrl);
+//        storageReference.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+//            @Override
+//            public void onComplete(@NonNull Task<Uri> task) {
+//                Uri url = task.getResult();
+////                Glide.with(getApplicationContext()).load(url).fitCenter().into(imageView);
+//                Glide.with(getApplicationContext())
+//                        .load(url)
+//                        .fitCenter()
+//                        .into(imageView);
+//                Log.d("SelectImage", "Exit Function");
+//            }
+//        });
+//
+//    }
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
@@ -147,15 +241,15 @@ public class ConnectDotsActivity extends AppCompatActivity {
         canvasWidth = dimensions[0];
         canvasHeight = dimensions[1];
         canvasView.createCanvas(relLayout, canvasWidth, canvasHeight);
-        getNodeFromFirebase("testing2");
+        getNodeFromFirebase(GameLevelActivity.gameName);
         Log.d("Initialization", "Get processing node");
 //        this.initialize_level(processingNodes);
     }
 
-    private void getNodeFromFirebase(String gameId){
+    private void getNodeFromFirebase(String gameName){
         ArrayList<Node> preprocessedArray = new ArrayList<Node>();
         DatabaseReference dotsDb = FirebaseDatabase.getInstance("https://draw4brains-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("ConnectDots");
-        Query query = dotsDb.orderByChild("gameId").equalTo(gameId);
+        Query query = dotsDb.orderByChild("imageName").equalTo(gameName);
         ValueEventListener newTest = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -163,12 +257,13 @@ public class ConnectDotsActivity extends AppCompatActivity {
                 for (DataSnapshot ds : snapshot.getChildren()) {
                     String gameId = ds.getKey();
                     String dotsArray = ds.child("arrayDotsPosition").getValue().toString();
-                    String imageId = ds.child("imageId").getValue().toString();
+//                    String imageId = ds.child("imageId").getValue().toString();
                     String imageName = ds.child("imageName").getValue().toString();
+                    Integer gameLevel = Integer.parseInt(ds.child("level").getValue().toString());
                     Log.d("DEBUG", gameId);
                     Log.d("DEBUG", ds.getValue().toString());
                     Log.d("dotsArray", dotsArray);
-                    Log.d("imageId", imageId);
+//                    Log.d("imageId", imageId);
                     Log.d("imageName", imageName);
 
                     dotsArray = dotsArray.replace("[", "").replace("]", "").replace("x", "")
@@ -200,7 +295,10 @@ public class ConnectDotsActivity extends AppCompatActivity {
                         Log.d("yCord", yCord.get(node_int).toString());
                         preprocessedArray.add(node);
                     }
+
                     Log.d("ArrayNode", preprocessedArray.toString());
+                    String storageUrl = ConnectDots.firebaseStorageUrl + gameName + ".jpg";
+                    newGame = new ConnectDots(gameName, cordString, gameLevel, storageUrl);
                     initialize_level(preprocessedArray);
                     chronometer.start();
                 }
@@ -240,6 +338,70 @@ public class ConnectDotsActivity extends AppCompatActivity {
         Log.d("CanvasDimensions", String.format("getCanvasDimensions: %d by %d", dimensions[0], dimensions[1]));
         return dimensions;
     }
+//    public Uri getImageUri(Context inContext, Bitmap inImage) {
+//        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+//        inImage.compress(Bitmap.CompressFormat.PNG, 100, bytes);
+//        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Test", null);
+//        return Uri.parse(path);
+//    }
+
+        //this method will upload the file
+//    private void uploadFile() {
+//        filePath = getImageUri(ConnectDotsActivity.this, CanvasView.mBitmap);
+//        //if there is a file to upload
+//        if (filePath != null) {
+//            //displaying a progress dialog while upload is going on
+//            final ProgressDialog progressDialog = new ProgressDialog(this);
+//            progressDialog.setTitle("Saving Drawing");
+//            progressDialog.show();
+//            Log.d("upload", "uploading still");
+//
+//            String drawName = "images/"+LoginActivity.currentUser.getUserID() + "_" + ConnectDotsActivity.newGame.getImageName() + ".jpg";
+//
+//            StorageReference riversRef = storageReference.child(drawName);
+//            riversRef.putFile(filePath)
+//                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//                        @Override
+//                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//                            //if the upload is successfull
+//                            //hiding the progress dialog
+//                            Log.d("upload", "uploading done");
+//                            progressDialog.dismiss();
+//
+//                            //and displaying a success toast
+//                            Toast.makeText(getApplicationContext(), "File Uploaded ", Toast.LENGTH_LONG).show();
+//                            intent = new Intent(ConnectDotsActivity.this, GuessImageActivity.class);
+//                            startActivity(intent);
+//                        }
+//                    })
+//                    .addOnFailureListener(new OnFailureListener() {
+//                        @Override
+//                        public void onFailure(@NonNull Exception exception) {
+//                            //if the upload is not successfull
+//                            //hiding the progress dialog
+//                            progressDialog.dismiss();
+//
+//                            //and displaying error message
+//                            Toast.makeText(getApplicationContext(), exception.getMessage(), Toast.LENGTH_LONG).show();
+//                        }
+//                    })
+//                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+//                        @Override
+//                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+//                            //calculating progress percentage
+//                            double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+//
+//                            //displaying percentage in progress dialog
+//                            progressDialog.setMessage("Uploaded " + ((int) progress) + "%...");
+//                        }
+//                    });
+//        }
+//        //if there is not any file
+//        else {
+//            //you can display an error toast
+//            Toast.makeText(ConnectDotsActivity.this, "Nothing was drawn!", Toast.LENGTH_SHORT).show();
+//        }
+//    }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -250,39 +412,108 @@ public class ConnectDotsActivity extends AppCompatActivity {
         float x = raw_x;
         float y = raw_y - offset;
 
+        int circleToCheckX;
+        int circleToCheckY;
+        int nextCircleToCheckX;
+        int nextCircleToCheckY;
+
+        ArrayList<Node> nodeList = this.nodeMgr.getNodeList();
+        Node currentNode = nodeList.get(startNode);
+        ImageView circleImage = currentNode.getNodeImage();
+        circleToCheckX = (int) circleImage.getX();
+        circleToCheckY = (int) circleImage.getY();
+
+
+//        checkCircle = circlePos;
         switch (event.getActionMasked()) {
             case MotionEvent.ACTION_DOWN:
-                X1 = x;
-                Y1 = y;
-                this.canvasView.startTouch(x, y);
-                Log.d("Pos X: ", String.valueOf(x));
-                Log.d("Pos Y: ", String.valueOf(y));
-                checkCircles(x, y);
-                this.canvasView.invalidate();
+//                X1 = x;
+//                Y1 = y;
+                if ((circleToCheckX - 111d <= x && x <= circleToCheckX + 111d) &&
+                        (circleToCheckY - 111d <= y && y <= circleToCheckY + 111d)){
+                    checkPos.add(circleToCheckX);
+                    checkPos.add(circleToCheckY);
+                    circleImage.setBackgroundColor(Color.GREEN);
+                    previousCircleX = (int)x;
+                    previousCircleY = (int)y;
+
+                    this.canvasView.startTouch(x, y);
+                    Log.d("Pos X: ", String.valueOf(x));
+                    Log.d("Pos Y: ", String.valueOf(y));
+                    //checkCircles(x, y);
+                    this.canvasView.invalidate();
+                }
+                else{
+                    this.canvasView.startTouch(x, y);
+                    this.canvasView.invalidate();
+                }
                 break;
             case MotionEvent.ACTION_MOVE:
-                checkCircles(x, y);
+                //checkCircles(x, y);
                 this.canvasView.moveTouch(x, y);
                 this.canvasView.invalidate();
+
+
                 break;
             case MotionEvent.ACTION_UP:
-                X2 = x;
-                Y2 = y;
-                this.canvasView.upTouch(true);
-                this.canvasView.drawLine(X1,Y1, X2, Y2);
+//                X2 = x;
+//                Y2 = y;
+                if(startNode < nodeList.size()) {
+                    Node nextNode = nodeList.get(startNode + 1);
+                    //Log.d("startnode_move1", String.valueOf(startNode));
+                    ImageView nextCircleImage = nextNode.getNodeImage();
+                    nextCircleToCheckX = (int) nextCircleImage.getX();
+                    nextCircleToCheckY = (int) nextCircleImage.getY();
+                    Log.d("previousCx", String.valueOf(previousCircleX));
+                    Log.d("previousCy", String.valueOf(previousCircleY));
+                    if ((nextCircleToCheckX - 111d <= x && x <= nextCircleToCheckX + 111d) &&
+                            (nextCircleToCheckY - 111d <= y && y <= nextCircleToCheckY + 111d) &&
+                            (circleToCheckX - 100d <= previousCircleX && previousCircleX <= circleToCheckX + 111d) &&
+                            (circleToCheckY - 111d <= previousCircleY && previousCircleY <= circleToCheckY + 111d)){
+
+                        checkPos.add(nextCircleToCheckX);
+                        checkPos.add(nextCircleToCheckY);
+                        nextCircleImage.setBackgroundColor(Color.GREEN);
+                        this.canvasView.upTouch(true);
+                        this.canvasView.invalidate();
+
+
+                        if (startNode < nodeList.size()) {//4
+                            startNode += 1;
+                        }
+                        if (startNode == nodeList.size()-1) {
+
+                            Toast.makeText(ConnectDotsActivity.this, "You Win!", Toast.LENGTH_LONG).show();
+//                            uploadFile();
+                            intent = new Intent(ConnectDotsActivity.this, GuessImageActivity.class);
+                            startActivity(intent);
+                        }
+                        //Log.d("startnode_move2", String.valueOf(startNode));
+
+                    }
+                    else{
+                        this.canvasView.upTouch(true);
+                        canvasView.onClickUndo();
+                        this.canvasView.invalidate();
+
+                    }
+                }
+                //this.canvasView.drawLine(X1,Y1, X2, Y2);
 //                this.canvasView.invalidate();
 //                this.canvasView.clearCanvas();
-                if (this.ggezwin) {
-                    this.canvasView.clearCanvas();
-                    Toast.makeText(ConnectDotsActivity.this, "You Win!", Toast.LENGTH_LONG).show();
-                }
+//                if (this.ggezwin) {
+//                    Toast.makeText(ConnectDotsActivity.this, "You Win!", Toast.LENGTH_LONG).show();
+//                    intent = new Intent(ConnectDotsActivity.this, GuessImageActivity.class);
+//                    startActivity(intent);
+
                 //else
                 //    this.resetTouched();
-                this.canvasView.invalidate();
                 break;
         }
         return true;
     }
+
+
 
     private int getYOffset(RelativeLayout view) {
         int offset;
@@ -292,49 +523,88 @@ public class ConnectDotsActivity extends AppCompatActivity {
         return offset;
     }
 
-//    private void resetCanvas() {
-//        this.ggezwin = false;
-//        this.circlePos.clear();
-//        this.circleStartX = 0;
-//        this.circleStartY = 0;
+
+
+//    private void checkCircles(float x, float y) {
+//        int circleCoordX;
+//        int circleCoordY;
 //
+//        for (Node node : this.nodeMgr.getNodeList()) {
+//            ImageView circleImage = node.getNodeImage();
+//
+//            double dist = Math.sqrt(Math.pow(circleImage.getX() + 111d - x, 2.0d) + Math.pow(circleImage.getY() + 111d - y, 2.0d));
+//
+//            ColorDrawable colorDrawable = (ColorDrawable) circleImage.getBackground();
+//
+//            if (((colorDrawable == null) || (colorDrawable.getColor() != Color.GREEN)) && dist < 111d) {
+//                Log.d("checked dot 1st if: ", "YES");
+//
+//
+////                if (this.circleStartX == 0 && this.circleStartY == 0) {
+////                    Log.d("checked dot 2nd if: ", "YES");
+////                    this.circleStartX = circleImage.getX();
+////                    this.circleStartY = circleImage.getY();
+//
+//                    circleCoordX = (int)circleImage.getX();
+//                    circleCoordY = (int)circleImage.getY();
+//                    circleCheckingCounter += 1;
+//                    boolean orderCorrect = checkOrder(circleCoordX, circleCoordY,circleCheckingCounter);
+//                    if (orderCorrect){
+//                        winningCount += 1;
+//                        Log.d("winningC", String.valueOf(winningCount));
+//                        if (winningCount >= circlePos.size()){
+//                            ggezwin = true;
+//                        }
+//                        Log.d("ezwinstatus", String.valueOf(ggezwin));
+//                        circleImage.setBackgroundColor(Color.GREEN);
+//                        Log.d("orderCorrect_counter",String.valueOf(circleCheckingCounter));
+//                    }
+//                    else {
+//                        circleCheckingCounter -= 1;
+//                        Toast.makeText(ConnectDotsActivity.this, "Wrong circle, try again", Toast.LENGTH_SHORT).show();
+//                        Log.d("orderWrong_counter",String.valueOf(circleCheckingCounter));
+//
+//                    }
+////                } else if (circleImage.getX() != this.circleStartX || circleImage.getY() != this.circleStartY) {
+////                    Log.d("checked dot 2nd elif: ", "YES");
+////                    circleCoordX = (int)circleImage.getX();
+////                    circleCoordY = (int)circleImage.getY();
+////
+////                    circleCheckingCounter += 1;
+////                    boolean orderCorrect = checkOrder(circleCoordX, circleCoordY, circleCheckingCounter);
+////                    if (orderCorrect){
+////                        winningCount += 1;
+////                        circleImage.setBackgroundColor(Color.GREEN);
+////                        Log.d("orderCorrect_counter",String.valueOf(circleCheckingCounter));
+////                    }
+////                    else {
+////                        circleCheckingCounter -= 1;
+////                        Toast.makeText(ConnectDotsActivity.this, "Wrong circle, try again", Toast.LENGTH_SHORT).show();
+////                        Log.d("orderWrong_counter",String.valueOf(circleCheckingCounter));
+////                    }
+////                }
+//            }
+//
+//
+//
+//        }
 //    }
-
-
-    private void resetTouched() {
-
-        for (Node node : this.nodeMgr.getNodeList()) {
-            ImageView circleImage = node.getNodeImage();
-            circleImage.setBackgroundColor(Color.TRANSPARENT);
-        }
-        this.circleStartX = 0;
-        this.circleStartY = 0;
-    }
-
-
-    private void checkCircles(float x, float y) {
-
-        for (Node node : this.nodeMgr.getNodeList()) {
-            ImageView circleImage = node.getNodeImage();
-
-            double dist = Math.sqrt(Math.pow(circleImage.getX() + (diameterForGame/2.0d) - x, 2.0d) + Math.pow(circleImage.getY() + (diameterForGame/2.0d) - y, 2.0d));
-
-            ColorDrawable colorDrawable = (ColorDrawable) circleImage.getBackground();
-
-            if (((colorDrawable == null) || (colorDrawable.getColor() != Color.GREEN)) && dist < (diameterForGame/2.0d)) {
-                if (this.circleStartX == 0 && this.circleStartY == 0) {
-                    this.circleStartX = circleImage.getX();
-                    this.circleStartY = circleImage.getY();
-                    circleImage.setBackgroundColor(Color.GREEN);
-                    Log.d("checked dot: ", "YES");
-                } else if (circleImage.getX() != this.circleStartX && circleImage.getY() != this.circleStartY) {
-                    circleImage.setBackgroundColor(Color.GREEN);
-                    this.ggezwin = true;
-                }
-            }
-
-        }
-    }
+//
+//    private boolean checkOrder(int checkX, int checkY, int circleNo){
+//        List<List<Integer>> checkCircle;
+//        checkCircle = circlePos;
+//        List<Integer> checkPos = new ArrayList<>();
+//        checkPos.add(checkX);
+//        checkPos.add(checkY);
+//
+//        if (checkPos.equals(checkCircle.get(circleNo-1))) {
+//            Log.d("circle checked:", "success!");
+//            return true;
+//        } else {
+//            Log.d("circle checked:", "fail");
+//            return false;
+//        }
+//    }
 
         private void updateScore(TextView pointView) {
         // Some game metric calculation passed into here.
@@ -427,6 +697,11 @@ public class ConnectDotsActivity extends AppCompatActivity {
             circleXY.add(node.getCenter_x());
             circleXY.add(node.getCenter_y());
             this.circlePos.add(circleXY);
+            ImageView circle = node.getNodeImage();
+            circleToUndo.add(circle);
+
+            Log.d("toUndooncreate", String.valueOf(circleToUndo));
+            Log.d("circles to be checked: ", String.valueOf(circlePos));
         }
 
     }

@@ -1,13 +1,87 @@
 package com.example.draw4brains.model;
 
 import android.media.Image;
+import android.text.TextUtils;
+import android.util.Log;
+import android.widget.ImageView;
+
+import androidx.annotation.NonNull;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ConnectDots {
-    String dotImageId;
-    Image dotImage;
+    public String getImageName() {
+        return imageName;
+    }
+
+    public void setImageName(String imageName) {
+        this.imageName = imageName;
+    }
+
+    public ImageView getImageDisplay() {
+        return imageDisplay;
+    }
+
+    public void setImageDisplay(ImageView imageDisplay) {
+        this.imageDisplay = imageDisplay;
+    }
+
+    public String[] getDotsArray() {
+        return dotsArray;
+    }
+
+    public void setDotsArray(String[] dotsArray) {
+        this.dotsArray = dotsArray;
+    }
+
+    public Integer getLevel() {
+        return level;
+    }
+
+    public void setLevel(Integer level) {
+        this.level = level;
+    }
+
+    public String getStorageStringRef() {
+        return storageStringRef;
+    }
+
+    public void setStorageStringRef(String storageStringRef) {
+        this.storageStringRef = storageStringRef;
+    }
+
+    private String imageName;
+    private ImageView imageDisplay;
+    private String[] dotsArray;
+    private Integer level;
+    private String storageStringRef;
+
+    public Node[] getNodesArray() {
+        return nodesArray;
+    }
+
+    public void setNodesArray(Node[] nodesArray) {
+        this.nodesArray = nodesArray;
+    }
+
+    private Node[] nodesArray;
+
+    public static String firebaseStorageUrl = "gs://draw4brains.appspot.com/";
+    public static String firebaseDbUrl = "https://draw4brains-default-rtdb.asia-southeast1.firebasedatabase.app/";
+    public static FirebaseStorage storage = FirebaseStorage.getInstance();
+    public static StorageReference storageReference;
+
+
     private static ConnectDots DotsInstance = new ConnectDots();
 
     /**
@@ -15,6 +89,15 @@ public class ConnectDots {
      * Made private.
      */
     private ConnectDots() {
+    }
+
+    public ConnectDots(String gameName, String[] dotsArray,
+                       Integer level, String firebaseStorageUrl) {
+        // set imageName in object
+        setImageName(gameName);
+        setDotsArray(dotsArray);
+        setLevel(level);
+        setStorageStringRef(firebaseStorageUrl);
     }
 
     /**
@@ -25,12 +108,6 @@ public class ConnectDots {
         return DotsInstance;
     }
 
-    public Image getImage(){
-        return dotImage;
-    }
-    public void setDotImage(Image dotImage){
-        this.dotImage = dotImage;
-    }
 
     /*URL iconURL = new URL("");
     // iconURL is null when not found
