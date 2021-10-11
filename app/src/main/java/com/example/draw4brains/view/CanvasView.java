@@ -17,7 +17,7 @@ import java.util.Random;
 
 public class CanvasView extends View {
 
-    private Bitmap mBitmap;
+    public static Bitmap mBitmap;
     private Canvas mCanvas;
     Random r = new Random();
     private Path mPath;
@@ -54,6 +54,7 @@ public class CanvasView extends View {
         this.relLayout = relLayout;
         mBitmap = Bitmap.createBitmap(canvasWidth, canvasHeight, Bitmap.Config.ARGB_8888);
         mCanvas = new Canvas(mBitmap);
+        mCanvas.drawColor(Color.TRANSPARENT);
     }
 
     // override onDraw

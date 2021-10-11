@@ -3,6 +3,8 @@ package com.example.draw4brains.view;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -13,6 +15,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -26,10 +29,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.draw4brains.R;
 import com.example.draw4brains.controller.NodeMgr;
+import com.example.draw4brains.model.ConnectDots;
 import com.example.draw4brains.model.Node;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -38,10 +45,15 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
 
 public class ConnectDotsActivity extends AppCompatActivity {
 
@@ -58,7 +70,7 @@ public class ConnectDotsActivity extends AppCompatActivity {
     int winningCount = 0;
     private static List<List<Integer>> checkCircle;
     private static List<Integer> checkPos = new ArrayList<>();
-    private static int startNode = 0;
+    private static int startNode;
     static int previousCircleX=0;
     static int previousCircleY=0;
     private static List<ImageView> circleToUndo = new ArrayList<>();
@@ -90,6 +102,8 @@ public class ConnectDotsActivity extends AppCompatActivity {
     private static final float DIAMETER_LIMIT_MIN = 70f;
     private static final float DIAMETER_CALCULATION_TOLERANCE_FACTOR = 1.5f;
 
+    //
+    public static ConnectDots newGame;
     // Load image from storage
     FirebaseStorage storage;
     StorageReference storageReference;
@@ -98,7 +112,7 @@ public class ConnectDotsActivity extends AppCompatActivity {
     private ImageView imageView;
 
     // Uri indicates, where the image will be picked from
-    private Uri filePath;
+//    private Uri filePath;
 
 
     @Override
@@ -117,8 +131,9 @@ public class ConnectDotsActivity extends AppCompatActivity {
         storageReference = storage.getReference();
         imageView = findViewById(R.id.image_bg);
 
-        GameLevelActivity.gameId = "testing1";
-        SelectImage();
+//        GameLevelActivity.gameName = "star";
+//        SelectImage();
+        startNode = 0;
 
 
         giveUpButton.setOnClickListener(new View.OnClickListener() {
@@ -196,22 +211,26 @@ public class ConnectDotsActivity extends AppCompatActivity {
     }
 
     // Select and Display Image method
-    private void SelectImage() {
-        Log.d("SelectImage", "Enter Function");
-        storage = FirebaseStorage.getInstance();
-        String storageUrl = "gs://draw4brains.appspot.com/";
-        storageUrl = storageUrl + GameLevelActivity.gameId + ".jpg";
-        storageReference = storage.getReferenceFromUrl(storageUrl);
-        storageReference.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
-            @Override
-            public void onComplete(@NonNull Task<Uri> task) {
-                Uri url = task.getResult();
-                Glide.with(getApplicationContext()).load(url).centerCrop().into(imageView);
-                Log.d("SelectImage", "Exit Function");
-            }
-        });
-
-    }
+//    private void SelectImage() {
+//        Log.d("SelectImage", "Enter Function");
+//        storage = FirebaseStorage.getInstance();
+//        String storageUrl = "gs://draw4brains.appspot.com/";
+//        storageUrl = storageUrl + GameLevelActivity.gameName + ".jpg";
+//        storageReference = storage.getReferenceFromUrl(storageUrl);
+//        storageReference.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+//            @Override
+//            public void onComplete(@NonNull Task<Uri> task) {
+//                Uri url = task.getResult();
+////                Glide.with(getApplicationContext()).load(url).fitCenter().into(imageView);
+//                Glide.with(getApplicationContext())
+//                        .load(url)
+//                        .fitCenter()
+//                        .into(imageView);
+//                Log.d("SelectImage", "Exit Function");
+//            }
+//        });
+//
+//    }
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
@@ -222,15 +241,15 @@ public class ConnectDotsActivity extends AppCompatActivity {
         canvasWidth = dimensions[0];
         canvasHeight = dimensions[1];
         canvasView.createCanvas(relLayout, canvasWidth, canvasHeight);
-        getNodeFromFirebase(GameLevelActivity.gameId);
+        getNodeFromFirebase(GameLevelActivity.gameName);
         Log.d("Initialization", "Get processing node");
 //        this.initialize_level(processingNodes);
     }
 
-    private void getNodeFromFirebase(String gameId){
+    private void getNodeFromFirebase(String gameName){
         ArrayList<Node> preprocessedArray = new ArrayList<Node>();
         DatabaseReference dotsDb = FirebaseDatabase.getInstance("https://draw4brains-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("ConnectDots");
-        Query query = dotsDb.orderByChild("gameId").equalTo(gameId);
+        Query query = dotsDb.orderByChild("imageName").equalTo(gameName);
         ValueEventListener newTest = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -238,12 +257,13 @@ public class ConnectDotsActivity extends AppCompatActivity {
                 for (DataSnapshot ds : snapshot.getChildren()) {
                     String gameId = ds.getKey();
                     String dotsArray = ds.child("arrayDotsPosition").getValue().toString();
-                    String imageId = ds.child("imageId").getValue().toString();
+//                    String imageId = ds.child("imageId").getValue().toString();
                     String imageName = ds.child("imageName").getValue().toString();
+                    Integer gameLevel = Integer.parseInt(ds.child("level").getValue().toString());
                     Log.d("DEBUG", gameId);
                     Log.d("DEBUG", ds.getValue().toString());
                     Log.d("dotsArray", dotsArray);
-                    Log.d("imageId", imageId);
+//                    Log.d("imageId", imageId);
                     Log.d("imageName", imageName);
 
                     dotsArray = dotsArray.replace("[", "").replace("]", "").replace("x", "")
@@ -275,7 +295,10 @@ public class ConnectDotsActivity extends AppCompatActivity {
                         Log.d("yCord", yCord.get(node_int).toString());
                         preprocessedArray.add(node);
                     }
+
                     Log.d("ArrayNode", preprocessedArray.toString());
+                    String storageUrl = ConnectDots.firebaseStorageUrl + gameName + ".jpg";
+                    newGame = new ConnectDots(gameName, cordString, gameLevel, storageUrl);
                     initialize_level(preprocessedArray);
                     chronometer.start();
                 }
@@ -315,7 +338,70 @@ public class ConnectDotsActivity extends AppCompatActivity {
         Log.d("CanvasDimensions", String.format("getCanvasDimensions: %d by %d", dimensions[0], dimensions[1]));
         return dimensions;
     }
+//    public Uri getImageUri(Context inContext, Bitmap inImage) {
+//        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+//        inImage.compress(Bitmap.CompressFormat.PNG, 100, bytes);
+//        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Test", null);
+//        return Uri.parse(path);
+//    }
 
+        //this method will upload the file
+//    private void uploadFile() {
+//        filePath = getImageUri(ConnectDotsActivity.this, CanvasView.mBitmap);
+//        //if there is a file to upload
+//        if (filePath != null) {
+//            //displaying a progress dialog while upload is going on
+//            final ProgressDialog progressDialog = new ProgressDialog(this);
+//            progressDialog.setTitle("Saving Drawing");
+//            progressDialog.show();
+//            Log.d("upload", "uploading still");
+//
+//            String drawName = "images/"+LoginActivity.currentUser.getUserID() + "_" + ConnectDotsActivity.newGame.getImageName() + ".jpg";
+//
+//            StorageReference riversRef = storageReference.child(drawName);
+//            riversRef.putFile(filePath)
+//                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//                        @Override
+//                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//                            //if the upload is successfull
+//                            //hiding the progress dialog
+//                            Log.d("upload", "uploading done");
+//                            progressDialog.dismiss();
+//
+//                            //and displaying a success toast
+//                            Toast.makeText(getApplicationContext(), "File Uploaded ", Toast.LENGTH_LONG).show();
+//                            intent = new Intent(ConnectDotsActivity.this, GuessImageActivity.class);
+//                            startActivity(intent);
+//                        }
+//                    })
+//                    .addOnFailureListener(new OnFailureListener() {
+//                        @Override
+//                        public void onFailure(@NonNull Exception exception) {
+//                            //if the upload is not successfull
+//                            //hiding the progress dialog
+//                            progressDialog.dismiss();
+//
+//                            //and displaying error message
+//                            Toast.makeText(getApplicationContext(), exception.getMessage(), Toast.LENGTH_LONG).show();
+//                        }
+//                    })
+//                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+//                        @Override
+//                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+//                            //calculating progress percentage
+//                            double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+//
+//                            //displaying percentage in progress dialog
+//                            progressDialog.setMessage("Uploaded " + ((int) progress) + "%...");
+//                        }
+//                    });
+//        }
+//        //if there is not any file
+//        else {
+//            //you can display an error toast
+//            Toast.makeText(ConnectDotsActivity.this, "Nothing was drawn!", Toast.LENGTH_SHORT).show();
+//        }
+//    }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -395,9 +481,10 @@ public class ConnectDotsActivity extends AppCompatActivity {
                         if (startNode < nodeList.size()) {//4
                             startNode += 1;
                         }
-                        if (startNode == 4) {
+                        if (startNode == nodeList.size()-1) {
 
                             Toast.makeText(ConnectDotsActivity.this, "You Win!", Toast.LENGTH_LONG).show();
+//                            uploadFile();
                             intent = new Intent(ConnectDotsActivity.this, GuessImageActivity.class);
                             startActivity(intent);
                         }
@@ -425,6 +512,8 @@ public class ConnectDotsActivity extends AppCompatActivity {
         }
         return true;
     }
+
+
 
     private int getYOffset(RelativeLayout view) {
         int offset;
