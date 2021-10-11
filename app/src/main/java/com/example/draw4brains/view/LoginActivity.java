@@ -51,8 +51,8 @@ public class LoginActivity extends AppCompatActivity {
         shortcutToGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                intent = new Intent(getApplicationContext(), ConnectDotsActivity.class);
-                intent.putExtra("isAdmin",true);
+                intent = new Intent(getApplicationContext(), GameLevelActivity.class);
+//                intent.putExtra("isAdmin",true);
                 startActivity(intent);
             }
         });
