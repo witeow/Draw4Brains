@@ -1,5 +1,6 @@
 package com.example.draw4brains.view;
 
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -9,10 +10,10 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -28,6 +29,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.draw4brains.R;
 import com.example.draw4brains.controller.NodeMgr;
+import com.example.draw4brains.controller.ScoreMgr;
 import com.example.draw4brains.model.Node;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -39,6 +41,8 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+
+import org.w3c.dom.NodeList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,6 +66,8 @@ public class ConnectDotsActivity extends AppCompatActivity {
     static int previousCircleX=0;
     static int previousCircleY=0;
     private static List<ImageView> circleToUndo = new ArrayList<>();
+//    private static List<ImageView> circleUndone = new ArrayList<>();
+
 
     // The following information will be integrated into Node class and stored in NodeMgr
     private NodeMgr nodeMgr = new NodeMgr();
@@ -71,17 +77,12 @@ public class ConnectDotsActivity extends AppCompatActivity {
     // Used in initialization
     float diameterForGame;
 
-    float X1, Y1, X2, Y2;
-
     // Change FILE AND LEVEL HERE
     private static final String LEVEL = "3"; // Testing purposes until intent is passed from other activity
     private static final String FILE_NAME = "nodeData.json"; // Testing purposes until intent is passed from other activity
 
     // Chronometer
     private Chronometer chronometer;
-    private long pauseOffset;
-    private boolean isRunning;
-
 
     // Constants
     private static final int PERCENTAGE_FILL_REQUIRED = 80; // To check if the nodes are spaced big enough
@@ -126,54 +127,18 @@ public class ConnectDotsActivity extends AppCompatActivity {
             public void onClick(View view) {
 //                Toast toast = Toast.makeText(ConnectDotsActivity.this, "Giving Up", Toast.LENGTH_SHORT);
 //                toast.show();
+                ScoreMgr scoreMgr = new ScoreMgr();
+                scoreMgr.scoreConnect(99999999, 1);
                 intent = new Intent(ConnectDotsActivity.this, GuessImageActivity.class);
                 startActivity(intent);
+
             }
         });
 
         chronometer = findViewById(R.id.chronometer);
 
-//        Button startBtn = findViewById(R.id.startBtn);
-//        Button pauseBtn = findViewById(R.id.pauseBtn);
-//        Button resetBtn = findViewById(R.id.resetBtn);
-//        startBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (!isRunning){
-//                    chronometer.setBase(SystemClock.elapsedRealtime() - pauseOffset);
-//                    chronometer.start();
-//                    isRunning = true;
-//                }
-//                Log.d("start clicked", "yes");
-//            }
-//        });
-//
-//        pauseBtn.setOnClickListener((new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (isRunning){
-//                    chronometer.stop();
-//                    pauseOffset = SystemClock.elapsedRealtime() - chronometer.getBase();
-//                    isRunning = false;
-//                }
-//                Log.d("pause clicked", "yes");
-//
-//            }
-//        }));
-//
-//        resetBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                chronometer.setBase(SystemClock.elapsedRealtime());
-//                pauseOffset = 0;
-//                Log.d("reset clicked", "yes");
-//            }
-//        });
-
-
-
           Button undoBtn = findViewById(R.id.undoBtn);
-          Button redoBtn = findViewById(R.id.redoBtn);
+//          Button redoBtn = findViewById(R.id.redoBtn);
           undoBtn.setOnClickListener(new View.OnClickListener() {
               @Override
               public void onClick(View v) {
@@ -187,12 +152,27 @@ public class ConnectDotsActivity extends AppCompatActivity {
                   }
               }
           });
-          redoBtn.setOnClickListener(new View.OnClickListener() {
-              @Override
-              public void onClick(View v) {
-                  canvasView.onClickRedo();
-              }
-          });
+//          redoBtn.setOnClickListener(new View.OnClickListener() {
+//              @Override
+//              public void onClick(View v) {
+//                  ImageView circle;
+//                  canvasView.onClickRedo();
+//                  circle = circleUndone.get(circleUndone.size()-1);
+//                  Log.d("redoC", String.valueOf(circleUndone));
+//
+//                  circle.setBackgroundColor(Color.GREEN);
+//                  if (startNode != circleToUndo.size()-1){
+//                      startNode++;
+//                  }
+//              }
+//          });
+    }
+
+    public int setConnectTime(){
+        int connectTime = 0;
+        long elapsed = SystemClock.elapsedRealtime() - chronometer.getBase();
+        connectTime = (int) elapsed/1000;
+        return connectTime;
     }
 
     // Select and Display Image method
@@ -277,6 +257,7 @@ public class ConnectDotsActivity extends AppCompatActivity {
                     }
                     Log.d("ArrayNode", preprocessedArray.toString());
                     initialize_level(preprocessedArray);
+                    chronometer.setBase(SystemClock.elapsedRealtime());
                     chronometer.start();
                 }
             }
@@ -395,9 +376,13 @@ public class ConnectDotsActivity extends AppCompatActivity {
                         if (startNode < nodeList.size()) {//4
                             startNode += 1;
                         }
-                        if (startNode == 4) {
+                        if (startNode == nodeList.size()-1) {
 
                             Toast.makeText(ConnectDotsActivity.this, "You Win!", Toast.LENGTH_LONG).show();
+                            long connectTime = setConnectTime();
+                            Log.d("connectTime", String.valueOf(connectTime));
+                            ScoreMgr scoreMgr = new ScoreMgr();
+                            scoreMgr.scoreConnect(connectTime, nodeList.size());
                             intent = new Intent(ConnectDotsActivity.this, GuessImageActivity.class);
                             startActivity(intent);
                         }

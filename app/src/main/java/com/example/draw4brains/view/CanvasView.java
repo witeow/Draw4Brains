@@ -128,22 +128,24 @@ public class CanvasView extends View {
         else
         {
             Toast.makeText(context, "No more strokes to undo!", Toast.LENGTH_LONG).show();
+            Log.d("undoNomore","no");
         }
-        //toast the user
     }
 
-    public void onClickRedo (){
-        if (undonePaths.size()>0)
-        {
-            paths.add(undonePaths.remove(undonePaths.size()-1));
-            invalidate();
-        }
-        else
-        {
-            Toast.makeText(context, "No more strokes to redo!", Toast.LENGTH_LONG).show();
-        }
-        //toast the user
-    }
+//    public int onClickRedo (){
+//        if (undonePaths.size()>0)
+//        {
+//            paths.add(undonePaths.remove(undonePaths.size()-1));
+//            invalidate();
+//        }
+//        else
+//        {
+//            Toast.makeText(context, "No more strokes to redo!", Toast.LENGTH_LONG).show();
+//            Log.d("redoNomore","no");
+//
+//        }
+//        return paths.size();
+//    }
 
 }
 

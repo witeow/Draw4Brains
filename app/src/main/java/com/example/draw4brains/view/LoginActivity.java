@@ -82,6 +82,7 @@ public class LoginActivity extends AppCompatActivity {
                             intent = new Intent(getApplicationContext(), UserHomeActivity.class);
                             intent.putExtra("isAdmin",false);
                             currentUser = new User(str_email);
+                            Log.d("current", String.valueOf(currentUser.getUserID()));
                             Log.d("UserDEBUG", "User has logged in!");
                             startActivity(intent);
                         }

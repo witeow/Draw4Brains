@@ -1,19 +1,24 @@
 package com.example.draw4brains.view;
 
 import static com.example.draw4brains.view.GameLevelActivity.gameId;
+import static com.example.draw4brains.view.LoginActivity.currentUser;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Chronometer;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.draw4brains.R;
+import com.example.draw4brains.controller.ScoreMgr;
+import com.example.draw4brains.model.User;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -34,13 +39,26 @@ public class GuessImageActivity extends AppCompatActivity {
 //    String answerArray[];
 
 
+    private Chronometer chronometer;
 
     Intent intent;
+    int guessTrial = 1;
+    int nbPlayed = 0;
+    int scoreUpdate = 0;
+
+    public int setGuessTime(){
+        int guessTime = 0;
+        long elapsed = SystemClock.elapsedRealtime() - chronometer.getBase();
+        guessTime = (int) elapsed/1000;
+        return guessTime;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_guess_image);
+
+        chronometer = findViewById(R.id.chronometer);
 
         // Load imageName from db
         DatabaseReference dotsDb = FirebaseDatabase.getInstance("https://draw4brains-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("ConnectDots");
@@ -117,6 +135,9 @@ public class GuessImageActivity extends AppCompatActivity {
                     setSelectionButtton(button13, answerTV, WORD_LENGTH, answerArray, occupied);
                     setSelectionButtton(button14, answerTV, WORD_LENGTH, answerArray, occupied);
 
+                    chronometer.setBase(SystemClock.elapsedRealtime());
+                    chronometer.start();
+
                     resetButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -129,12 +150,25 @@ public class GuessImageActivity extends AppCompatActivity {
                         public void onClick(View view) {
                             boolean isCorrect = checkAnswer(answerArray, wordToGuess);
                             if (isCorrect) {
+                                long guessTime = setGuessTime();
                                 Log.d("output", "toasting");
                                 Toast.makeText(GuessImageActivity.this, "Yay! You guessed it", Toast.LENGTH_SHORT).show();
+                                ScoreMgr scoreMgr = new ScoreMgr();
+                                int addScoreToTotal = scoreMgr.scoreGuess(guessTime, guessTrial);
                                 resetStates(answerTV, WORD_LENGTH, occupied, answerArray, buttonList);
+                                intent = new Intent(GuessImageActivity.this, EndGameActivity.class);
+                                startActivity(intent);
+
+                                nbPlayed = currentUser.getNumber_played() + 1;
+                                currentUser.setNumber_played(nbPlayed);
+
+                                scoreUpdate = currentUser.getTotalScore() + addScoreToTotal;
+                                currentUser.setTotalScore(scoreUpdate,nbPlayed);
+
                             } else {
                                 Log.d("output", "toasting");
                                 Toast.makeText(GuessImageActivity.this, "Try Again!", Toast.LENGTH_SHORT).show();
+                                guessTrial +=1;
                                 resetStates(answerTV, WORD_LENGTH, occupied, answerArray, buttonList);
                             }
                         }
@@ -143,6 +177,10 @@ public class GuessImageActivity extends AppCompatActivity {
                     giveUp.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+                            ScoreMgr scoreMgr = new ScoreMgr();
+                            int addScoreToTotal = scoreMgr.scoreGuess(99999999, 6);
+                            nbPlayed = currentUser.getNumber_played() + 1;
+                            currentUser.setNumber_played(nbPlayed);
                             intent = new Intent(GuessImageActivity.this, EndGameActivity.class);
                             startActivity(intent);
                         }
