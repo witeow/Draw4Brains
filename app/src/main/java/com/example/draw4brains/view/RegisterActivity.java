@@ -23,6 +23,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.draw4brains.controller.AESCrypt;
 import com.example.draw4brains.controller.RegisterMgr;
 
 import com.example.draw4brains.R;
@@ -245,33 +247,43 @@ public class RegisterActivity extends AppCompatActivity {
                 if (snapshot.exists()){
                     email.setError("Email currently used! Please use a different email instead");
                 }else{
-                    auth.createUserWithEmailAndPassword(strEmail, strPass).addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()){
-                                HashMap<String, Object> registerUser = new HashMap<>();
-                                String[] userAttributes = {"userEmail", "userName", "userGender", "userPassword", "userPhoneNum",
-                                        "userHouseNum", "userAddress", "userBirthday", "userScore",  "userNokName", "userNokNum", "userAdmin", "userNumGamesPlayed"};
+                    try {
+                        String encryptStrPass = AESCrypt.encrypt(strPass);
+//                        encryptStrPass = encryptStrPass.substring(0, encryptStrPass.length()-3);
+                        Log.d("OldPw", strPass);
+                        Log.d("NewPw", encryptStrPass);
+                        auth.createUserWithEmailAndPassword(strEmail, encryptStrPass).addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()){
+                                    HashMap<String, Object> registerUser = new HashMap<>();
+                                    String[] userAttributes = {"userEmail", "userName", "userGender", "userPassword", "userPhoneNum",
+                                            "userHouseNum", "userAddress", "userBirthday", "userScore",  "userNokName", "userNokNum", "userAdmin", "userNumGamesPlayed"};
 
-                                String[] regAttributes = {strEmail, strFirstName + " " + strLastName, strGender, strPass,
-                                        strPhoneNo, strHomeNo, strAddress, strBirthday, "0", strNokName, strNokPhone, strAdmin, "0"};
+                                    String[] regAttributes = {strEmail, strFirstName + " " + strLastName, strGender, encryptStrPass,
+                                            strPhoneNo, strHomeNo, strAddress, strBirthday, "0", strNokName, strNokPhone, strAdmin, "0"};
 
-                                for(int attributeNo=0; attributeNo<userAttributes.length; attributeNo++){
-                                    addToHashMap(registerUser, userAttributes[attributeNo], regAttributes[attributeNo]);
+                                    for(int attributeNo=0; attributeNo<userAttributes.length; attributeNo++){
+                                        addToHashMap(registerUser, userAttributes[attributeNo], regAttributes[attributeNo]);
+                                    }
+                                    DatabaseReference newUserRef = FirebaseDatabase.getInstance(realtimedatabase).getReference("User").push();
+                                    newUserRef.updateChildren(registerUser);
+                                    String userRefId = newUserRef.getKey();
+                                    updateAdmin(userRefId, strAdmin);
+                                    Toast.makeText(RegisterActivity.this, "Registration Successful!", Toast.LENGTH_SHORT).show();
+                                    startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+                                    finish();
+                                } else{
+                                    Toast.makeText(RegisterActivity.this, "Registration Failed", Toast.LENGTH_SHORT).show();
                                 }
-                                DatabaseReference newUserRef = FirebaseDatabase.getInstance(realtimedatabase).getReference("User").push();
-                                newUserRef.updateChildren(registerUser);
-                                String userRefId = newUserRef.getKey();
-                                updateAdmin(userRefId, strAdmin);
-                                Toast.makeText(RegisterActivity.this, "Registration Successful!", Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
-                                finish();
-                            } else{
-                                Toast.makeText(RegisterActivity.this, "Registration Failed", Toast.LENGTH_SHORT).show();
-                            }
 
-                        }
-                    });
+                            }
+                        });
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+
                 }
             }
 
