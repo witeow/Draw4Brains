@@ -60,7 +60,7 @@ public class GuessImageActivity extends AppCompatActivity {
         String answerArray[] = new String[WORD_LENGTH];
 
         for (int i=0; i < WORD_LENGTH; i++) {
-            answerArray[i] = "-";
+            answerArray[i] = "_";
             occupied[i]  = false;
         }
 

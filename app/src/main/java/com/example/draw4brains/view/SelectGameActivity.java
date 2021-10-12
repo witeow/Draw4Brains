@@ -12,7 +12,7 @@ import com.example.draw4brains.R;
 
 public class SelectGameActivity extends AppCompatActivity {
 
-    private Button btnGame1, btnBackHome;
+    private ImageButton btnGame1, btnBackHome;
     Intent intent;
 
     @Override
@@ -21,8 +21,8 @@ public class SelectGameActivity extends AppCompatActivity {
         getSupportActionBar().hide();
         setContentView(R.layout.activity_select_game);
 
-        btnGame1 = findViewById(R.id.btn_game1);
-        btnBackHome = findViewById(R.id.btn_back_home);
+        btnGame1 = findViewById(R.id.connectDotGame);
+        btnBackHome = findViewById(R.id.back_button);
 
         btnGame1.setOnClickListener(new View.OnClickListener() {
             @Override
