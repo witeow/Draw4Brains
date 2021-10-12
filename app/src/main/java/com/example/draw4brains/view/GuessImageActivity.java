@@ -1,9 +1,6 @@
 package com.example.draw4brains.view;
 
-import static com.example.draw4brains.view.GameLevelActivity.gameId;
 import static com.example.draw4brains.view.LoginActivity.currentUser;
-
-import static com.example.draw4brains.view.GameLevelActivity.gameName;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,21 +18,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
+
 import com.example.draw4brains.R;
 import com.example.draw4brains.controller.ScoreMgr;
-import com.example.draw4brains.model.User;
 import com.example.draw4brains.model.ConnectDots;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import java.util.Random;
 
@@ -54,6 +42,7 @@ public class GuessImageActivity extends AppCompatActivity {
     int guessTrial = 1;
     int nbPlayed = 0;
     int scoreUpdate = 0;
+    ScoreMgr scoreMgr;
 
     public int setGuessTime(){
         int guessTime = 0;
@@ -62,12 +51,15 @@ public class GuessImageActivity extends AppCompatActivity {
         return guessTime;
     }
 
-    Intent intent;
     ImageView guessImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        intent = getIntent();
+        scoreMgr = (ScoreMgr) intent.getSerializableExtra("score");
+
         setContentView(R.layout.activity_guess_image);
 
         chronometer = findViewById(R.id.chronometer);
@@ -91,24 +83,6 @@ public class GuessImageActivity extends AppCompatActivity {
         TextView answerTV = findViewById(R.id.answer_field);
         answerTV.setText(answerString);
 
-//        Button button1 = findViewById(R.id.button1);
-//        Button button2 = findViewById(R.id.button2);
-//        Button button3 = findViewById(R.id.button3);
-//        Button button4 = findViewById(R.id.button4);
-//        Button button5 = findViewById(R.id.button5);
-//        Button button6 = findViewById(R.id.button6);
-//        Button button7 = findViewById(R.id.button7);
-//        Button button8 = findViewById(R.id.button8);
-//        Button button9 = findViewById(R.id.button9);
-//        Button button10 = findViewById(R.id.button10);
-//        Button button11 = findViewById(R.id.button11);
-//        Button button12 = findViewById(R.id.button12);
-//        Button button13 = findViewById(R.id.button13);
-//        Button button14 = findViewById(R.id.button14);
-//        Button resetButton = findViewById(R.id.resetButton);
-//        Button submitButton = findViewById(R.id.submitButton);
-//        Button giveUp = findViewById(R.id.btn_give_up);
-
         buttonList[0] = findViewById(R.id.button1);
         buttonList[1]  = findViewById(R.id.button2);
         buttonList[2]  = findViewById(R.id.button3);
@@ -128,165 +102,16 @@ public class GuessImageActivity extends AppCompatActivity {
         Button giveUp = findViewById(R.id.btn_give_up);
 
 
-//        buttonList[0] = button1;
-//        buttonList[1] = button2;
-//        buttonList[2] = button3;
-//        buttonList[3] = button4;
-//        buttonList[4] = button5;
-//        buttonList[5] = button6;
-//        buttonList[6] = button7;
-//        buttonList[7] = button8;
-//        buttonList[8] = button9;
-//        buttonList[9] = button10;
-//        buttonList[10] = button11;
-//        buttonList[11] = button12;
-//        buttonList[12] = button13;
-//        buttonList[13] = button14;
-
         tempSetButtonText(buttonList, wordToGuess); // Temporary for testing. Assign letter to button
 
         for(int buttonNum = 0; buttonNum<buttonList.length; buttonNum++){
             setSelectionButtton(buttonList[buttonNum], answerTV, WORD_LENGTH, answerArray, occupied);
         }
 
-//        setSelectionButtton(button1, answerTV, WORD_LENGTH, answerArray, occupied);
-//        setSelectionButtton(button2, answerTV, WORD_LENGTH, answerArray, occupied);
-//        setSelectionButtton(button3, answerTV, WORD_LENGTH, answerArray, occupied);
-//        setSelectionButtton(button4, answerTV, WORD_LENGTH, answerArray, occupied);
-//        setSelectionButtton(button5, answerTV, WORD_LENGTH, answerArray, occupied);
-//        setSelectionButtton(button6, answerTV, WORD_LENGTH, answerArray, occupied);
-//        setSelectionButtton(button7, answerTV, WORD_LENGTH, answerArray, occupied);
-//        setSelectionButtton(button8, answerTV, WORD_LENGTH, answerArray, occupied);
-//        setSelectionButtton(button9, answerTV, WORD_LENGTH, answerArray, occupied);
-//        setSelectionButtton(button10, answerTV, WORD_LENGTH, answerArray, occupied);
-//        setSelectionButtton(button11, answerTV, WORD_LENGTH, answerArray, occupied);
-//        setSelectionButtton(button12, answerTV, WORD_LENGTH, answerArray, occupied);
-//        setSelectionButtton(button13, answerTV, WORD_LENGTH, answerArray, occupied);
-//        setSelectionButtton(button14, answerTV, WORD_LENGTH, answerArray, occupied);
+
+
 
         resetButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot ds : snapshot.getChildren()){
-                    String imageName = ds.child("imageName").getValue().toString();
-                    Log.d("imageName", imageName);
-
-                    String wordToGuess = imageName;
-                    int WORD_LENGTH = wordToGuess.length();
-                    Button buttonList[] = new Button[14];
-                    boolean occupied[] = new boolean[WORD_LENGTH];
-                    String answerArray[] = new String[WORD_LENGTH];
-
-                    for (int i=0; i < WORD_LENGTH; i++) {
-                        answerArray[i] = "-";
-                        occupied[i]  = false;
-                    }
-                    String answerString = formatAnswerString(answerArray);
-                    TextView answerTV = findViewById(R.id.answer_field);
-                    answerTV.setText(answerString);
-
-                    Button button1 = findViewById(R.id.button1);
-                    Button button2 = findViewById(R.id.button2);
-                    Button button3 = findViewById(R.id.button3);
-                    Button button4 = findViewById(R.id.button4);
-                    Button button5 = findViewById(R.id.button5);
-                    Button button6 = findViewById(R.id.button6);
-                    Button button7 = findViewById(R.id.button7);
-                    Button button8 = findViewById(R.id.button8);
-                    Button button9 = findViewById(R.id.button9);
-                    Button button10 = findViewById(R.id.button10);
-                    Button button11 = findViewById(R.id.button11);
-                    Button button12 = findViewById(R.id.button12);
-                    Button button13 = findViewById(R.id.button13);
-                    Button button14 = findViewById(R.id.button14);
-                    Button resetButton = findViewById(R.id.resetButton);
-                    Button submitButton = findViewById(R.id.submitButton);
-                    Button giveUp = findViewById(R.id.btn_give_up);
-
-
-                    buttonList[0] = button1;
-                    buttonList[1] = button2;
-                    buttonList[2] = button3;
-                    buttonList[3] = button4;
-                    buttonList[4] = button5;
-                    buttonList[5] = button6;
-                    buttonList[6] = button7;
-                    buttonList[7] = button8;
-                    buttonList[8] = button9;
-                    buttonList[9] = button10;
-                    buttonList[10] = button11;
-                    buttonList[11] = button12;
-                    buttonList[12] = button13;
-                    buttonList[13] = button14;
-
-                    tempSetButtonText(buttonList, wordToGuess); // Temporary for testing. Assign letter to button
-
-                    setSelectionButtton(button1, answerTV, WORD_LENGTH, answerArray, occupied);
-                    setSelectionButtton(button2, answerTV, WORD_LENGTH, answerArray, occupied);
-                    setSelectionButtton(button3, answerTV, WORD_LENGTH, answerArray, occupied);
-                    setSelectionButtton(button4, answerTV, WORD_LENGTH, answerArray, occupied);
-                    setSelectionButtton(button5, answerTV, WORD_LENGTH, answerArray, occupied);
-                    setSelectionButtton(button6, answerTV, WORD_LENGTH, answerArray, occupied);
-                    setSelectionButtton(button7, answerTV, WORD_LENGTH, answerArray, occupied);
-                    setSelectionButtton(button8, answerTV, WORD_LENGTH, answerArray, occupied);
-                    setSelectionButtton(button9, answerTV, WORD_LENGTH, answerArray, occupied);
-                    setSelectionButtton(button10, answerTV, WORD_LENGTH, answerArray, occupied);
-                    setSelectionButtton(button11, answerTV, WORD_LENGTH, answerArray, occupied);
-                    setSelectionButtton(button12, answerTV, WORD_LENGTH, answerArray, occupied);
-                    setSelectionButtton(button13, answerTV, WORD_LENGTH, answerArray, occupied);
-                    setSelectionButtton(button14, answerTV, WORD_LENGTH, answerArray, occupied);
-
-                    chronometer.setBase(SystemClock.elapsedRealtime());
-                    chronometer.start();
-
-                    resetButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            resetStates(answerTV, WORD_LENGTH, occupied, answerArray, buttonList);
-                        }
-                    });
-
-                    submitButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            boolean isCorrect = checkAnswer(answerArray, wordToGuess);
-                            if (isCorrect) {
-                                long guessTime = setGuessTime();
-                                Log.d("output", "toasting");
-                                Toast.makeText(GuessImageActivity.this, "Yay! You guessed it", Toast.LENGTH_SHORT).show();
-                                ScoreMgr scoreMgr = new ScoreMgr();
-                                int addScoreToTotal = scoreMgr.scoreGuess(guessTime, guessTrial);
-                                resetStates(answerTV, WORD_LENGTH, occupied, answerArray, buttonList);
-                                intent = new Intent(GuessImageActivity.this, EndGameActivity.class);
-                                startActivity(intent);
-
-                                nbPlayed = currentUser.getNumber_played() + 1;
-                                currentUser.setNumber_played(nbPlayed);
-
-                                scoreUpdate = currentUser.getTotalScore() + addScoreToTotal;
-                                currentUser.setTotalScore(scoreUpdate,nbPlayed);
-
-                            } else {
-                                Log.d("output", "toasting");
-                                Toast.makeText(GuessImageActivity.this, "Try Again!", Toast.LENGTH_SHORT).show();
-                                guessTrial +=1;
-                                resetStates(answerTV, WORD_LENGTH, occupied, answerArray, buttonList);
-                            }
-                        }
-                    });
-
-                    giveUp.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            ScoreMgr scoreMgr = new ScoreMgr();
-                            int addScoreToTotal = scoreMgr.scoreGuess(99999999, 6);
-                            nbPlayed = currentUser.getNumber_played() + 1;
-                            currentUser.setNumber_played(nbPlayed);
-                            intent = new Intent(GuessImageActivity.this, EndGameActivity.class);
-                            startActivity(intent);
-                        }
-                    });
-
             public void onClick(View view) {
                 resetStates(answerTV, WORD_LENGTH, occupied, answerArray, buttonList);
             }
@@ -297,12 +122,21 @@ public class GuessImageActivity extends AppCompatActivity {
             public void onClick(View view) {
                 boolean isCorrect = checkAnswer(answerArray, wordToGuess);
                 if (isCorrect) {
+                    long guessTime = setGuessTime();
                     Log.d("output", "toasting");
                     Toast.makeText(GuessImageActivity.this, "Yay! You guessed it", Toast.LENGTH_SHORT).show();
-                    resetStates(answerTV, WORD_LENGTH, occupied, answerArray, buttonList);
+                    int addScoreToTotal = scoreMgr.scoreGuess(guessTime, guessTrial);
+                    nbPlayed = currentUser.getNumber_played() + 1;
+                    currentUser.setNumber_played(nbPlayed);
+                    scoreUpdate = currentUser.getTotalScore() + addScoreToTotal;
+                    currentUser.setTotalScore(scoreUpdate,nbPlayed);
+                    intent = new Intent(GuessImageActivity.this, EndGameActivity.class);
+                    intent.putExtra("score", scoreMgr);
+                    startActivity(intent);
                 } else {
                     Log.d("output", "toasting");
                     Toast.makeText(GuessImageActivity.this, "Try Again!", Toast.LENGTH_SHORT).show();
+                    guessTrial +=1;
                     resetStates(answerTV, WORD_LENGTH, occupied, answerArray, buttonList);
                 }
             }
@@ -311,7 +145,11 @@ public class GuessImageActivity extends AppCompatActivity {
         giveUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                int addScoreToTotal = scoreMgr.scoreGuess(99999999, 6);
+                nbPlayed = currentUser.getNumber_played() + 1;
+                currentUser.setNumber_played(nbPlayed);
                 intent = new Intent(GuessImageActivity.this, EndGameActivity.class);
+                intent.putExtra("score", scoreMgr);
                 startActivity(intent);
             }
         });
@@ -332,6 +170,8 @@ public class GuessImageActivity extends AppCompatActivity {
                         .load(url)
                         .fitCenter()
                         .into(guessImage);
+                chronometer.setBase(SystemClock.elapsedRealtime());
+                chronometer.start();
                 Log.d("SelectImage", "Exit Function");
             }
         });

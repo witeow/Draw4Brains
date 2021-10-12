@@ -20,15 +20,22 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class GameLevelActivity extends AppCompatActivity {
 
-    private Button btnLevel1, btnLevel2, btnLevel3, btnLevel4, btnLevel5;
+    private Button btnEasy, btnNormal, btnHard;
     private ImageButton btnBack;
     private TextView instructionTextView;
     public static String gameName;
+
     Intent intent;
     ArrayList<String> levelString = new ArrayList<>();
+
+    // Temp random levels
+    private Random r;
+    private String[] games;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,12 +45,12 @@ public class GameLevelActivity extends AppCompatActivity {
         gameName = "";
 
         btnBack = findViewById(R.id.btn_back);
-        btnLevel1 = findViewById(R.id.btn_level1);
-        btnLevel2 = findViewById(R.id.btn_level2);
-        btnLevel3 = findViewById(R.id.btn_level3);
-        btnLevel4 = findViewById(R.id.btn_level4);
-        btnLevel5 = findViewById(R.id.btn_level5);
+        btnEasy = findViewById(R.id.easyBtn);
+        btnNormal = findViewById(R.id.normalBtn);
+        btnHard = findViewById(R.id.hardBtn);
         instructionTextView = findViewById(R.id.instructionTextView);
+
+        r = new Random();
 
         instructionTextView.setText(
                 "Instructions:\n\n\n" +
@@ -53,45 +60,36 @@ public class GameLevelActivity extends AppCompatActivity {
                 "Stage 2 - Guess the Image\n" +
                 "Guess the image shown by entering the correct characters\n\n");
 
-        btnLevel1.setOnClickListener(new View.OnClickListener() {
+        btnEasy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                gameName = "seven";
+                String gameDifficulty = "easy"; // For use with database
+                games = new String[] {"seven", "house"};
+                gameName = games[r.nextInt(2)];
                 changeActivitytoConnectDots(view);
             }
         });
 
-        btnLevel2.setOnClickListener(new View.OnClickListener() {
+        btnNormal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                gameName = "house";
+                String gameDifficulty = "normal"; // For use with database
+                games = new String[] {"star", "one"};
+                gameName = games[r.nextInt(2)];
                 changeActivitytoConnectDots(view);
             }
         });
 
-        btnLevel3.setOnClickListener(new View.OnClickListener() {
+        btnHard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                gameName = "star";
+                String gameDifficulty = "hard"; // For use with database
+                games = new String[] {"shirt"};
+                gameName = games[r.nextInt(1)];
                 changeActivitytoConnectDots(view);
             }
         });
 
-        btnLevel4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                gameName = "one";
-                changeActivitytoConnectDots(view);
-            }
-        });
-
-        btnLevel5.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                gameName = "shirt";
-                changeActivitytoConnectDots(view);
-            }
-        });
 
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override

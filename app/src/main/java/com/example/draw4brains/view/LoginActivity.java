@@ -57,16 +57,9 @@ public class LoginActivity extends AppCompatActivity {
         btnAccType = findViewById(R.id.btn_acc_type);
         btnAccType.setChecked(false);
 
-        // For testing purposes
-        Button shortcutToGame = findViewById(R.id.shortcutGame);
-        shortcutToGame.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                intent = new Intent(getApplicationContext(), GameLevelActivity.class);
-//                intent.putExtra("isAdmin",true);
-                startActivity(intent);
-            }
-        });
+        // For easy logging in
+        email.setText("witeow223@gmail.com");
+        password.setText("Witeow1!");
 
         auth = FirebaseAuth.getInstance();
 
@@ -76,27 +69,6 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String str_email = email.getText().toString();
                 String str_pass = password.getText().toString(); //TODO: useBcrypt to encrypt password
-//                Log.d("Debug email:",str_email);
-//                Log.d("Debug pass:",str_pass);
-                auth.signInWithEmailAndPassword(str_email, str_pass).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-                    @Override
-                    public void onSuccess(AuthResult authResult) {
-                        Toast.makeText(LoginActivity.this, "Login Successful!", Toast.LENGTH_SHORT).show();
-                        if (btnAccType.isChecked()) {
-                            // Checked == Admin Mode
-                            intent = new Intent(getApplicationContext(), AdminHomeActivity.class);
-                            intent.putExtra("isAdmin",true);
-                            currentAdmin = new Admin(str_email);
-                            startActivity(intent);
-                        } else {
-                            // Unchecked == User Mode
-                            intent = new Intent(getApplicationContext(), UserHomeActivity.class);
-                            intent.putExtra("isAdmin",false);
-                            currentUser = new User(str_email);
-                            Log.d("current", String.valueOf(currentUser.getUserID()));
-                            Log.d("UserDEBUG", "User has logged in!");
-                            startActivity(intent);
-
                 Log.d("Debug email:",str_email);
                 Log.d("Debug pass:",str_pass);
                 try {

@@ -8,7 +8,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/topPanel"
-        android:layout_width="409dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/light_blue"
         app:layout_constraintEnd_toEndOf="parent"
@@ -30,14 +30,15 @@
 
         <Button
             android:id="@+id/btn_give_up"
-            android:layout_width="100dp"
-            android:layout_height="42dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
             android:backgroundTint="@color/red"
             android:text="Give Up"
             android:textColor="@color/black"
+            app:layout_constraintHorizontal_bias="0.946"
             app:layout_constraintBottom_toBottomOf="@+id/chronometer"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.946"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/chronometer" />
 
@@ -45,33 +46,23 @@
             android:id="@+id/undoBtn"
             android:layout_width="83dp"
             android:layout_height="37dp"
-            android:layout_marginTop="10dp"
             android:layout_marginLeft="20dp"
             android:text="Undo"
             android:textSize="7dp"
+            app:layout_constraintBottom_toBottomOf="@+id/chronometer"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_game_header" />
-
-        <Button
-            android:id="@+id/redoBtn"
-            android:layout_width="83dp"
-            android:layout_height="37dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginLeft="20dp"
-            android:text="Redo"
-            android:textSize="7dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/undoBtn" />
+            app:layout_constraintTop_toTopOf="@+id/chronometer" />
 
         <Chronometer
             android:id="@+id/chronometer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
             android:textSize="30dp"
-            app:layout_constraintBottom_toBottomOf="@+id/redoBtn"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/undoBtn" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_game_header" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -1,11 +1,8 @@
 package com.example.draw4brains.view;
 
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -13,11 +10,9 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
 
-import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -30,17 +25,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.example.draw4brains.R;
 import com.example.draw4brains.controller.NodeMgr;
 import com.example.draw4brains.controller.ScoreMgr;
 import com.example.draw4brains.model.ConnectDots;
 import com.example.draw4brains.model.Node;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -48,18 +37,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
-
-import org.w3c.dom.NodeList;
 
 
-import java.io.ByteArrayOutputStream;
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
 
 public class ConnectDotsActivity extends AppCompatActivity {
 
@@ -88,7 +70,7 @@ public class ConnectDotsActivity extends AppCompatActivity {
     private static int canvasHeight;
 
     // Used in initialization
-    float diameterForGame;
+    int radiusIntForGame;
 
     // Change FILE AND LEVEL HERE
     private static final String LEVEL = "3"; // Testing purposes until intent is passed from other activity
@@ -147,6 +129,7 @@ public class ConnectDotsActivity extends AppCompatActivity {
                 ScoreMgr scoreMgr = new ScoreMgr();
                 scoreMgr.scoreConnect(99999999, 1);
                 intent = new Intent(ConnectDotsActivity.this, GuessImageActivity.class);
+                intent.putExtra("score", scoreMgr);
                 startActivity(intent);
 
             }
@@ -305,7 +288,7 @@ public class ConnectDotsActivity extends AppCompatActivity {
         Log.d("Initialization", "Start initialization");
         ArrayList<Node> scaledNodes = calibrateNodeToCanvasSize(processingNodes, canvasWidth, canvasHeight, PERCENTAGE_FILL_REQUIRED, SCALING_FACTOR, SCALING_FACTOR_MODIFIER);
         Log.d("Initialization", "Finished Scaling Nodes to Canvas Size");
-        Log.d("Diameter", "Diameter" + String.valueOf(diameterForGame));
+        Log.d("Diameter", "Diameter" + String.valueOf(radiusIntForGame));
 
         // Add creation of circle here
         createCircles(scaledNodes);
@@ -403,8 +386,8 @@ public class ConnectDotsActivity extends AppCompatActivity {
         ArrayList<Node> nodeList = this.nodeMgr.getNodeList();
         Node currentNode = nodeList.get(startNode);
         ImageView circleImage = currentNode.getNodeImage();
-        circleToCheckX = (int) circleImage.getX();
-        circleToCheckY = (int) circleImage.getY();
+        circleToCheckX = (int) circleImage.getX() + radiusIntForGame;
+        circleToCheckY = (int) circleImage.getY() + radiusIntForGame;
 
 
 //        checkCircle = circlePos;
@@ -412,8 +395,8 @@ public class ConnectDotsActivity extends AppCompatActivity {
             case MotionEvent.ACTION_DOWN:
 //                X1 = x;
 //                Y1 = y;
-                if ((circleToCheckX - 111d <= x && x <= circleToCheckX + 111d) &&
-                        (circleToCheckY - 111d <= y && y <= circleToCheckY + 111d)){
+                if (    (circleToCheckX - radiusIntForGame <= x && x <= circleToCheckX + radiusIntForGame) &&
+                        (circleToCheckY - radiusIntForGame <= y && y <= circleToCheckY + radiusIntForGame)){
                     checkPos.add(circleToCheckX);
                     checkPos.add(circleToCheckY);
                     circleImage.setBackgroundColor(Color.GREEN);
@@ -445,14 +428,14 @@ public class ConnectDotsActivity extends AppCompatActivity {
                     Node nextNode = nodeList.get(startNode + 1);
                     //Log.d("startnode_move1", String.valueOf(startNode));
                     ImageView nextCircleImage = nextNode.getNodeImage();
-                    nextCircleToCheckX = (int) nextCircleImage.getX();
-                    nextCircleToCheckY = (int) nextCircleImage.getY();
+                    nextCircleToCheckX = (int) nextCircleImage.getX() + radiusIntForGame;
+                    nextCircleToCheckY = (int) nextCircleImage.getY() + radiusIntForGame;
                     Log.d("previousCx", String.valueOf(previousCircleX));
                     Log.d("previousCy", String.valueOf(previousCircleY));
-                    if ((nextCircleToCheckX - 60d <= x && x <= nextCircleToCheckX + 60d) &&
-                            (nextCircleToCheckY - 60d <= y && y <= nextCircleToCheckY + 60d) &&
-                            (circleToCheckX - 60d <= previousCircleX && previousCircleX <= circleToCheckX + 60d) &&
-                            (circleToCheckY - 60d <= previousCircleY && previousCircleY <= circleToCheckY + 60d)){
+                    if (    (nextCircleToCheckX - radiusIntForGame <= x && x <= nextCircleToCheckX + radiusIntForGame) &&
+                            (nextCircleToCheckY - radiusIntForGame <= y && y <= nextCircleToCheckY + radiusIntForGame) &&
+                            (circleToCheckX - radiusIntForGame <= previousCircleX && previousCircleX <= circleToCheckX + radiusIntForGame) &&
+                            (circleToCheckY - radiusIntForGame <= previousCircleY && previousCircleY <= circleToCheckY + radiusIntForGame)){
 
                         checkPos.add(nextCircleToCheckX);
                         checkPos.add(nextCircleToCheckY);
@@ -473,6 +456,7 @@ public class ConnectDotsActivity extends AppCompatActivity {
                             scoreMgr.scoreConnect(connectTime, nodeList.size());
 //                            uploadFile();
                             intent = new Intent(ConnectDotsActivity.this, GuessImageActivity.class);
+                            intent.putExtra("score", scoreMgr);
                             startActivity(intent);
                         }
                         //Log.d("startnode_move2", String.valueOf(startNode));
@@ -615,6 +599,7 @@ public class ConnectDotsActivity extends AppCompatActivity {
         boolean isFirst = false;
         boolean isLast = false;
         float diameter = getDiameterForNodes(nodesList);
+        this.radiusIntForGame = (int) (diameter/2f);
 
         // Styling Code
         Paint nodePaint = new Paint();
