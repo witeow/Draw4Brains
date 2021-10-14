@@ -31,7 +31,8 @@
             android:exported="true" />
         <activity
             android:name=".view.AdminHomeActivity"
-            android:exported="true" />
+            android:exported="true"
+            />
         <activity
             android:name=".view.ForgetPasswordActivity"
             android:exported="true" />

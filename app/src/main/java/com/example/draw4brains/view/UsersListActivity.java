@@ -15,6 +15,9 @@ import android.widget.SearchView;
 import com.example.draw4brains.R;
 import com.example.draw4brains.controller.AdminController;
 import com.example.draw4brains.model.User;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseError;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -23,6 +26,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.sql.Ref;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -42,6 +46,16 @@ public class UsersListActivity extends AppCompatActivity {
     FirebaseAuth fAuth;
     //String uid;
     String admin_email;
+    String child_uid;
+    String easy_dot;
+    String easy_gamesplayed;
+    String easy_guess;
+    String med_dot;
+    String med_gamesplayed;
+    String med_guess;
+    String hard_dot;
+    String hard_gamesplayed;
+    String hard_guess;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,30 +64,10 @@ public class UsersListActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 //TODO
         fAuth = FirebaseAuth.getInstance();
-        //FirebaseUser firebaseUser = fAuth.getCurrentUser();
+
         admin_email = fAuth.getCurrentUser().getEmail();
         Log.d("Admin's uidddddddddd", admin_email);
-//        DatabaseReference User_cred = FirebaseDatabase.getInstance().getReference("Admin").child(uid);
-//        uid=User_cred
-//        Log.d("Admin's uidddddddddd", uid);
-//        User_cred.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                uid = snapshot.getKey();
-//                Log.d("Admin's uidddddddddd", uid);
-//            }
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//            }
-//        });
 
-//        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-//        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Admin");
-////        // opens up the current user's database reference
-//        final DatabaseReference currentUser = databaseReference.child(firebaseUser.getUid());
-
-
-        //initialize the views
         lvUsers = (ListView) findViewById(R.id.lv_users);
         lvUsers.setEmptyView(findViewById(R.id.tv_empty));
 
@@ -95,18 +89,21 @@ public class UsersListActivity extends AppCompatActivity {
 
 
         DatabaseReference rootRef = getInstance("https://draw4brains-default-rtdb.asia-southeast1.firebasedatabase.app").getReference();
+
         DatabaseReference usersdRef = rootRef.child("User");
-//        //get list of users, making sure that they aren't already disabled, an admin, or a clinic admin
+
         ValueEventListener eventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 for(DataSnapshot ds : dataSnapshot.getChildren()) {
-                    String child_uid = ds.getKey();
+                    child_uid = ds.getKey();
                     Log.d("TAG", child_uid);
                     String email=ds.child("userEmail").getValue(String.class);
                     String name=ds.child("userName").getValue(String.class);
                     String score = ds.child("userScore").getValue(String.class);
+
+
                     int number_played = ds.child("userNumGamesPlayed").getValue(int.class);
 
 
@@ -115,7 +112,7 @@ public class UsersListActivity extends AppCompatActivity {
 
                     
                     if (admin_email.equals(caretaker_email)) {
-                        User.add(new User(name, "gender", "phone", email, caretaker_email, false, score,number_played));
+                        User.add(new User(name, "gender", child_uid, email, caretaker_email, false, score,number_played));
                     }
 
                 }
@@ -125,11 +122,180 @@ public class UsersListActivity extends AppCompatActivity {
                 lvUsers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                        Intent intent = new Intent(UsersListActivity.this, StatisticsPageActivity.class);
-                        intent.putExtra("Name",mAdminController.getItem(position).getUserName());
-                        intent.putExtra("Score",mAdminController.getItem(position).getTotalScore());
-                        intent.putExtra("number_played",mAdminController.getItem(position).getNumber_played());
-                        startActivity(intent);
+
+//                        DatabaseReference scoreRef;
+//                        scoreRef = rootRef.child("Score").child(mAdminController.getItem(position).getPhoneNo()).child("connectDots").child("easy").child("dots");
+//                        scoreRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+//                            @Override
+//                            public void onComplete(@NonNull Task<DataSnapshot> task) {
+//
+//                                if (!task.isSuccessful()) {
+//                                    Log.e("firebase", "Error getting data", task.getException());
+//                                }
+//                                else {
+//                                    Log.d("dots", String.valueOf(task.getResult().getValue()));
+//                                    easy_dot=String.valueOf(task.getResult().getValue());
+//                                }
+//                            }
+//                        });
+//                        scoreRef = rootRef.child("Score").child(mAdminController.getItem(position).getPhoneNo()).child("connectDots").child("easy").child("gamesPlayed");
+//                        scoreRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+//                            @Override
+//                            public void onComplete(@NonNull Task<DataSnapshot> task) {
+//                                if (!task.isSuccessful()) {
+//                                    Log.e("firebase", "Error getting data", task.getException());
+//                                }
+//                                else {
+//                                    Log.d("gamesplayed", String.valueOf(task.getResult().getValue()));
+//                                    easy_gamesplayed=String.valueOf(task.getResult().getValue());
+//                                }
+//                            }
+//                        });
+//                        scoreRef = rootRef.child("Score").child(mAdminController.getItem(position).getPhoneNo()).child("connectDots").child("easy").child("guess");
+//                        scoreRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+//                            @Override
+//                            public void onComplete(@NonNull Task<DataSnapshot> task) {
+//                                if (!task.isSuccessful()) {
+//                                    Log.e("firebase", "Error getting data", task.getException());
+//                                }
+//                                else {
+//                                    Log.d("guess", String.valueOf(task.getResult().getValue()));
+//                                    easy_guess=String.valueOf(task.getResult().getValue());
+//                                }
+//                            }
+//                        });
+//                        scoreRef = rootRef.child("Score").child(mAdminController.getItem(position).getPhoneNo()).child("connectDots").child("medium").child("dots");
+//                        scoreRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+//                            @Override
+//                            public void onComplete(@NonNull Task<DataSnapshot> task) {
+//
+//                                if (!task.isSuccessful()) {
+//                                    Log.e("firebase", "Error getting data", task.getException());
+//                                }
+//                                else {
+//                                    Log.d("dots", String.valueOf(task.getResult().getValue()));
+//                                    med_dot=String.valueOf(task.getResult().getValue());
+//                                }
+//                            }
+//                        });
+//                        scoreRef = rootRef.child("Score").child(mAdminController.getItem(position).getPhoneNo()).child("connectDots").child("medium").child("gamesPlayed");
+//                        scoreRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+//                            @Override
+//                            public void onComplete(@NonNull Task<DataSnapshot> task) {
+//                                if (!task.isSuccessful()) {
+//                                    Log.e("firebase", "Error getting data", task.getException());
+//                                }
+//                                else {
+//                                    Log.d("gamesplayed", String.valueOf(task.getResult().getValue()));
+//                                    med_gamesplayed=String.valueOf(task.getResult().getValue());
+//                                }
+//                            }
+//                        });
+//                        scoreRef = rootRef.child("Score").child(mAdminController.getItem(position).getPhoneNo()).child("connectDots").child("medium").child("guess");
+//                        scoreRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+//                            @Override
+//                            public void onComplete(@NonNull Task<DataSnapshot> task) {
+//                                if (!task.isSuccessful()) {
+//                                    Log.e("firebase", "Error getting data", task.getException());
+//                                }
+//                                else {
+//                                    Log.d("guess", String.valueOf(task.getResult().getValue()));
+//                                    med_guess=String.valueOf(task.getResult().getValue());
+//                                }
+//                            }
+//                        });
+//                        scoreRef = rootRef.child("Score").child(mAdminController.getItem(position).getPhoneNo()).child("connectDots").child("hard").child("dots");
+//                        scoreRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+//                            @Override
+//                            public void onComplete(@NonNull Task<DataSnapshot> task) {
+//
+//                                if (!task.isSuccessful()) {
+//                                    Log.e("firebase", "Error getting data", task.getException());
+//                                }
+//                                else {
+//                                    Log.d("dots", String.valueOf(task.getResult().getValue()));
+//                                    hard_dot=String.valueOf(task.getResult().getValue());
+//                                }
+//                            }
+//                        });
+//                        scoreRef = rootRef.child("Score").child(mAdminController.getItem(position).getPhoneNo()).child("connectDots").child("hard").child("gamesPlayed");
+//                        scoreRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+//                            @Override
+//                            public void onComplete(@NonNull Task<DataSnapshot> task) {
+//                                if (!task.isSuccessful()) {
+//                                    Log.e("firebase", "Error getting data", task.getException());
+//                                }
+//                                else {
+//                                    Log.d("gamesplayed", String.valueOf(task.getResult().getValue()));
+//                                    hard_gamesplayed=String.valueOf(task.getResult().getValue());
+//                                }
+//                            }
+//                        });
+//                        scoreRef = rootRef.child("Score").child(mAdminController.getItem(position).getPhoneNo()).child("connectDots").child("hard").child("guess");
+//                        scoreRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+//                            @Override
+//                            public void onComplete(@NonNull Task<DataSnapshot> task) {
+//                                if (!task.isSuccessful()) {
+//                                    Log.e("firebase", "Error getting data", task.getException());
+//                                }
+//                                else {
+//                                    Log.d("guess", String.valueOf(task.getResult().getValue()));
+//                                    hard_guess=String.valueOf(task.getResult().getValue());
+//                                }
+//                            }
+//                        });
+
+
+                        rootRef.child("Score").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot tasksSnapshot) {
+                                for (DataSnapshot snapshot: tasksSnapshot.getChildren()) {
+                                    String key = snapshot.getKey();
+                                    if(key.equals(mAdminController.getItem(position).getPhoneNo())) {
+                                        easy_dot = snapshot.child("connectDots").child("easy").child("dots").getValue(String.class);
+                                        easy_gamesplayed = String.valueOf(snapshot.child("connectDots").child("easy").child("gamesPlayed").getValue(Long.class));
+                                        easy_guess = snapshot.child("connectDots").child("easy").child("guess").getValue(String.class);
+
+                                        med_dot = snapshot.child("connectDots").child("medium").child("dots").getValue(String.class);
+                                        med_gamesplayed = String.valueOf(snapshot.child("connectDots").child("medium").child("gamesPlayed").getValue(Long.class));
+                                        med_guess = snapshot.child("connectDots").child("medium").child("guess").getValue(String.class);
+
+                                        hard_dot = snapshot.child("connectDots").child("hard").child("dots").getValue(String.class);
+                                        hard_gamesplayed = String.valueOf(snapshot.child("connectDots").child("hard").child("gamesPlayed").getValue(Long.class));
+                                        hard_guess = snapshot.child("connectDots").child("hard").child("guess").getValue(String.class);
+                                        Log.d("guess", snapshot.child("connectDots").child("easy").child("dots").getValue(String.class));
+                                    }
+                                }
+
+                                Intent intent = new Intent(UsersListActivity.this, StatisticsPageActivity.class);
+                                intent.putExtra("Name",mAdminController.getItem(position).getUserName());
+                                intent.putExtra("Score",mAdminController.getItem(position).getTotalScore());
+                                intent.putExtra("number_played",mAdminController.getItem(position).getNumber_played());
+                                intent.putExtra("easydot",easy_dot);
+                                intent.putExtra("easygames",easy_gamesplayed);
+                                intent.putExtra("easyguess",easy_guess);
+                                intent.putExtra("meddot",med_dot);
+                                intent.putExtra("medgames",med_gamesplayed);
+                                intent.putExtra("medguess",med_guess);
+                                intent.putExtra("harddot",hard_dot);
+                                intent.putExtra("hardgames",hard_gamesplayed);
+                                intent.putExtra("hardguess",hard_guess);
+
+                                startActivity(intent);
+
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
+
+
+
+
+
+
                         //showEnableDialog(mAdminController.getItemId(position));
 
                     }

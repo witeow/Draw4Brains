@@ -181,6 +181,8 @@ public class User {
 
     public void setscore(int score){this.score = score;}
 
+
+
     public int getTotalScore(){return totalScore;}
 
     public void setTotalScore(int userScore, int gamesPlayed){this.totalScore = userScore*gamesPlayed;}
