@@ -304,70 +304,6 @@ public class ConnectDotsActivity extends AppCompatActivity {
         Log.d("CanvasDimensions", String.format("getCanvasDimensions: %d by %d", dimensions[0], dimensions[1]));
         return dimensions;
     }
-//    public Uri getImageUri(Context inContext, Bitmap inImage) {
-//        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-//        inImage.compress(Bitmap.CompressFormat.PNG, 100, bytes);
-//        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Test", null);
-//        return Uri.parse(path);
-//    }
-
-        //this method will upload the file
-//    private void uploadFile() {
-//        filePath = getImageUri(ConnectDotsActivity.this, CanvasView.mBitmap);
-//        //if there is a file to upload
-//        if (filePath != null) {
-//            //displaying a progress dialog while upload is going on
-//            final ProgressDialog progressDialog = new ProgressDialog(this);
-//            progressDialog.setTitle("Saving Drawing");
-//            progressDialog.show();
-//            Log.d("upload", "uploading still");
-//
-//            String drawName = "images/"+LoginActivity.currentUser.getUserID() + "_" + ConnectDotsActivity.newGame.getImageName() + ".jpg";
-//
-//            StorageReference riversRef = storageReference.child(drawName);
-//            riversRef.putFile(filePath)
-//                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-//                        @Override
-//                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-//                            //if the upload is successfull
-//                            //hiding the progress dialog
-//                            Log.d("upload", "uploading done");
-//                            progressDialog.dismiss();
-//
-//                            //and displaying a success toast
-//                            Toast.makeText(getApplicationContext(), "File Uploaded ", Toast.LENGTH_LONG).show();
-//                            intent = new Intent(ConnectDotsActivity.this, GuessImageActivity.class);
-//                            startActivity(intent);
-//                        }
-//                    })
-//                    .addOnFailureListener(new OnFailureListener() {
-//                        @Override
-//                        public void onFailure(@NonNull Exception exception) {
-//                            //if the upload is not successfull
-//                            //hiding the progress dialog
-//                            progressDialog.dismiss();
-//
-//                            //and displaying error message
-//                            Toast.makeText(getApplicationContext(), exception.getMessage(), Toast.LENGTH_LONG).show();
-//                        }
-//                    })
-//                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-//                        @Override
-//                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-//                            //calculating progress percentage
-//                            double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
-//
-//                            //displaying percentage in progress dialog
-//                            progressDialog.setMessage("Uploaded " + ((int) progress) + "%...");
-//                        }
-//                    });
-//        }
-//        //if there is not any file
-//        else {
-//            //you can display an error toast
-//            Toast.makeText(ConnectDotsActivity.this, "Nothing was drawn!", Toast.LENGTH_SHORT).show();
-//        }
-//    }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -495,88 +431,6 @@ public class ConnectDotsActivity extends AppCompatActivity {
     }
 
 
-
-//    private void checkCircles(float x, float y) {
-//        int circleCoordX;
-//        int circleCoordY;
-//
-//        for (Node node : this.nodeMgr.getNodeList()) {
-//            ImageView circleImage = node.getNodeImage();
-//
-//            double dist = Math.sqrt(Math.pow(circleImage.getX() + 111d - x, 2.0d) + Math.pow(circleImage.getY() + 111d - y, 2.0d));
-//
-//            ColorDrawable colorDrawable = (ColorDrawable) circleImage.getBackground();
-//
-//            if (((colorDrawable == null) || (colorDrawable.getColor() != Color.GREEN)) && dist < 111d) {
-//                Log.d("checked dot 1st if: ", "YES");
-//
-//
-////                if (this.circleStartX == 0 && this.circleStartY == 0) {
-////                    Log.d("checked dot 2nd if: ", "YES");
-////                    this.circleStartX = circleImage.getX();
-////                    this.circleStartY = circleImage.getY();
-//
-//                    circleCoordX = (int)circleImage.getX();
-//                    circleCoordY = (int)circleImage.getY();
-//                    circleCheckingCounter += 1;
-//                    boolean orderCorrect = checkOrder(circleCoordX, circleCoordY,circleCheckingCounter);
-//                    if (orderCorrect){
-//                        winningCount += 1;
-//                        Log.d("winningC", String.valueOf(winningCount));
-//                        if (winningCount >= circlePos.size()){
-//                            ggezwin = true;
-//                        }
-//                        Log.d("ezwinstatus", String.valueOf(ggezwin));
-//                        circleImage.setBackgroundColor(Color.GREEN);
-//                        Log.d("orderCorrect_counter",String.valueOf(circleCheckingCounter));
-//                    }
-//                    else {
-//                        circleCheckingCounter -= 1;
-//                        Toast.makeText(ConnectDotsActivity.this, "Wrong circle, try again", Toast.LENGTH_SHORT).show();
-//                        Log.d("orderWrong_counter",String.valueOf(circleCheckingCounter));
-//
-//                    }
-////                } else if (circleImage.getX() != this.circleStartX || circleImage.getY() != this.circleStartY) {
-////                    Log.d("checked dot 2nd elif: ", "YES");
-////                    circleCoordX = (int)circleImage.getX();
-////                    circleCoordY = (int)circleImage.getY();
-////
-////                    circleCheckingCounter += 1;
-////                    boolean orderCorrect = checkOrder(circleCoordX, circleCoordY, circleCheckingCounter);
-////                    if (orderCorrect){
-////                        winningCount += 1;
-////                        circleImage.setBackgroundColor(Color.GREEN);
-////                        Log.d("orderCorrect_counter",String.valueOf(circleCheckingCounter));
-////                    }
-////                    else {
-////                        circleCheckingCounter -= 1;
-////                        Toast.makeText(ConnectDotsActivity.this, "Wrong circle, try again", Toast.LENGTH_SHORT).show();
-////                        Log.d("orderWrong_counter",String.valueOf(circleCheckingCounter));
-////                    }
-////                }
-//            }
-//
-//
-//
-//        }
-//    }
-//
-//    private boolean checkOrder(int checkX, int checkY, int circleNo){
-//        List<List<Integer>> checkCircle;
-//        checkCircle = circlePos;
-//        List<Integer> checkPos = new ArrayList<>();
-//        checkPos.add(checkX);
-//        checkPos.add(checkY);
-//
-//        if (checkPos.equals(checkCircle.get(circleNo-1))) {
-//            Log.d("circle checked:", "success!");
-//            return true;
-//        } else {
-//            Log.d("circle checked:", "fail");
-//            return false;
-//        }
-//    }
-
         private void updateScore(TextView pointView) {
         // Some game metric calculation passed into here.
 
@@ -689,11 +543,7 @@ public class ConnectDotsActivity extends AppCompatActivity {
             circleImage.setX(node.getCenter_x());
             circleImage.setY(node.getCenter_y());
         }
-
-
     }
-
-
 
 
     /**
@@ -851,64 +701,6 @@ public class ConnectDotsActivity extends AppCompatActivity {
 
     }
 
-//    private ArrayList<Node> transformNodeAutomatic(ArrayList<Node> nodesList, int canvasWidth, int canvasHeight, int percentageFillRequired) {
-//        // The bound has been displaced to origin. Now we have to transform the nodes appropriately back and try to center it on the screen.
-//
-//        int[] finalBound = getBoundDimensions(nodesList, false);
-//        float scaledPercentageX = ((float)finalBound[0]/canvasWidth * 100);
-//        float scaledPercentageY = ((float)finalBound[1]/canvasHeight * 100);
-//        Log.d("Percentage", String.format("finalBoundX, finalBoundY: %d, %d", finalBound[0], finalBound[1]));
-//        Log.d("Percentage", String.format("PercentX, PercentY: %f, %f", scaledPercentageX, scaledPercentageY));
-////        float higher = scaledPercentageX > scaledPercentageY ? scaledPercentageX : scaledPercentageY;
-//
-////        Log.d("Percentage", "Lower" + String.valueOf(higher));
-////        Log.d("Percentage", "Required" + String.valueOf(percentageFillRequired));
-//
-//        // Transform along X
-//        if ((percentageFillRequired - scaledPercentageX) > percentageFillRequired/4f) { // If the scaled percentage is less than 1/3 of required, then do transformation
-//            Log.d("Scaling", String.format("Final Bound: (%d , %d)", finalBound[0], finalBound[1]));
-//            int transformX = Math.round((canvasWidth-finalBound[0])/2f);
-//            Log.d("Scaling", String.format("Canvas WidthHeight Check: (%d , %d)", canvasWidth, canvasHeight));
-//            Log.d("Scaling", String.format("FinalTransformX: (%d)", transformX));
-//
-//            for (Node node: nodesList) {
-//                int x = node.getCenter_x() + transformX;
-//                node.setCenter(x,node.getCenter_y());
-//            }
-//        } else {
-//            // Just shift a little
-//            int transformX = Math.round((canvasWidth-finalBound[0])/8f);
-//
-//            for (Node node: nodesList) {
-//                int x = node.getCenter_x() + transformX;
-//                node.setCenter(x,node.getCenter_y());
-//            }
-//        }
-//
-//        // Transform along Y
-//        if ((percentageFillRequired - scaledPercentageY) > percentageFillRequired/4f) { // If the scaled percentage is less than 1/3 of required, then do transformation
-//            Log.d("Scaling", String.format("Final Bound: (%d , %d)", finalBound[0], finalBound[1]));
-//            int transformY = Math.round((canvasHeight-finalBound[1])/2f);
-//            Log.d("Scaling", String.format("Canvas WidthHeight Check: (%d , %d)", canvasWidth, canvasHeight));
-//            Log.d("Scaling", String.format("FinalTransformX: (%d)", transformY));
-//
-//            for (Node node: nodesList) {
-//                int y = node.getCenter_y() + transformY;
-//                node.setCenter(node.getCenter_x(), y);
-//            }
-//        } else {
-//            // Just shift a little
-//            int transformY = Math.round((canvasHeight-finalBound[1])/8f);
-//
-//            for (Node node: nodesList) {
-//                int y = node.getCenter_y() + transformY;
-//                node.setCenter(node.getCenter_x(),y);
-//            }
-//        }
-//
-//        return nodesList;
-//    }
-
     /**
      * To scale the nodes based on a certain scale factor and reassign the center x,y coordinates for the node position in pixels
      * @param nodesList The list containing the nodes to be scaled.
@@ -1016,5 +808,207 @@ public class ConnectDotsActivity extends AppCompatActivity {
         return new int[]{boundWidth, boundHeight};
     }
 
+    //    public Uri getImageUri(Context inContext, Bitmap inImage) {
+//        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+//        inImage.compress(Bitmap.CompressFormat.PNG, 100, bytes);
+//        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Test", null);
+//        return Uri.parse(path);
+//    }
+
+    //this method will upload the file
+//    private void uploadFile() {
+//        filePath = getImageUri(ConnectDotsActivity.this, CanvasView.mBitmap);
+//        //if there is a file to upload
+//        if (filePath != null) {
+//            //displaying a progress dialog while upload is going on
+//            final ProgressDialog progressDialog = new ProgressDialog(this);
+//            progressDialog.setTitle("Saving Drawing");
+//            progressDialog.show();
+//            Log.d("upload", "uploading still");
+//
+//            String drawName = "images/"+LoginActivity.currentUser.getUserID() + "_" + ConnectDotsActivity.newGame.getImageName() + ".jpg";
+//
+//            StorageReference riversRef = storageReference.child(drawName);
+//            riversRef.putFile(filePath)
+//                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//                        @Override
+//                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//                            //if the upload is successfull
+//                            //hiding the progress dialog
+//                            Log.d("upload", "uploading done");
+//                            progressDialog.dismiss();
+//
+//                            //and displaying a success toast
+//                            Toast.makeText(getApplicationContext(), "File Uploaded ", Toast.LENGTH_LONG).show();
+//                            intent = new Intent(ConnectDotsActivity.this, GuessImageActivity.class);
+//                            startActivity(intent);
+//                        }
+//                    })
+//                    .addOnFailureListener(new OnFailureListener() {
+//                        @Override
+//                        public void onFailure(@NonNull Exception exception) {
+//                            //if the upload is not successfull
+//                            //hiding the progress dialog
+//                            progressDialog.dismiss();
+//
+//                            //and displaying error message
+//                            Toast.makeText(getApplicationContext(), exception.getMessage(), Toast.LENGTH_LONG).show();
+//                        }
+//                    })
+//                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+//                        @Override
+//                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+//                            //calculating progress percentage
+//                            double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+//
+//                            //displaying percentage in progress dialog
+//                            progressDialog.setMessage("Uploaded " + ((int) progress) + "%...");
+//                        }
+//                    });
+//        }
+//        //if there is not any file
+//        else {
+//            //you can display an error toast
+//            Toast.makeText(ConnectDotsActivity.this, "Nothing was drawn!", Toast.LENGTH_SHORT).show();
+//        }
+//    }
+
+    //    private void checkCircles(float x, float y) {
+//        int circleCoordX;
+//        int circleCoordY;
+//
+//        for (Node node : this.nodeMgr.getNodeList()) {
+//            ImageView circleImage = node.getNodeImage();
+//
+//            double dist = Math.sqrt(Math.pow(circleImage.getX() + 111d - x, 2.0d) + Math.pow(circleImage.getY() + 111d - y, 2.0d));
+//
+//            ColorDrawable colorDrawable = (ColorDrawable) circleImage.getBackground();
+//
+//            if (((colorDrawable == null) || (colorDrawable.getColor() != Color.GREEN)) && dist < 111d) {
+//                Log.d("checked dot 1st if: ", "YES");
+//
+//
+////                if (this.circleStartX == 0 && this.circleStartY == 0) {
+////                    Log.d("checked dot 2nd if: ", "YES");
+////                    this.circleStartX = circleImage.getX();
+////                    this.circleStartY = circleImage.getY();
+//
+//                    circleCoordX = (int)circleImage.getX();
+//                    circleCoordY = (int)circleImage.getY();
+//                    circleCheckingCounter += 1;
+//                    boolean orderCorrect = checkOrder(circleCoordX, circleCoordY,circleCheckingCounter);
+//                    if (orderCorrect){
+//                        winningCount += 1;
+//                        Log.d("winningC", String.valueOf(winningCount));
+//                        if (winningCount >= circlePos.size()){
+//                            ggezwin = true;
+//                        }
+//                        Log.d("ezwinstatus", String.valueOf(ggezwin));
+//                        circleImage.setBackgroundColor(Color.GREEN);
+//                        Log.d("orderCorrect_counter",String.valueOf(circleCheckingCounter));
+//                    }
+//                    else {
+//                        circleCheckingCounter -= 1;
+//                        Toast.makeText(ConnectDotsActivity.this, "Wrong circle, try again", Toast.LENGTH_SHORT).show();
+//                        Log.d("orderWrong_counter",String.valueOf(circleCheckingCounter));
+//
+//                    }
+////                } else if (circleImage.getX() != this.circleStartX || circleImage.getY() != this.circleStartY) {
+////                    Log.d("checked dot 2nd elif: ", "YES");
+////                    circleCoordX = (int)circleImage.getX();
+////                    circleCoordY = (int)circleImage.getY();
+////
+////                    circleCheckingCounter += 1;
+////                    boolean orderCorrect = checkOrder(circleCoordX, circleCoordY, circleCheckingCounter);
+////                    if (orderCorrect){
+////                        winningCount += 1;
+////                        circleImage.setBackgroundColor(Color.GREEN);
+////                        Log.d("orderCorrect_counter",String.valueOf(circleCheckingCounter));
+////                    }
+////                    else {
+////                        circleCheckingCounter -= 1;
+////                        Toast.makeText(ConnectDotsActivity.this, "Wrong circle, try again", Toast.LENGTH_SHORT).show();
+////                        Log.d("orderWrong_counter",String.valueOf(circleCheckingCounter));
+////                    }
+////                }
+//            }
+//
+//
+//
+//        }
+//    }
+//
+//    private boolean checkOrder(int checkX, int checkY, int circleNo){
+//        List<List<Integer>> checkCircle;
+//        checkCircle = circlePos;
+//        List<Integer> checkPos = new ArrayList<>();
+//        checkPos.add(checkX);
+//        checkPos.add(checkY);
+//
+//        if (checkPos.equals(checkCircle.get(circleNo-1))) {
+//            Log.d("circle checked:", "success!");
+//            return true;
+//        } else {
+//            Log.d("circle checked:", "fail");
+//            return false;
+//        }
+//    }
+//    private ArrayList<Node> transformNodeAutomatic(ArrayList<Node> nodesList, int canvasWidth, int canvasHeight, int percentageFillRequired) {
+//        // The bound has been displaced to origin. Now we have to transform the nodes appropriately back and try to center it on the screen.
+//
+//        int[] finalBound = getBoundDimensions(nodesList, false);
+//        float scaledPercentageX = ((float)finalBound[0]/canvasWidth * 100);
+//        float scaledPercentageY = ((float)finalBound[1]/canvasHeight * 100);
+//        Log.d("Percentage", String.format("finalBoundX, finalBoundY: %d, %d", finalBound[0], finalBound[1]));
+//        Log.d("Percentage", String.format("PercentX, PercentY: %f, %f", scaledPercentageX, scaledPercentageY));
+////        float higher = scaledPercentageX > scaledPercentageY ? scaledPercentageX : scaledPercentageY;
+//
+////        Log.d("Percentage", "Lower" + String.valueOf(higher));
+////        Log.d("Percentage", "Required" + String.valueOf(percentageFillRequired));
+//
+//        // Transform along X
+//        if ((percentageFillRequired - scaledPercentageX) > percentageFillRequired/4f) { // If the scaled percentage is less than 1/3 of required, then do transformation
+//            Log.d("Scaling", String.format("Final Bound: (%d , %d)", finalBound[0], finalBound[1]));
+//            int transformX = Math.round((canvasWidth-finalBound[0])/2f);
+//            Log.d("Scaling", String.format("Canvas WidthHeight Check: (%d , %d)", canvasWidth, canvasHeight));
+//            Log.d("Scaling", String.format("FinalTransformX: (%d)", transformX));
+//
+//            for (Node node: nodesList) {
+//                int x = node.getCenter_x() + transformX;
+//                node.setCenter(x,node.getCenter_y());
+//            }
+//        } else {
+//            // Just shift a little
+//            int transformX = Math.round((canvasWidth-finalBound[0])/8f);
+//
+//            for (Node node: nodesList) {
+//                int x = node.getCenter_x() + transformX;
+//                node.setCenter(x,node.getCenter_y());
+//            }
+//        }
+//
+//        // Transform along Y
+//        if ((percentageFillRequired - scaledPercentageY) > percentageFillRequired/4f) { // If the scaled percentage is less than 1/3 of required, then do transformation
+//            Log.d("Scaling", String.format("Final Bound: (%d , %d)", finalBound[0], finalBound[1]));
+//            int transformY = Math.round((canvasHeight-finalBound[1])/2f);
+//            Log.d("Scaling", String.format("Canvas WidthHeight Check: (%d , %d)", canvasWidth, canvasHeight));
+//            Log.d("Scaling", String.format("FinalTransformX: (%d)", transformY));
+//
+//            for (Node node: nodesList) {
+//                int y = node.getCenter_y() + transformY;
+//                node.setCenter(node.getCenter_x(), y);
+//            }
+//        } else {
+//            // Just shift a little
+//            int transformY = Math.round((canvasHeight-finalBound[1])/8f);
+//
+//            for (Node node: nodesList) {
+//                int y = node.getCenter_y() + transformY;
+//                node.setCenter(node.getCenter_x(),y);
+//            }
+//        }
+//
+//        return nodesList;
+//    }
 
 }

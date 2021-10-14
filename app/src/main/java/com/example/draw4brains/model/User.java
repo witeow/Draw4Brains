@@ -37,7 +37,7 @@ public class User {
      * Constructor of User.
      * Made private.
      */
-    private User() {
+    public User() {
     }
 
     public User(String emailAddress){

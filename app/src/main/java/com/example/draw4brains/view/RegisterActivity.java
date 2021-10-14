@@ -270,6 +270,7 @@ public class RegisterActivity extends AppCompatActivity {
                                     newUserRef.updateChildren(registerUser);
                                     String userRefId = newUserRef.getKey();
                                     updateAdmin(userRefId, strAdmin);
+                                    createScore(userRefId);
                                     Toast.makeText(RegisterActivity.this, "Registration Successful!", Toast.LENGTH_SHORT).show();
                                     startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
                                     finish();
@@ -296,6 +297,28 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
+    private void createScore(String userId){
+        String[] gameDifficulty = {"easy", "medium", "hard"};
+        String gameType = "connectDots";
+        String initialValue = "0";
+        String gameOne = "dots";
+        String gameTwo = "guess";
+        String gamesPlayed = "gamesPlayed";
+        DatabaseReference newUserRef = FirebaseDatabase.getInstance(realtimedatabase)
+                .getReference("Score").child(userId).child(gameType);
+        HashMap<String, Object> allScores = new HashMap<>();
+        for(int difficultyNum = 0; difficultyNum<gameDifficulty.length; difficultyNum++){
+            HashMap<String, Object> singleScore = new HashMap<>();
+            addToHashMap(singleScore, gameOne, initialValue);
+            addToHashMap(singleScore, gameTwo, initialValue);
+            addToHashMap(singleScore, gamesPlayed, initialValue);
+
+            allScores.put(gameDifficulty[difficultyNum], singleScore);
+        }
+        addToHashMap(allScores, "userId", userId);
+        newUserRef.updateChildren(allScores);
+    }
+
     private void updateAdmin(String userRefId, String strAdmin) {
         Log.d("userRefId", userRefId);
         Log.d("strAdmin", strAdmin);
@@ -317,21 +340,6 @@ public class RegisterActivity extends AppCompatActivity {
                         }
                         adminRef.child(adminUid).child("arrayUserId").setValue(userString);
                     }
-//                    String userString = snapshot.child("arrayUserId").toString();
-//                    Log.d("userString", userString);
-//                    String adminUid = snapshot.getKey();
-//                    Log.d("adminUid", adminUid);
-//                    if (TextUtils.isEmpty(userString)){
-//                        userString = userRefId;
-//                    }else{
-//                        userString += ", " + userRefId;
-//                    }
-//                    db.getReference(adminUid).child("arrayUserId").setValue(userString).addOnCompleteListener(new OnCompleteListener<Void>() {
-//                        @Override
-//                        public void onComplete(@NonNull Task<Void> task) {
-//                            Log.d("Update", "Database has been successfully updated!");
-//                        }
-//                    });
                 }else{
                     Toast.makeText(RegisterActivity.this, "No such Caretaker exists!", Toast.LENGTH_SHORT).show();
                 }
@@ -455,6 +463,10 @@ public class RegisterActivity extends AppCompatActivity {
 
         return passwordFlag;
     }
+
+
+
+
 
 ////    Retrieve list of admins from database
 //    private void attributeList(DatabaseReference dbRef, String dbAttribute){

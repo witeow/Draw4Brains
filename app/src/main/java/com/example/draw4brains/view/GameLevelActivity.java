@@ -28,6 +28,8 @@ public class GameLevelActivity extends AppCompatActivity {
     private ImageButton btnBack;
     private TextView instructionTextView;
     public static String gameName;
+    public static String gameType;
+    public static String gameDifficulty;
 
     Intent intent;
     ArrayList<String> levelString = new ArrayList<>();
@@ -43,6 +45,7 @@ public class GameLevelActivity extends AppCompatActivity {
         getSupportActionBar().hide();
         setContentView(R.layout.activity_select_game_level);
         gameName = "";
+        gameType = "";
 
         btnBack = findViewById(R.id.btn_back);
         btnEasy = findViewById(R.id.easyBtn);
@@ -63,7 +66,8 @@ public class GameLevelActivity extends AppCompatActivity {
         btnEasy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String gameDifficulty = "easy"; // For use with database
+                gameType = "connectDots";
+                gameDifficulty = "easy"; // For use with database
                 games = new String[] {"seven", "house"};
                 gameName = games[r.nextInt(2)];
                 changeActivitytoConnectDots(view);
@@ -73,7 +77,8 @@ public class GameLevelActivity extends AppCompatActivity {
         btnNormal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String gameDifficulty = "normal"; // For use with database
+                gameType = "connectDots";
+                gameDifficulty = "normal"; // For use with database
                 games = new String[] {"star", "one"};
                 gameName = games[r.nextInt(2)];
                 changeActivitytoConnectDots(view);
@@ -83,7 +88,8 @@ public class GameLevelActivity extends AppCompatActivity {
         btnHard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String gameDifficulty = "hard"; // For use with database
+                gameType = "connectDots";
+                gameDifficulty = "hard"; // For use with database
                 games = new String[] {"shirt"};
                 gameName = games[r.nextInt(1)];
                 changeActivitytoConnectDots(view);
@@ -96,6 +102,7 @@ public class GameLevelActivity extends AppCompatActivity {
             public void onClick(View view) {
                 intent = new Intent(GameLevelActivity.this, SelectGameActivity.class);
                 gameName = "";
+                gameDifficulty = "";
                 startActivity(intent);
             }
         });

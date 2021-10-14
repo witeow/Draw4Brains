@@ -56,7 +56,7 @@ public class Admin {
      * Constructor of Admin.
      * Made private.
      */
-    private Admin() {
+    public Admin() {
     }
 
     /**

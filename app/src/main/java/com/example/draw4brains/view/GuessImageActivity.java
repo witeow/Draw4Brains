@@ -108,9 +108,6 @@ public class GuessImageActivity extends AppCompatActivity {
             setSelectionButtton(buttonList[buttonNum], answerTV, WORD_LENGTH, answerArray, occupied);
         }
 
-
-
-
         resetButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 resetStates(answerTV, WORD_LENGTH, occupied, answerArray, buttonList);
