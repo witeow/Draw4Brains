@@ -26,7 +26,7 @@ public class ScoreMgr extends AppCompatActivity implements Serializable {
             averageCircleTime = 1;
         }
         Log.d("averageT", String.valueOf(averageCircleTime));
-        int score1 = (1/averageCircleTime)*50;
+        int score1 = (int) ((1.0/averageCircleTime)*50.0);
         scoreConnect = score1;
         scoreSum += score1;
         Log.d("connectScore", String.valueOf(score1));
@@ -35,13 +35,19 @@ public class ScoreMgr extends AppCompatActivity implements Serializable {
         return scoreSum;
     }
 
-    public int scoreGuess(long guessTime, int guessTrials){
+    public int scoreGuess(long guessTime, int guessTrials, String wordToGuess){
+        double timePerLetter = 2.0;
+        double totalWordTime =timePerLetter*wordToGuess.length();
         int score2 = 0;
+        double scoreMatrix = totalWordTime/guessTime;
+        if (scoreMatrix>1){
+            scoreMatrix = 1;
+        }
         if (guessTrials <= 5){
-            score2 = (1/((int)guessTime)) * 25 + 25 - (guessTrials-1) * 5;
+            score2 = (int) ((scoreMatrix) * 25 + 25 - (guessTrials-1) * 5);
         }
         else {
-            score2 = (1/((int)guessTime)) * 25;
+            score2 = (int) ((scoreMatrix) * 25);
             }
         scoreSum += score2;
         scoreGuess = score2;

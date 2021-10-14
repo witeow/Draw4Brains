@@ -136,11 +136,14 @@ public class GuessImageActivity extends AppCompatActivity {
                     public void onClick(View view) {
                         boolean isCorrect = checkAnswer(answerArray, wordToGuess);
                         if (isCorrect) {
-                            long guessTime = setGuessTime();
+                            long guessTime = (long) setGuessTime();
                             Log.d("output", "toasting");
                             Toast.makeText(GuessImageActivity.this, "Yay! You guessed it", Toast.LENGTH_SHORT).show();
 //                    int addScoreToTotal = scoreMgr.scoreGuess(guessTime, guessTrial);
-                            scoreMgr.scoreGuess(guessTime, guessTrial);
+                            Log.d("guessTime", String.valueOf(guessTime));
+                            Log.d("guessTrial", String.valueOf(guessTrial));
+                            scoreMgr.scoreGuess(guessTime, guessTrial, wordToGuess);
+                            Log.d("output", "toasting");
 //                    nbPlayed = currentUser.getNumber_played() + 1;
 //                    currentUser.setNumber_played(nbPlayed);
 //                    scoreUpdate = currentUser.getTotalScore() + addScoreToTotal;
@@ -161,9 +164,10 @@ public class GuessImageActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
 //                int addScoreToTotal = scoreMgr.scoreGuess(99999999, 6);
-                        scoreMgr.scoreGuess(99999999, 6);
+                        scoreMgr.scoreGuess(99999999, 6, wordToGuess);
 //                nbPlayed = currentUser.getNumber_played() + 1;
 //                currentUser.setNumber_played(nbPlayed);
+
                         Log.d("scoreMgrDots", String.valueOf(scoreMgr.getDotScore()));
                         intent = new Intent(GuessImageActivity.this, EndGameActivity.class);
                         intent.putExtra("score", scoreMgr);

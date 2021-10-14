@@ -386,11 +386,12 @@ public class ConnectDotsActivity extends AppCompatActivity {
                         if (startNode == nodeList.size()-1) {
 
                             Toast.makeText(ConnectDotsActivity.this, "You Win!", Toast.LENGTH_LONG).show();
-                            long connectTime = setConnectTime();
+                            long connectTime = (long) setConnectTime();
                             Log.d("connectTime", String.valueOf(connectTime));
+                            Log.d("connectNode", String.valueOf(nodeList.size()));
                             ScoreMgr scoreMgr = new ScoreMgr();
                             scoreMgr.scoreConnect(connectTime, nodeList.size());
-                            Log.d("connectTime", String.valueOf(scoreMgr.getDotScore()));
+                            Log.d("connectScore", String.valueOf(scoreMgr.getDotScore()));
 //                            uploadFile();
                             intent = new Intent(ConnectDotsActivity.this, GuessImageActivity.class);
                             intent.putExtra("score", scoreMgr);
