@@ -78,7 +78,7 @@ public class GameLevelActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 gameType = "connectDots";
-                gameDifficulty = "normal"; // For use with database
+                gameDifficulty = "medium"; // For use with database
                 games = new String[] {"star", "one"};
                 gameName = games[r.nextInt(2)];
                 changeActivitytoConnectDots(view);

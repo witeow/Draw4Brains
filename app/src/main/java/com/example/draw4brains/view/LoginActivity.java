@@ -307,10 +307,10 @@ public class LoginActivity extends AppCompatActivity {
 
                             Log.d("score guess", guess);
                             Log.d("score numPlayed", ds.child(userScore.getGameDifficulty().get(difficultyLevel))
-                                    .child("dots").getValue()
+                                    .child("guess").getValue()
                                     .toString());
                             Integer numPlayed = Integer.parseInt(ds.child(userScore.getGameDifficulty().get(difficultyLevel))
-                                    .child("dots").getValue()
+                                    .child("gamesPlayed").getValue()
                                     .toString());
 
 

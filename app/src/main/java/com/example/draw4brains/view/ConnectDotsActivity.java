@@ -30,6 +30,7 @@ import com.example.draw4brains.controller.NodeMgr;
 import com.example.draw4brains.controller.ScoreMgr;
 import com.example.draw4brains.model.ConnectDots;
 import com.example.draw4brains.model.Node;
+import com.example.draw4brains.model.Score;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -95,8 +96,6 @@ public class ConnectDotsActivity extends AppCompatActivity {
     // view for image view
     private ImageView imageView;
 
-    // Uri indicates, where the image will be picked from
-//    private Uri filePath;
 
 
     @Override
@@ -264,6 +263,7 @@ public class ConnectDotsActivity extends AppCompatActivity {
                     Log.d("ArrayNode", preprocessedArray.toString());
                     String storageUrl = ConnectDots.firebaseStorageUrl + gameName + ".jpg";
                     newGame = new ConnectDots(gameName, cordString, gameLevel, storageUrl);
+                    Log.d("ConnectDotsgameName", newGame.getStorageStringRef());
                     initialize_level(preprocessedArray);
                     chronometer.setBase(SystemClock.elapsedRealtime());
                     chronometer.start();
@@ -390,6 +390,7 @@ public class ConnectDotsActivity extends AppCompatActivity {
                             Log.d("connectTime", String.valueOf(connectTime));
                             ScoreMgr scoreMgr = new ScoreMgr();
                             scoreMgr.scoreConnect(connectTime, nodeList.size());
+                            Log.d("connectTime", String.valueOf(scoreMgr.getDotScore()));
 //                            uploadFile();
                             intent = new Intent(ConnectDotsActivity.this, GuessImageActivity.class);
                             intent.putExtra("score", scoreMgr);

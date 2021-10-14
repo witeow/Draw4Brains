@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -33,14 +34,18 @@ public class EndGameActivity extends AppCompatActivity {
 
         intent = getIntent();
         scoreMgr = (ScoreMgr) intent.getSerializableExtra("score");
+        Log.d("scoreMgrDots", String.valueOf(scoreMgr.getDotScore()));
+        Log.d("scoreMgrDots", String.valueOf(scoreMgr.getGuessScore()));
         dotScore = findViewById(R.id.connectDotScoreText);
         guessScore = findViewById(R.id.guessScoreText);
 
-        dotScore.setText("TESTING");
-        guessScore.setText("TESTING");
+//        dotScore.setText("TESTING");
+//        guessScore.setText("TESTING");
 
         String currentDotScore = String.valueOf(scoreMgr.getDotScore());
         String currentGuessScore = String.valueOf(scoreMgr.getGuessScore());
+        Log.d("currentDotScore", currentDotScore);
+        Log.d("currentGuessScore", currentGuessScore);
 
         dotScore.setText(currentDotScore);
         guessScore.setText(currentGuessScore);
@@ -74,8 +79,8 @@ public class EndGameActivity extends AppCompatActivity {
                     newGuess.get(diffucultyIndex).set(0, currentGuessScore);
                 }
 
-                String dotsStr = TextUtils.join(", ", newDots.get(diffucultyIndex));
-                String guessStr = TextUtils.join(", ", newGuess.get(diffucultyIndex));
+                String dotsStr = TextUtils.join(",", newDots.get(diffucultyIndex));
+                String guessStr = TextUtils.join(",", newGuess.get(diffucultyIndex));
                 Integer numPlayed = newNumPlayed.get(diffucultyIndex) + 1;
                 newNumPlayed.set(diffucultyIndex, numPlayed);
 
