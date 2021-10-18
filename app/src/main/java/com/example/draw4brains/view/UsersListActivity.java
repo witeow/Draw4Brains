@@ -104,7 +104,10 @@ public class UsersListActivity extends AppCompatActivity {
                     String score = ds.child("userScore").getValue(String.class);
 
 
-                    int number_played = ds.child("userNumGamesPlayed").getValue(int.class);
+                    String played = (ds.child("userNumGamesPlayed").getValue(String.class));
+                    Log.d("Played", played);
+
+                    int number_played = 3;
 
 
                     //String caretaker_email = "wlim095@e.ntu.edu.sg";

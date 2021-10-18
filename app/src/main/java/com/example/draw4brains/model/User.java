@@ -30,6 +30,7 @@ public class User {
     private String userID;
     private String nokName;
     private String nokNum;
+    public  Score userScore;
 
     private static User userInstance = new User();
 
@@ -241,5 +242,13 @@ public class User {
 
     public void setNokNum(String nokNum) {
         this.nokNum = nokNum;
+    }
+
+    public Score getScore() {
+        return this.userScore;
+    }
+
+    public void setScore(Score userScore) {
+        this.userScore = userScore;
     }
 }

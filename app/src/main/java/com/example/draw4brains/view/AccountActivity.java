@@ -10,6 +10,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.draw4brains.R;
+import com.example.draw4brains.controller.LoginMgr;
 
 public class AccountActivity extends AppCompatActivity {
 
@@ -41,11 +42,17 @@ public class AccountActivity extends AppCompatActivity {
         btnBack = findViewById(R.id.btn_back);
         btnLogout = findViewById(R.id.btn_logout);
 
-        tvEmail.setText(LoginActivity.currentUser.getEmailAddress());
-        tvName.setText(LoginActivity.currentUser.getUserName());
-        tvBirthday.setText(LoginActivity.currentUser.getBirthday());
-        tvPhone.setText(LoginActivity.currentUser.getPhoneNo());
-
+        if (isAdmin) {
+            tvEmail.setText(LoginMgr.currentAdmin.getEmailAddress());
+            tvName.setText(LoginMgr.currentAdmin.getAdminName());
+            tvBirthday.setText("023029329");
+            tvPhone.setText(LoginMgr.currentAdmin.getPhoneNo());
+        } else {
+            tvEmail.setText(LoginMgr.currentUser.getEmailAddress());
+            tvName.setText(LoginMgr.currentUser.getUserName());
+            tvBirthday.setText(LoginMgr.currentUser.getBirthday());
+            tvPhone.setText(LoginMgr.currentUser.getPhoneNo());
+        }
 
         // Set onClick Listeners
         btnLogout.setOnClickListener(new View.OnClickListener() {
