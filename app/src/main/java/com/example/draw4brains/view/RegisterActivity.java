@@ -4,7 +4,6 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
@@ -14,39 +13,39 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.example.draw4brains.controller.AESCrypt;
 
 import com.example.draw4brains.R;
 import com.example.draw4brains.controller.RegisterMgr;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
 
     private ImageButton btnRegister, btnBack;
-    private RadioButton gender, maleBtn, femaleBtn;
+    private RadioButton maleBtn;
     private EditText email, firstName, lastName, pass, rePass, phoneNo, homePhoneNo, address, birthday, nokName, nokPhone, chooseAdmin;
     private DatePickerDialog picker;
     private RadioGroup genderChoice;
+    private RegisterMgr registerMgr;
+    private Intent intent;
 
-    private ArrayList<String> attList = new ArrayList<>();
-
+    // Intent Keys for Fields
+    private static final String INTENT_KEY_EMAIL = "STORED_EMAIL";
+    private static final String INTENT_KEY_FIRST_NAME = "STORED_FIRST_NAME";
+    private static final String INTENT_KEY_LAST_NAME = "STORED_LAST_NAME";
+    private static final String INTENT_KEY_GENDER_ID = "STORED_GENDER_ID";
+    private static final String INTENT_KEY_PASSWORD = "STORED_PASSWORD";
+    private static final String INTENT_KEY_PASSWORD2 = "STORED_PASSWORD2";
+    private static final String INTENT_KEY_PHONE_NUM = "STORED_PHONE_NUM";
+    private static final String INTENT_KEY_HOME_NUM = "STORED_HOME_NUM";
+    private static final String INTENT_KEY_ADDRESS = "STORED_ADDRESS";
+    private static final String INTENT_KEY_BIRTHDAY = "STORED_BIRTHDAY";
+    private static final String INTENT_KEY_NOK_NAME = "STORED_NOK_NAME";
+    private static final String INTENT_KEY_NOK_PHONE_NUM = "STORED_NOK_PHONE_NUM";
+    private static final String INTENT_KEY_ADMIN_EMAIL = "STORED_ADMIN_EMAIL";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,15 +53,16 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         getSupportActionBar().hide();
         setContentView(R.layout.activity_register);
 
-        String admin_email = getIntent().getStringExtra("Admin_email");
-//        String admin_uid = getIntent().getStringExtra("Admin_uid");
+        // Initialize controller class instances
+        registerMgr = new RegisterMgr(RegisterActivity.this);
 
-        btnRegister = findViewById(R.id.btn_register);
+        // Initialize XML Elements to use
         btnBack = findViewById(R.id.btn_back);
         email = findViewById(R.id.et_email);
         firstName = findViewById(R.id.et_first_name);
         lastName = findViewById(R.id.et_last_name);
         genderChoice = findViewById(R.id.gender_group);
+        maleBtn = findViewById(R.id.btn_male);
         pass = findViewById(R.id.et_password);
         rePass = findViewById(R.id.et_password2);
         phoneNo = findViewById(R.id.et_phone);
@@ -72,87 +72,75 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         nokName = findViewById(R.id.et_nok_name);
         nokPhone = findViewById(R.id.et_nok_phone);
         chooseAdmin = findViewById(R.id.et_chooseadmin);
+        btnRegister = findViewById(R.id.btn_register);
 
         birthday.setInputType(InputType.TYPE_NULL);
         chooseAdmin.setInputType(InputType.TYPE_NULL);
 
-        maleBtn = findViewById(R.id.btn_male);
-        femaleBtn = findViewById(R.id.btn_female);
-
-        // Retain information after selecting caretaker.
-        if (admin_email != null) {
-            email.setText(getIntent().getStringExtra("Stored_Email"));
-            firstName.setText(getIntent().getStringExtra("Stored_First_Name"));
-            lastName.setText(getIntent().getStringExtra("Stored_Last_Name"));
-            Log.d("gender in tent", getIntent().getStringExtra("Stored_Gender"));
-            if (TextUtils.equals(getIntent().getStringExtra("Stored_Gender"), "Male")) {
-                maleBtn.setChecked(true);
-                femaleBtn.setChecked(false);
-            } else {
-                femaleBtn.setChecked(true);
-                maleBtn.setChecked(false);
-            }
-//            gender.setText(getIntent().getStringExtra("Stored_Gender"));
-            pass.setText(getIntent().getStringExtra("Stored_Password"));
-            rePass.setText(getIntent().getStringExtra("Stored_Re_Password"));
-            phoneNo.setText(getIntent().getStringExtra("Stored_Phone"));
-            homePhoneNo.setText(getIntent().getStringExtra("Stored_Home"));
-            address.setText(getIntent().getStringExtra("Stored_Address"));
-            birthday.setText(getIntent().getStringExtra("Stored_Birthday"));
-            nokName.setText(getIntent().getStringExtra("Stored_Nok_Name"));
-            nokPhone.setText(getIntent().getStringExtra("Stored_Nok_Phone"));
-
-            chooseAdmin.setText(admin_email);
-        }
-
+        // Set listeners
         birthday.setOnClickListener(this);
         chooseAdmin.setOnClickListener(this);
         btnRegister.setOnClickListener(this);
         btnBack.setOnClickListener(this);
 
+        // Process information from intent (if have)
+        String adminEmail = getIntent().getStringExtra(INTENT_KEY_ADMIN_EMAIL);
+        /// Purpose: Retain information after selecting caretaker.
+        if (adminEmail != null) {
+            // If adminEmail has been selected in choose admin activity, restore field data from intent
+            email.setText(getIntent().getStringExtra(INTENT_KEY_EMAIL));
+            firstName.setText(getIntent().getStringExtra(INTENT_KEY_FIRST_NAME));
+            lastName.setText(getIntent().getStringExtra(INTENT_KEY_LAST_NAME));
+            genderChoice.clearCheck(); // Clear all selection in radio group
+            RadioButton selectedButton = findViewById(getIntent().getIntExtra(INTENT_KEY_GENDER_ID, maleBtn.getId())); // Get button view by gender id default is male button
+            selectedButton.setChecked(true); // Set button to true
+            pass.setText(getIntent().getStringExtra(INTENT_KEY_PASSWORD));
+            rePass.setText(getIntent().getStringExtra(INTENT_KEY_PASSWORD2));
+            phoneNo.setText(getIntent().getStringExtra(INTENT_KEY_PHONE_NUM));
+            homePhoneNo.setText(getIntent().getStringExtra(INTENT_KEY_HOME_NUM));
+            address.setText(getIntent().getStringExtra(INTENT_KEY_ADDRESS));
+            birthday.setText(getIntent().getStringExtra(INTENT_KEY_BIRTHDAY));
+            nokName.setText(getIntent().getStringExtra(INTENT_KEY_NOK_NAME));
+            nokPhone.setText(getIntent().getStringExtra(INTENT_KEY_NOK_PHONE_NUM));
+            chooseAdmin.setText(adminEmail);
+        }
     }
 
     @Override
     public void onClick(View view) {
-        Integer intGender = null;
         switch (view.getId()) {
             case R.id.et_birthday:
                 this.displayBirthdayDialog();
                 break;
             case R.id.et_chooseadmin:
                 Intent loadUsers = new Intent(RegisterActivity.this, ChooseAdminActivity.class);
-                loadUsers.putExtra("Stored_Email", email.getText().toString());
-                loadUsers.putExtra("Stored_First_Name", firstName.getText().toString());
-                loadUsers.putExtra("Stored_Last_Name", lastName.getText().toString());
-                intGender = genderChoice.getCheckedRadioButtonId();
-                gender = findViewById(intGender);
-                loadUsers.putExtra("Stored_Gender", gender.getText().toString());
-                Log.d("gender before change", gender.getText().toString());
-                loadUsers.putExtra("Stored_Password", pass.getText().toString());
-                loadUsers.putExtra("Stored_Re_Password", rePass.getText().toString());
-                loadUsers.putExtra("Stored_Phone", phoneNo.getText().toString());
-                loadUsers.putExtra("Stored_Home", homePhoneNo.getText().toString());
-                loadUsers.putExtra("Stored_Address", address.getText().toString());
-                loadUsers.putExtra("Stored_Birthday", birthday.getText().toString());
-                loadUsers.putExtra("Stored_Nok_Name", nokName.getText().toString());
-                loadUsers.putExtra("Stored_Nok_Phone", nokPhone.getText().toString());
+                loadUsers.putExtra(INTENT_KEY_EMAIL, email.getText().toString());
+                loadUsers.putExtra(INTENT_KEY_FIRST_NAME, firstName.getText().toString());
+                loadUsers.putExtra(INTENT_KEY_LAST_NAME, lastName.getText().toString());
+                loadUsers.putExtra(INTENT_KEY_GENDER_ID, genderChoice.getCheckedRadioButtonId());
+                loadUsers.putExtra(INTENT_KEY_PASSWORD, pass.getText().toString());
+                loadUsers.putExtra(INTENT_KEY_PASSWORD2, rePass.getText().toString());
+                loadUsers.putExtra(INTENT_KEY_PHONE_NUM, phoneNo.getText().toString());
+                loadUsers.putExtra(INTENT_KEY_HOME_NUM, homePhoneNo.getText().toString());
+                loadUsers.putExtra(INTENT_KEY_ADDRESS, address.getText().toString());
+                loadUsers.putExtra(INTENT_KEY_BIRTHDAY, birthday.getText().toString());
+                loadUsers.putExtra(INTENT_KEY_NOK_NAME, nokName.getText().toString());
+                loadUsers.putExtra(INTENT_KEY_NOK_PHONE_NUM, nokPhone.getText().toString());
                 startActivity(loadUsers);
                 break;
             case R.id.btn_register:
-                Log.d("Register", "Button clicked");
-                RegisterMgr registerMgr = new RegisterMgr(RegisterActivity.this);
-                registerMgr.registerUser(new RegisterMgr.onCallBackRegisterResult() {
+                registerMgr.registerUser(new RegisterMgr.onCallBackFailRegisterResult() {
                     @Override
-                    public void onCallback(boolean isSuccessful) {
-                        if (!isSuccessful) {
-                            Log.d("Cred", "TOASTED");
-                            Toast.makeText(RegisterActivity.this, "Invalid Fields Detected", Toast.LENGTH_SHORT).show();
-                        }
+                    public void onFailure() {
+                        Log.d("RegisterAttempt", "Failed");
+                        Toast.makeText(RegisterActivity.this, "Invalid Fields Detected", Toast.LENGTH_SHORT).show();
                     }
                 });
                 break;
             case R.id.btn_back:
-                startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+                intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
                 finish();
                 break;
         }

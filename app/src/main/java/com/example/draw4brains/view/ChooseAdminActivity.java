@@ -43,6 +43,8 @@ public class ChooseAdminActivity extends AppCompatActivity {
     String uid;
     String admin_email;
 
+    private static final String INTENT_KEY_ADMIN_EMAIL = "STORED_ADMIN_EMAIL";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,11 +86,11 @@ public class ChooseAdminActivity extends AppCompatActivity {
                         if (bundle != null) {
                             intent.putExtras(bundle);
                         }
-                        intent.putExtra("Admin_email",mAdminController.getItem(position).getEmailAddress());
-                        intent.putExtra("Admin_uid",String.valueOf(mAdminController.getItem(position).getCaretaker_email()));
-                        Log.d("intent", String.valueOf(intent.getStringExtra("Admin_name")));
-                        Log.d("intent", String.valueOf(intent.getStringExtra("Admin_uid")));
+                        intent.putExtra(INTENT_KEY_ADMIN_EMAIL,mAdminController.getItem(position).getEmailAddress());
+//                        intent.putExtra("Admin_uid",String.valueOf(mAdminController.getItem(position).getCaretaker_email()));
+                        Log.d("intent", String.valueOf(intent.getStringExtra(INTENT_KEY_ADMIN_EMAIL)));
 
+//                        Log.d("intent", String.valueOf(intent.getStringExtra("Admin_uid")));
 //                        onBackPressed();
                         startActivity(intent);
                         //showEnableDialog(mAdminController.getItemId(position));

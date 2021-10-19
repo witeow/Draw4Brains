@@ -22,7 +22,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class GameLevelActivity extends AppCompatActivity {
+public class GameLevelActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Button btnEasy, btnNormal, btnHard;
     private ImageButton btnBack;
@@ -32,12 +32,10 @@ public class GameLevelActivity extends AppCompatActivity {
     public static String gameDifficulty;
 
     Intent intent;
-    ArrayList<String> levelString = new ArrayList<>();
 
     // Temp random levels
     private Random r;
     private String[] games;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,64 +51,58 @@ public class GameLevelActivity extends AppCompatActivity {
         btnHard = findViewById(R.id.hardBtn);
         instructionTextView = findViewById(R.id.instructionTextView);
 
-        r = new Random();
-
+        btnBack.setOnClickListener(this);
+        btnEasy.setOnClickListener(this);
+        btnNormal.setOnClickListener(this);
+        btnHard.setOnClickListener(this);
         instructionTextView.setText(
                 "Instructions:\n\n\n" +
-                "Connect-The-Dot Game consist of 2 stages.\n\n" +
-                "Stage 1 - Connect the Dots\n" +
-                "Connect the dots based on the ordering (1,2,3,4,...)\n\n" +
-                "Stage 2 - Guess the Image\n" +
-                "Guess the image shown by entering the correct characters\n\n");
-
-        btnEasy.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                gameType = "connectDots";
-                gameDifficulty = "easy"; // For use with database
-                games = new String[] {"seven", "house"};
-                gameName = games[r.nextInt(2)];
-                changeActivitytoConnectDots(view);
-            }
-        });
-
-        btnNormal.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                gameType = "connectDots";
-                gameDifficulty = "medium"; // For use with database
-                games = new String[] {"star", "one"};
-                gameName = games[r.nextInt(2)];
-                changeActivitytoConnectDots(view);
-            }
-        });
-
-        btnHard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                gameType = "connectDots";
-                gameDifficulty = "hard"; // For use with database
-                games = new String[] {"shirt"};
-                gameName = games[r.nextInt(1)];
-                changeActivitytoConnectDots(view);
-            }
-        });
+                        "Connect-The-Dot Game consist of 2 stages.\n\n" +
+                        "Stage 1 - Connect the Dots\n" +
+                        "Connect the dots based on the ordering (1,2,3,4,...)\n\n" +
+                        "Stage 2 - Guess the Image\n" +
+                        "Guess the image shown by entering the correct characters\n\n");
+        r = new Random();
 
 
-        btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+    }
+
+    private void changeActivityToConnectDots() {
+        intent = new Intent(GameLevelActivity.this, ConnectDotsActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.btn_back:
                 intent = new Intent(GameLevelActivity.this, SelectGameActivity.class);
                 gameName = "";
                 gameDifficulty = "";
                 startActivity(intent);
-            }
-        });
+                break;
+            case R.id.easyBtn:
+                gameType = "connectDots";
+                gameDifficulty = "easy"; // For use with database
+                games = new String[]{"seven", "house"};
+                gameName = games[r.nextInt(2)];
+                changeActivityToConnectDots();
+                break;
+            case R.id.normalBtn:
+                gameType = "connectDots";
+                gameDifficulty = "medium"; // For use with database
+                games = new String[]{"star", "one"};
+                gameName = games[r.nextInt(2)];
+                changeActivityToConnectDots();
 
-    }
-
-    private void changeActivitytoConnectDots(View view){
-        intent = new Intent(GameLevelActivity.this, ConnectDotsActivity.class);
-        startActivity(intent);
+                break;
+            case R.id.hardBtn:
+                gameType = "connectDots";
+                gameDifficulty = "hard"; // For use with database
+                games = new String[]{"shirt"};
+                gameName = games[r.nextInt(1)];
+                changeActivityToConnectDots();
+                break;
+        }
     }
 }

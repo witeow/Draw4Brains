@@ -36,6 +36,7 @@ public class RegisterMgr {
     private EditText email, firstName, lastName, pass, rePass, phoneNo, homePhoneNo, address, birthday, nokName, nokPhone, chooseAdmin;
     private RadioGroup genderChoice;
 
+    Intent intent;
     private static String realtimedatabase = "https://draw4brains-default-rtdb.asia-southeast1.firebasedatabase.app/";
 
 
@@ -64,11 +65,11 @@ public class RegisterMgr {
     /**
      * Interface used to handle callBacks and manipulate Account objects
      */
-    public interface onCallBackRegisterResult {
-        void onCallback(boolean isSuccessful);
+    public interface onCallBackFailRegisterResult {
+        void onFailure();
     }
 
-    public void registerUser(onCallBackRegisterResult callBackRegisterResult) {
+    public void registerUser(onCallBackFailRegisterResult callBackFailRegisterResult) {
 
 
         // Initialize strings
@@ -92,7 +93,7 @@ public class RegisterMgr {
                 strNokName, strNokPhone, strAdmin);
 
         if (!isSuccessful) {
-            callBackRegisterResult.onCallback(false);
+            callBackFailRegisterResult.onFailure();
         }
 
         Log.d("Cred", "After");
@@ -108,7 +109,7 @@ public class RegisterMgr {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
                     email.setError("Email currently used! Please use a different email instead");
-                    callBackRegisterResult.onCallback(false);
+                    callBackFailRegisterResult.onFailure();
                 } else {
                     try {
                         String encryptStrPass = AESCrypt.encrypt(strPass);
@@ -135,7 +136,9 @@ public class RegisterMgr {
                                     updateAdmin(userRefId, strAdmin);
                                     createScore(userRefId);
                                     Toast.makeText(registerActivity, "Registration Successful!", Toast.LENGTH_SHORT).show();
-                                    registerActivity.startActivity(new Intent(registerActivity, LoginActivity.class));
+                                    intent = new Intent(registerActivity, LoginActivity.class);
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    registerActivity.startActivity(intent);
                                     registerActivity.finish();
                                 } else {
                                     Toast.makeText(registerActivity, "Registration Failed", Toast.LENGTH_SHORT).show();
@@ -146,8 +149,6 @@ public class RegisterMgr {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-
-
                 }
             }
 

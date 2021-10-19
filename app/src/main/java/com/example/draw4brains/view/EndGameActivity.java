@@ -11,12 +11,11 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.draw4brains.R;
-import com.example.draw4brains.controller.LoginMgr;
+import com.example.draw4brains.controller.AuthenticationMgr;
 import com.example.draw4brains.controller.ScoreMgr;
 import com.example.draw4brains.model.Score;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 
 import java.util.ArrayList;
 
@@ -61,7 +60,7 @@ public class EndGameActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 FirebaseDatabase userDb = FirebaseDatabase.getInstance("https://draw4brains-default-rtdb.asia-southeast1.firebasedatabase.app/");
-                Score score = LoginMgr.currentUser.getScore();
+                Score score = AuthenticationMgr.currentUser.getScore();
                 DatabaseReference userRef = userDb.getReference("Score").child(score.getUserId())
                         .child(GameLevelActivity.gameType)
                         .child(GameLevelActivity.gameDifficulty);

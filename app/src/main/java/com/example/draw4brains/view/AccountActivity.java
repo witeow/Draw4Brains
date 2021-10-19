@@ -5,12 +5,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.draw4brains.R;
-import com.example.draw4brains.controller.LoginMgr;
+import com.example.draw4brains.controller.AuthenticationMgr;
 
 public class AccountActivity extends AppCompatActivity {
 
@@ -19,12 +18,15 @@ public class AccountActivity extends AppCompatActivity {
     private boolean isAdmin;
     private Bundle extras;
     private Intent intent;
+    private AuthenticationMgr authenticationMgr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().hide();
         setContentView(R.layout.activity_account_settings);
+
+        authenticationMgr = new AuthenticationMgr();
 
         // Get data of intent
         extras = getIntent().getExtras();
@@ -43,22 +45,22 @@ public class AccountActivity extends AppCompatActivity {
         btnLogout = findViewById(R.id.btn_logout);
 
         if (isAdmin) {
-            tvEmail.setText(LoginMgr.currentAdmin.getEmailAddress());
-            tvName.setText(LoginMgr.currentAdmin.getAdminName());
+            tvEmail.setText(AuthenticationMgr.currentAdmin.getEmailAddress());
+            tvName.setText(AuthenticationMgr.currentAdmin.getAdminName());
             tvBirthday.setText("023029329");
-            tvPhone.setText(LoginMgr.currentAdmin.getPhoneNo());
+            tvPhone.setText(AuthenticationMgr.currentAdmin.getPhoneNo());
         } else {
-            tvEmail.setText(LoginMgr.currentUser.getEmailAddress());
-            tvName.setText(LoginMgr.currentUser.getUserName());
-            tvBirthday.setText(LoginMgr.currentUser.getBirthday());
-            tvPhone.setText(LoginMgr.currentUser.getPhoneNo());
+            tvEmail.setText(AuthenticationMgr.currentUser.getEmailAddress());
+            tvName.setText(AuthenticationMgr.currentUser.getUserName());
+            tvBirthday.setText(AuthenticationMgr.currentUser.getBirthday());
+            tvPhone.setText(AuthenticationMgr.currentUser.getPhoneNo());
         }
 
         // Set onClick Listeners
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                authenticationMgr.logout(AccountActivity.this);
             }
         });
 

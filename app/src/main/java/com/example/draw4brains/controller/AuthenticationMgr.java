@@ -20,6 +20,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -27,15 +28,30 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-public class LoginMgr {
+public class AuthenticationMgr {
 
     public static User currentUser;
     public static Admin currentAdmin;
     private Intent intent;
     private FirebaseAuth auth;
 
-    public LoginMgr(){
+    public AuthenticationMgr(){
         auth = FirebaseAuth.getInstance();
+    }
+
+    public void signInIfAccountExist(Activity loginActivity) {
+        if (auth.getCurrentUser() != null) {
+            String firebaseUserEmail = auth.getCurrentUser().getEmail();
+            String userEmail = currentUser != null ? currentUser.getEmailAddress() : null;
+            String adminEmail = currentAdmin != null ? currentAdmin.getEmailAddress() : null;
+            if (firebaseUserEmail.equalsIgnoreCase(userEmail)) {
+                loginActivity.startActivity(new Intent(loginActivity, UserHomeActivity.class));
+                loginActivity.finish();
+            } else if (firebaseUserEmail.equalsIgnoreCase(adminEmail)) {
+                loginActivity.startActivity(new Intent(loginActivity, AdminHomeActivity.class));
+                loginActivity.finish();
+            }
+        }
     }
 
     public void login(Activity loginActivity, String email, String password, boolean isAdmin) {
@@ -145,7 +161,9 @@ public class LoginMgr {
                     Log.d("AdminDEBUG", "Admin has logged in!");
                     intent = new Intent(loginActivity.getApplicationContext(), AdminHomeActivity.class);
                     intent.putExtra("isAdmin", true);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     loginActivity.startActivity(intent);
+                    loginActivity.finish();
                 }else{
                     Toast.makeText(loginActivity, "No User found!", Toast.LENGTH_SHORT).show();
                     Log.d("LoginDEBUG", "Task Unsuccessful!");
@@ -211,7 +229,9 @@ public class LoginMgr {
                             // Login after getting score.
                             intent = new Intent(loginActivity.getApplicationContext(), UserHomeActivity.class);
                             intent.putExtra("isAdmin", false);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             loginActivity.startActivity(intent);
+                            loginActivity.finish();
                         }
                     });
 
@@ -228,6 +248,13 @@ public class LoginMgr {
                 Toast.makeText(loginActivity, "Database could not be accessed!", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    public void logout(Activity accountActivity){
+        auth.signOut();
+        intent = new Intent(accountActivity, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        accountActivity.startActivity(intent);
     }
 
 }

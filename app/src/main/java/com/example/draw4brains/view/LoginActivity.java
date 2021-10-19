@@ -6,13 +6,11 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ToggleButton;
-import com.example.draw4brains.R;
-import com.example.draw4brains.controller.LoginMgr;
-import com.google.firebase.auth.FirebaseAuth;
 
+import com.example.draw4brains.R;
+import com.example.draw4brains.controller.AuthenticationMgr;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -20,8 +18,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private EditText password;
     private ImageButton btnLogin, btnForgotPW, btnRegister;
     private ToggleButton btnAccType;
-
     private Intent intent;
+    private AuthenticationMgr authenticationMgr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,39 +27,61 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         getSupportActionBar().hide();
         setContentView(R.layout.activity_user_login);
 
-        email =findViewById(R.id.et_email);
+        // Initialize controller class instances
+        authenticationMgr = new AuthenticationMgr();
+
+        // Initialize XML Elements to use
+        email = findViewById(R.id.et_email);
         password = findViewById(R.id.et_password);
         btnLogin = findViewById(R.id.btn_login);
         btnForgotPW = findViewById(R.id.btn_forgot_pw);
         btnRegister = findViewById(R.id.btn_register);
         btnAccType = findViewById(R.id.btn_acc_type);
-        btnAccType.setChecked(false);
+        btnAccType.setChecked(false); // Default is user account
 
-        // For easy logging in
-        email.setText("witeow223@gmail.com");
-        password.setText("Witeow1!");
-
+        // Set listeners
         btnLogin.setOnClickListener(this);
         btnForgotPW.setOnClickListener(this);
         btnRegister.setOnClickListener(this);
+
+
+        // For easy logging  and switching to admin ///////
+        email.setText("witeow223@gmail.com");
+        password.setText("Witeow1!");
+
+        btnAccType.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean isAdmin = btnAccType.isChecked() ? true : false;
+                if (isAdmin) {
+                    email.setText("WLIM095@e.ntu.edu.sg");
+                    password.setText("Witeow1!");
+                } else {
+                    email.setText("witeow223@gmail.com");
+                    password.setText("Witeow1!");
+                }
+            }
+        });
+        /////////////////////////////////////////////////////
+
     }
 
     /**
      * This function overwrites the onClick function for the View class Android to accomodate for
      * different behaviour for different click events when different views are interacted with by user
+     * <p>
+     * Options available: Login, Register, Forget Password
      *
-     * Options available: Back to Start Up, Login Button, Forgot Password Option.
      * @param view
      */
     @Override
     public void onClick(View view) {
-        switch(view.getId()) {
+        switch (view.getId()) {
             case R.id.btn_login:
                 String emailString = email.getText().toString();
                 String passwordString = password.getText().toString();
                 boolean isAdmin = btnAccType.isChecked() ? true : false;
-                LoginMgr loginMgr = new LoginMgr();
-                loginMgr.login(LoginActivity.this, emailString, passwordString, isAdmin);
+                authenticationMgr.login(LoginActivity.this, emailString, passwordString, isAdmin);
                 break;
             case R.id.btn_register:
                 intent = new Intent(getApplicationContext(), RegisterActivity.class);
@@ -74,5 +94,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-
+    public void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        // Check if user is signed in already and then move to main screen
+        authenticationMgr.signInIfAccountExist(LoginActivity.this);
+    }
 }

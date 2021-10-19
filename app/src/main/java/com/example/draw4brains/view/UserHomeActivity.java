@@ -2,18 +2,14 @@ package com.example.draw4brains.view;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.draw4brains.R;
-import com.example.draw4brains.controller.LoginMgr;
 
-import java.security.AccessControlContext;
-
-public class UserHomeActivity extends AppCompatActivity {
+public class UserHomeActivity extends AppCompatActivity implements View.OnClickListener {
 
     private ImageButton btnSelectGame, btnStats, btnAccInfo;
 
@@ -39,35 +35,31 @@ public class UserHomeActivity extends AppCompatActivity {
         btnAccInfo = findViewById(R.id.btn_acc_info);
         btnStats = findViewById(R.id.btn_stats);
 
+        btnSelectGame.setOnClickListener(this);
+        btnAccInfo.setOnClickListener(this);
+        btnStats.setOnClickListener(this);
 
-        btnSelectGame.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.btn_select_game:
                 intent = new Intent(getApplicationContext(), SelectGameActivity.class);
                 startActivity(intent);
-            }
-        });
-
-        btnAccInfo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+                break;
+            case R.id.btn_acc_info:
                 intent = new Intent(getApplicationContext(), AccountActivity.class);
                 intent.putExtra("isAdmin", isAdmin);
                 startActivity(intent);
-            }
-        });
-
-        btnStats.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent intent = new Intent(UserHomeActivity.this, StatisticsPageActivity.class);
-                        intent.putExtra("Name","Hard Coded Test");
-                        intent.putExtra("Score",String.valueOf(100));
-                        Log.d("intent", String.valueOf(intent.getStringExtra("Name")));
-                        Log.d("intent", String.valueOf(intent.getStringExtra("Score")));
-                        startActivity(intent);
-                    }
-        });
-
+                break;
+            case R.id.btn_stats:
+                Intent intent = new Intent(UserHomeActivity.this, StatisticsPageActivity.class);
+                startActivity(intent);
+                break;
+        }
     }
+
+
 }
