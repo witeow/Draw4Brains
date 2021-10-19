@@ -8,11 +8,12 @@ import android.widget.ImageButton;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.draw4brains.R;
-import com.example.draw4brains.games.connectthedots.view.GameLevelActivity;
 
 public class SelectGameActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private ImageButton btnGame1, btnBackHome;
+    private static final Class CONNECT_THE_DOT_REFERENCE_POINT = com.example.draw4brains.games.connectthedots.view.GameMenuActivity.class;
+
+    private ImageButton btnConnectDot, btnBackHome;
     Intent intent;
 
     @Override
@@ -21,10 +22,10 @@ public class SelectGameActivity extends AppCompatActivity implements View.OnClic
         getSupportActionBar().hide();
         setContentView(R.layout.activity_select_game);
 
-        btnGame1 = findViewById(R.id.connectDotGame);
+        btnConnectDot = findViewById(R.id.connectDotGame);
         btnBackHome = findViewById(R.id.back_button);
 
-        btnGame1.setOnClickListener(this);
+        btnConnectDot.setOnClickListener(this);
         btnBackHome.setOnClickListener(this);
     }
 
@@ -32,7 +33,7 @@ public class SelectGameActivity extends AppCompatActivity implements View.OnClic
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.connectDotGame:
-                intent = new Intent(SelectGameActivity.this, GameLevelActivity.class);
+                intent = new Intent(SelectGameActivity.this, CONNECT_THE_DOT_REFERENCE_POINT);
                 startActivity(intent);
                 break;
             case R.id.back_button:

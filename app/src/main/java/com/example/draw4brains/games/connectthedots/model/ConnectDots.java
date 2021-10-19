@@ -5,7 +5,9 @@ import android.widget.ImageView;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-public class ConnectDots {
+import java.io.Serializable;
+
+public class ConnectDots implements Serializable {
     public String getImageName() {
         return imageName;
     }

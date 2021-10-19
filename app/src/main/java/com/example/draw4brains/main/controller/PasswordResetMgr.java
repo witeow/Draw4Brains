@@ -9,7 +9,6 @@ public class PasswordResetMgr {
     public PasswordResetMgr() {
         auth = FirebaseAuth.getInstance();
     }
-
     ;
 
     public void resetPassword(String resetEmail) {

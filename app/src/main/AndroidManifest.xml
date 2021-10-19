@@ -46,7 +46,7 @@
             android:name=".main.view.AccountActivity"
             android:exported="true" />
         <activity
-            android:name=".games.connectthedots.view.GameLevelActivity"
+            android:name=".games.connectthedots.view.GameMenuActivity"
             android:exported="true" />
         <activity
             android:name=".games.connectthedots.view.EndGameActivity"

@@ -11,9 +11,9 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.draw4brains.R;
+import com.example.draw4brains.games.connectthedots.controller.GameMgr;
 import com.example.draw4brains.main.controller.AuthenticationMgr;
 import com.example.draw4brains.main.controller.MasterMgr;
-import com.example.draw4brains.games.connectthedots.controller.ScoreMgr;
 import com.example.draw4brains.games.connectthedots.model.Score;
 import com.example.draw4brains.main.view.UserHomeActivity;
 import com.google.firebase.database.DatabaseReference;
@@ -26,9 +26,12 @@ public class EndGameActivity extends AppCompatActivity implements View.OnClickLi
     private Button btnMainMenu;
     private TextView dotScore, guessScore;
     Intent intent;
-    ScoreMgr scoreMgr;
+//    ScoreMgr scoreMgr;
     AuthenticationMgr authenticationMgr;
     String currentDotScore, currentGuessScore;
+
+    GameMgr gameMgr;
+    private static final String INTENT_GAME_MANAGER = "GAME_MANAGER";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,17 +44,18 @@ public class EndGameActivity extends AppCompatActivity implements View.OnClickLi
 
 
         intent = getIntent();
-        scoreMgr = (ScoreMgr) intent.getSerializableExtra("score");
-        Log.d("scoreMgrDots", String.valueOf(scoreMgr.getDotScore()));
-        Log.d("scoreMgrDots", String.valueOf(scoreMgr.getGuessScore()));
+//        scoreMgr = (ScoreMgr) intent.getSerializableExtra("score");
+        gameMgr = (GameMgr) intent.getSerializableExtra(INTENT_GAME_MANAGER);
+        Log.d("scoreMgrDots", String.valueOf(gameMgr.getConnectScore()));
+        Log.d("scoreMgrDots", String.valueOf(gameMgr.getGuessScore()));
         dotScore = findViewById(R.id.connectDotScoreText);
         guessScore = findViewById(R.id.guessScoreText);
 
 //        dotScore.setText("TESTING");
 //        guessScore.setText("TESTING");
 
-        currentDotScore = String.valueOf(scoreMgr.getDotScore());
-        currentGuessScore = String.valueOf(scoreMgr.getGuessScore());
+        currentDotScore = String.valueOf(gameMgr.getConnectScore());
+        currentGuessScore = String.valueOf(gameMgr.getGuessScore());
         Log.d("currentDotScore", currentDotScore);
         Log.d("currentGuessScore", currentGuessScore);
 
@@ -79,11 +83,11 @@ public class EndGameActivity extends AppCompatActivity implements View.OnClickLi
                 FirebaseDatabase userDb = FirebaseDatabase.getInstance("https://draw4brains-default-rtdb.asia-southeast1.firebasedatabase.app/");
                 Score score = authenticationMgr.getCurrentUser().getScore();
                 DatabaseReference userRef = userDb.getReference("Score").child(score.getUserId())
-                        .child(GameLevelActivity.gameType)
-                        .child(GameLevelActivity.gameDifficulty);
+                        .child(gameMgr.getLevelInfo().getGameType())
+                        .child(gameMgr.getLevelInfo().getGameDifficulty());
 
 
-                Integer diffucultyIndex = score.getGameDifficulty().indexOf(GameLevelActivity.gameDifficulty);
+                Integer diffucultyIndex = score.getGameDifficulty().indexOf(gameMgr.getLevelInfo().getGameDifficulty());
 
                 ArrayList<Integer> newNumPlayed = score.getGamesPlayed();
                 ArrayList<ArrayList<String>> newDots = score.getDots();

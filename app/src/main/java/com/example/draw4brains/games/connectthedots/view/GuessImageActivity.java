@@ -18,7 +18,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 
 import com.example.draw4brains.R;
-import com.example.draw4brains.games.connectthedots.controller.ScoreMgr;
+import com.example.draw4brains.games.connectthedots.controller.GameMgr;
 import com.example.draw4brains.games.connectthedots.model.ConnectDots;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -40,7 +40,7 @@ public class GuessImageActivity extends AppCompatActivity {
      private int guessTrial;
 //    int nbPlayed = 0;
 //    int scoreUpdate = 0;
-    ScoreMgr scoreMgr;
+//    ScoreMgr scoreMgr;
 
     public int setGuessTime(){
         int guessTime = 0;
@@ -51,13 +51,18 @@ public class GuessImageActivity extends AppCompatActivity {
 
     ImageView guessImage;
 
+    GameMgr gameMgr;
+    private static final String INTENT_GAME_MANAGER = "GAME_MANAGER";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        intent = getIntent();
-        scoreMgr = (ScoreMgr) intent.getSerializableExtra("score");
         guessTrial = 1;
+
+        intent = getIntent();
+//        scoreMgr = (ScoreMgr) intent.getSerializableExtra("score");
+        gameMgr = (GameMgr) intent.getSerializableExtra(INTENT_GAME_MANAGER);
 
         setContentView(R.layout.activity_guess_image);
 
@@ -66,8 +71,8 @@ public class GuessImageActivity extends AppCompatActivity {
         guessImage = findViewById(R.id.guess_image);
 
         Log.d("SelectImage", "Enter Function");
-        Log.d("SelectImage", ConnectDotsActivity.newGame.getStorageStringRef());
-        ConnectDots.storage.getReferenceFromUrl(ConnectDotsActivity.newGame.getStorageStringRef())
+        Log.d("SelectImage", gameMgr.getConnectDotsLevelObject().getStorageStringRef());
+        ConnectDots.storage.getReferenceFromUrl(gameMgr.getConnectDotsLevelObject().getStorageStringRef())
                 .getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
             @Override
             public void onComplete(@NonNull Task<Uri> task) {
@@ -83,7 +88,7 @@ public class GuessImageActivity extends AppCompatActivity {
                 Log.d("SelectImage", "Exit Function");
 
                 // Load imageName from db
-                String wordToGuess = ConnectDotsActivity.newGame.getImageName();
+                String wordToGuess = gameMgr.getConnectDotsLevelObject().getImageName();
                 int WORD_LENGTH = wordToGuess.length();
                 Button buttonList[] = new Button[14];
                 boolean occupied[] = new boolean[WORD_LENGTH];
@@ -140,14 +145,15 @@ public class GuessImageActivity extends AppCompatActivity {
 //                    int addScoreToTotal = scoreMgr.scoreGuess(guessTime, guessTrial);
                             Log.d("guessTime", String.valueOf(guessTime));
                             Log.d("guessTrial", String.valueOf(guessTrial));
-                            scoreMgr.scoreGuess(guessTime, guessTrial, wordToGuess);
+                            gameMgr.calculateGuessScore(guessTime, guessTrial, wordToGuess);
                             Log.d("output", "toasting");
 //                    nbPlayed = currentUser.getNumber_played() + 1;
 //                    currentUser.setNumber_played(nbPlayed);
 //                    scoreUpdate = currentUser.getTotalScore() + addScoreToTotal;
 //                    currentUser.setTotalScore(scoreUpdate,nbPlayed);
                             intent = new Intent(GuessImageActivity.this, EndGameActivity.class);
-                            intent.putExtra("score", scoreMgr);
+//                            intent.putExtra("score", scoreMgr);
+                            intent.putExtra(INTENT_GAME_MANAGER, gameMgr);
                             startActivity(intent);
                         } else {
                             Log.d("output", "toasting");
@@ -162,13 +168,14 @@ public class GuessImageActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
 //                int addScoreToTotal = scoreMgr.scoreGuess(99999999, 6);
-                        scoreMgr.scoreGuess(99999999, 6, wordToGuess);
+                        gameMgr.calculateGuessScore(99999999, 6, wordToGuess);
 //                nbPlayed = currentUser.getNumber_played() + 1;
 //                currentUser.setNumber_played(nbPlayed);
 
-                        Log.d("scoreMgrDots", String.valueOf(scoreMgr.getDotScore()));
+//                        Log.d("scoreMgrDots", String.valueOf(scoreMgr.getDotScore()));
                         intent = new Intent(GuessImageActivity.this, EndGameActivity.class);
-                        intent.putExtra("score", scoreMgr);
+//                        intent.putExtra("score", scoreMgr);
+                        intent.putExtra(INTENT_GAME_MANAGER, gameMgr);
                         startActivity(intent);
                     }
                 });
@@ -185,8 +192,8 @@ public class GuessImageActivity extends AppCompatActivity {
     // Select and Display Image method
     private void SelectImage() {
         Log.d("SelectImage", "Enter Function");
-        Log.d("SelectImage", ConnectDotsActivity.newGame.getStorageStringRef());
-        ConnectDots.storage.getReferenceFromUrl(ConnectDotsActivity.newGame.getStorageStringRef())
+        Log.d("SelectImage", gameMgr.getConnectDotsLevelObject().getStorageStringRef());
+        ConnectDots.storage.getReferenceFromUrl(gameMgr.getConnectDotsLevelObject().getStorageStringRef())
                 .getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
             @Override
             public void onComplete(@NonNull Task<Uri> task) {

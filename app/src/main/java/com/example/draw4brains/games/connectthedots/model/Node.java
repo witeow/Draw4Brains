@@ -1,9 +1,15 @@
 package com.example.draw4brains.games.connectthedots.model;
 
+import android.graphics.Color;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.widget.ImageView;
 
-public class Node {
+import androidx.annotation.ColorInt;
 
+import java.io.Serializable;
+
+public class Node implements Serializable {
 
     private String name;
     private int geometric_x;
@@ -14,23 +20,12 @@ public class Node {
     private ImageView nodeImage;
     boolean selected;
 
-//    private Node nextNode;
-//    private Node endingNode;
-//    private Node startingNode;
-
-    public Node(String name, int center_x, int center_y, int radius, ImageView nodeImage){
-        this.name = name;
-        this.center_x = center_x;
-        this.center_y = center_y;
-        this.radius = radius;
-        this.nodeImage = nodeImage;
-        this.selected = false;
-    }
 
     public Node(String name, int geometric_x, int geometric_y) {
         this.name = name;
         this.geometric_x = geometric_x;
         this.geometric_y= geometric_y;
+        this.selected = false;
     }
 
     public Node(int name, int geometric_x, int geometric_y) {
@@ -92,11 +87,21 @@ public class Node {
         return nodeImage;
     }
 
-    public void setNodeImage(ImageView nodeImage) {
+    public void setNodeImage(ImageView nodeImage) { // Not used since image is initialized during creation of notes
         this.nodeImage = nodeImage;
     }
-    //    public boolean isConnectedInOrder(Node node1, Node node2, ArrayList<Node> nodeList) {
-//
-//    }
+
+    public float getNodeImagePosX() {
+        return nodeImage.getX();
+    }
+
+    public float getNodeImagePosY() {
+        return nodeImage.getY();
+    }
+
+    public void setNodeBackgroundColor(@ColorInt int color) {
+        this.nodeImage.setBackgroundColor(color);
+    };
+
 
 }
