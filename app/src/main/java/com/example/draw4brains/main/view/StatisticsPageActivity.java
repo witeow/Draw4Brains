@@ -2,15 +2,19 @@ package com.example.draw4brains.main.view;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.draw4brains.R;
+import com.example.draw4brains.games.connectthedots.model.Score;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.util.ArrayList;
 
 public class StatisticsPageActivity extends AppCompatActivity {
 
@@ -23,50 +27,73 @@ public class StatisticsPageActivity extends AppCompatActivity {
     String harddot;
     String hardgame;
     String hardguess;
+    Score score;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_statistics);
-//        intent.putExtra("easydot",easy_dot);
-//        intent.putExtra("easygames",easy_gamesplayed);
-//        intent.putExtra("easyguess",easy_guess);
-//        intent.putExtra("meddot",med_dot);
-//        intent.putExtra("medgames",med_gamesplayed);
-//        intent.putExtra("medguess",med_guess);
-//        intent.putExtra("harddot",hard_dot);
-//        intent.putExtra("hardgames",hard_gamesplayed);
-//        intent.putExtra("hardguess",hard_guess);
         String Name = getIntent().getStringExtra("Name");
-        int Score = getIntent().getIntExtra("Score",0);
-        int number_played = getIntent().getIntExtra("number_played",0);
+        score = (Score) getIntent().getSerializableExtra("User Score");
 
-       easydot = cutting(getIntent().getStringExtra("easydot"));
-        easygame = getIntent().getStringExtra("easygames");
-        easyguess = cutting(getIntent().getStringExtra("easyguess"));
+        ArrayList<String> easyDotArray = score.getDots().get(score.getGameDifficulty().indexOf("easy"));
+        Integer easyGamesPlayed = score.getGamesPlayed().get(score.getGameDifficulty().indexOf("easy"));
+        ArrayList<String> easyGuessArray = score.getDots().get(score.getGameDifficulty().indexOf("easy"));
+
+        ArrayList<String> mediumDotArray = score.getDots().get(score.getGameDifficulty().indexOf("medium"));
+        Integer mediumGamesPlayed = score.getGamesPlayed().get(score.getGameDifficulty().indexOf("medium"));
+        ArrayList<String> mediumGuessArray = score.getDots().get(score.getGameDifficulty().indexOf("medium"));
+
+        ArrayList<String> hardDotArray = score.getDots().get(score.getGameDifficulty().indexOf("hard"));
+        Integer hardGamesPlayed = score.getGamesPlayed().get(score.getGameDifficulty().indexOf("hard"));
+        ArrayList<String> hardGuessArray = score.getDots().get(score.getGameDifficulty().indexOf("hard"));
 
 
-        meddot = cutting(getIntent().getStringExtra("meddot"));
-        medgame = getIntent().getStringExtra("medgames");
-        medguess = cutting(getIntent().getStringExtra("medguess"));
 
-        harddot = cutting(getIntent().getStringExtra("harddot"));
-       hardgame = getIntent().getStringExtra("hardgames");
-         hardguess = cutting(getIntent().getStringExtra("hardguess"));
+        int easyScore =0;
+        for(int game = 0;game<easyGamesPlayed;game++){
+            easyScore += Integer.parseInt(easyDotArray.get(game));
+            easyScore += Integer.parseInt(easyGuessArray.get(game));
+        }
 
-//        int average_score=0;
-//        int i=Integer.parseInt(Score);
-//        if (number_played != 0) {
-//           average_score = i/number_played;
-//        }
+        int mediumScore =0;
+        for(int game = 0;game<mediumGamesPlayed;game++){
+            mediumScore += Integer.parseInt(mediumDotArray.get(game));
+            mediumScore += Integer.parseInt(mediumGuessArray.get(game));
+        }
 
-        Log.d(cutting(getIntent().getStringExtra("medguess")), "onCreate: ");
+        int hardScore =0;
+        for(int game = 0;game<hardGamesPlayed;game++){
+            hardScore += Integer.parseInt(hardDotArray.get(game));
+            hardScore += Integer.parseInt(hardGuessArray.get(game));
+        }
+
+        int number_played = easyGamesPlayed + mediumGamesPlayed + hardGamesPlayed;
+        int avgScore =0;
+        if (number_played!=0){
+            // avg score
+            avgScore = (easyScore + mediumScore + hardScore)/number_played;
+        }
+
+
+        easydot = cutting(TextUtils.join(", ", easyDotArray));
+        easygame = easyGamesPlayed.toString();
+        easyguess = cutting(TextUtils.join(", ", easyGuessArray));
+
+        meddot = cutting(TextUtils.join(", ", mediumDotArray));
+        medgame = mediumGamesPlayed.toString();
+        medguess = cutting(TextUtils.join(", ", mediumGuessArray));
+
+        harddot = cutting(TextUtils.join(", ", hardDotArray));
+        hardgame = hardGamesPlayed.toString();
+        hardguess = cutting(TextUtils.join(", ", hardGuessArray));
+
         TextView t_score = (TextView) findViewById(R.id.tv_stats);
         TextView t_name = (TextView) findViewById(R.id.tv_name);
         TextView t_games_played = (TextView) findViewById(R.id.no_games_played);
-        TextView dot = (TextView) findViewById(R.id.textView_dots) ;
-        TextView guess = (TextView) findViewById(R.id.textView_guess) ;
-        TextView game = (TextView) findViewById(R.id.textView_games) ;
+        TextView dot = (TextView) findViewById(R.id.textView_dots);
+        TextView guess = (TextView) findViewById(R.id.textView_guess);
+        TextView game = (TextView) findViewById(R.id.textView_games);
 
         Button button_easy = (Button) findViewById(R.id.button_easy);
 
@@ -78,7 +105,6 @@ public class StatisticsPageActivity extends AppCompatActivity {
         dot.setText("Last 3 Dots Score: " + easydot);
         guess.setText("Last 3 Guess Score: " + easyguess);
         game.setText("Games: " + easygame);
-
 
 
         button_easy.setOnClickListener(new View.OnClickListener() {
@@ -121,16 +147,16 @@ public class StatisticsPageActivity extends AppCompatActivity {
         });
 
         t_name.setText(Name);
-        t_score.setText(Integer.toString(Score));
+        t_score.setText(Integer.toString(avgScore));
         t_games_played.setText(Integer.toString(number_played));
     }
 
 
-    public String cutting(String string){
+    public String cutting(String string) {
         int length = string.length();
-        StringBuilder cutdown= new StringBuilder();
+        StringBuilder cutdown = new StringBuilder();
         int comma_count = 0;
-        while(length>0 && comma_count<3) {
+        while (length > 0 && comma_count < 3) {
             String cha = String.valueOf(string.charAt(length - 1));
             if (cha.equals(",") || cha.equals("，")) {
                 cha = ",";
@@ -138,12 +164,12 @@ public class StatisticsPageActivity extends AppCompatActivity {
                 comma_count += 1;
                 Log.d(String.valueOf(comma_count), "commacount: ");
             }
-            if (comma_count == 3){
-            break;
-        }
+            if (comma_count == 3) {
+                break;
+            }
             cutdown.insert(0, cha);
             Log.d(cutdown.toString(), "string: ");
-            length-=1;
+            length -= 1;
         }
         return cutdown.toString();
 

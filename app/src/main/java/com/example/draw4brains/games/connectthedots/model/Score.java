@@ -1,8 +1,9 @@
 package com.example.draw4brains.games.connectthedots.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Score {
+public class Score implements Serializable {
 
     private String userId;
     private String gameType;

@@ -76,7 +76,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="No. played"
+        android:text="Games played"
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -131,9 +131,10 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center|start"
-            android:paddingLeft="12dp"
+            android:layout_marginHorizontal="30dp"
             android:text="Games:"
             android:textSize="30sp" />
+        <!--            android:paddingLeft="20dp"-->
 
         <TextView
             android:id="@+id/textView_dots"
@@ -141,9 +142,11 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center|start"
-            android:paddingLeft="12dp"
+            android:layout_marginHorizontal="30dp"
+
             android:text="Last 3 Dots score:"
             android:textSize="30sp" />
+<!--        android:paddingLeft="12dp"-->
 
         <TextView
             android:id="@+id/textView_guess"
@@ -151,9 +154,11 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center|start"
-            android:paddingLeft="12dp"
+            android:layout_marginHorizontal="30dp"
+
             android:text="Last 3 Guess score:"
             android:textSize="30sp" />
+<!--        android:paddingLeft="12dp"-->
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

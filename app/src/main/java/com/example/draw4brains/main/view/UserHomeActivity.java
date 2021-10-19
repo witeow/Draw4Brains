@@ -8,6 +8,7 @@ import android.widget.ImageButton;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.draw4brains.R;
+import com.example.draw4brains.main.controller.MasterMgr;
 
 public class UserHomeActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -50,6 +51,8 @@ public class UserHomeActivity extends AppCompatActivity implements View.OnClickL
                 break;
             case R.id.btn_stats:
                 intent = new Intent(UserHomeActivity.this, StatisticsPageActivity.class);
+                intent.putExtra("User Score", MasterMgr.authenticationMgr.getCurrentUser().userScore);
+                intent.putExtra("Name", MasterMgr.authenticationMgr.getCurrentUser().getUserName());
                 startActivity(intent);
                 break;
         }
