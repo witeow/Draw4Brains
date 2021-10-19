@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 
 import com.example.draw4brains.games.connectthedots.controller.DatabaseMgr;
 import com.example.draw4brains.main.model.Admin;
-import com.example.draw4brains.games.connectthedots.model.Score;
+import com.example.draw4brains.main.model.Score;
 import com.example.draw4brains.main.model.User;
 import com.example.draw4brains.main.view.AdminHomeActivity;
 import com.example.draw4brains.main.view.LoginActivity;
