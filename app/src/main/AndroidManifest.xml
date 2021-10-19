@@ -10,10 +10,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Draw4Brains">
         <activity
-            android:name=".view.GuessImageActivity"
+            android:name=".games.connectthedots.view.GuessImageActivity"
             android:exported="true" />
         <activity
-            android:name=".view.LoginActivity"
+            android:name=".main.view.LoginActivity"
             android:exported="true"
             android:label="@string/app_name">
             <intent-filter>
@@ -23,44 +23,44 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".view.StatisticsPageActivity"
+            android:name=".main.view.StatisticsPageActivity"
             android:exported="true"
             android:label="Statistics" />
         <activity
-            android:name=".view.UserHomeActivity"
+            android:name=".main.view.UserHomeActivity"
             android:exported="true" />
         <activity
-            android:name=".view.AdminHomeActivity"
+            android:name=".main.view.AdminHomeActivity"
             android:exported="true"
             />
         <activity
-            android:name=".view.ForgetPasswordActivity"
+            android:name=".main.view.ForgetPasswordActivity"
             android:exported="true" />
         <activity
-            android:name=".view.SelectGameActivity"
+            android:name=".main.view.SelectGameActivity"
             android:exported="true" />
         <activity
-            android:name=".view.RegisterActivity"
+            android:name=".main.view.RegisterActivity"
             android:exported="true" />
         <activity
-            android:name=".view.AccountActivity"
+            android:name=".main.view.AccountActivity"
             android:exported="true" />
         <activity
-            android:name=".view.GameLevelActivity"
+            android:name=".games.connectthedots.view.GameLevelActivity"
             android:exported="true" />
         <activity
-            android:name=".view.EndGameActivity"
+            android:name=".games.connectthedots.view.EndGameActivity"
             android:exported="true" />
         <activity
-            android:name=".view.ConnectDotsActivity"
+            android:name=".games.connectthedots.view.ConnectDotsActivity"
             android:exported="true" />
         <activity
-            android:name=".view.ChooseAdminActivity"
+            android:name=".main.view.ChooseAdminActivity"
             android:exported="true" />
         <activity
-            android:name=".view.UsersListActivity"
+            android:name=".main.view.UsersListActivity"
             android:exported="true"
-            android:parentActivityName=".view.AdminHomeActivity" />
+            android:parentActivityName=".main.view.AdminHomeActivity" />
     </application>
 
 </manifest>
