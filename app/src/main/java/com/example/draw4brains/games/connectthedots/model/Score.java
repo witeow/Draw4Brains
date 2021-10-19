@@ -1,4 +1,4 @@
-package com.example.draw4brains.main.model;
+package com.example.draw4brains.games.connectthedots.model;
 
 import java.util.ArrayList;
 

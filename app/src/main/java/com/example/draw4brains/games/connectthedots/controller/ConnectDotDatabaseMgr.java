@@ -6,7 +6,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.example.draw4brains.games.connectthedots.model.Node;
-import com.example.draw4brains.main.model.Score;
+import com.example.draw4brains.games.connectthedots.model.Score;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -17,9 +17,9 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class DatabaseMgr {
+public class ConnectDotDatabaseMgr {
 
-    public DatabaseMgr() {
+    public ConnectDotDatabaseMgr() {
     }
 
     ;

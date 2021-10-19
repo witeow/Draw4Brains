@@ -2,7 +2,6 @@ package com.example.draw4brains.games.connectthedots.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,7 +11,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.draw4brains.R;
-import com.example.draw4brains.games.connectthedots.controller.DatabaseMgr;
+import com.example.draw4brains.games.connectthedots.controller.ConnectDotDatabaseMgr;
 import com.example.draw4brains.games.connectthedots.controller.GameMgr;
 import com.example.draw4brains.games.connectthedots.model.ConnectDots;
 import com.example.draw4brains.games.connectthedots.model.Constants;
@@ -40,7 +39,7 @@ public class GameMenuActivity extends AppCompatActivity implements View.OnClickL
     // Intent Key
     private static final String INTENT_KEY_GAME_MANAGER = "GAME_MANAGER";
 
-    DatabaseMgr databaseMgr;
+    ConnectDotDatabaseMgr connectDotDatabaseMgr;
 
 
     @Override
@@ -50,7 +49,7 @@ public class GameMenuActivity extends AppCompatActivity implements View.OnClickL
         setContentView(R.layout.activity_select_game_level);
 
         // Link database manager
-        databaseMgr = new DatabaseMgr();
+        connectDotDatabaseMgr = new ConnectDotDatabaseMgr();
 
         // Initialize XML Elements to use
         btnBack = findViewById(R.id.btn_back);
@@ -127,7 +126,7 @@ public class GameMenuActivity extends AppCompatActivity implements View.OnClickL
 
     private void startGame(Level levelInfo) {
         this.gameMgr = new GameMgr(levelInfo);
-        databaseMgr.loadNodeData(gameMgr, new DatabaseMgr.onCompleteDataLoad() {
+        connectDotDatabaseMgr.loadNodeData(gameMgr, new ConnectDotDatabaseMgr.onCompleteDataLoad() {
             @Override
             public void onComplete(ArrayList<Node> preprocessedNodes, String[] cordString, int gameLevel) {
                 // Load game level object to ConenctDot attribute inside gameMgr and change activity.

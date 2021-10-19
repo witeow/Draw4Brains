@@ -14,7 +14,7 @@ import com.example.draw4brains.R;
 import com.example.draw4brains.games.connectthedots.controller.GameMgr;
 import com.example.draw4brains.main.controller.AuthenticationMgr;
 import com.example.draw4brains.main.controller.MasterMgr;
-import com.example.draw4brains.main.model.Score;
+import com.example.draw4brains.games.connectthedots.model.Score;
 import com.example.draw4brains.main.view.UserHomeActivity;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;

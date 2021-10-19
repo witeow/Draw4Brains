@@ -9,9 +9,9 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import com.example.draw4brains.games.connectthedots.controller.DatabaseMgr;
+import com.example.draw4brains.games.connectthedots.controller.ConnectDotDatabaseMgr;
 import com.example.draw4brains.main.model.Admin;
-import com.example.draw4brains.main.model.Score;
+import com.example.draw4brains.games.connectthedots.model.Score;
 import com.example.draw4brains.main.model.User;
 import com.example.draw4brains.main.view.AdminHomeActivity;
 import com.example.draw4brains.main.view.LoginActivity;
@@ -248,8 +248,8 @@ public class AuthenticationMgr {
                     }
 //                    Log.d("UserDEBUG", "User has logged in!");
 //                    Log.d("UserDEBUG", currentUser.getAddress());
-                    DatabaseMgr databaseMgr = new DatabaseMgr();
-                    databaseMgr.getScoreFromDatabase(currentUser.getUserID(), new DatabaseMgr.onCallBackUserScore() {
+                    ConnectDotDatabaseMgr connectDotDatabaseMgr = new ConnectDotDatabaseMgr();
+                    connectDotDatabaseMgr.getScoreFromDatabase(currentUser.getUserID(), new ConnectDotDatabaseMgr.onCallBackUserScore() {
                         @Override
                         public void onCallback(Score score) {
                             currentUser.setScore(score);
