@@ -1,7 +1,5 @@
 package com.example.draw4brains.view;
 
-import static com.example.draw4brains.view.LoginActivity.currentUser;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 

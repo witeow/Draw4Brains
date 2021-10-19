@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.draw4brains.R;
+import com.example.draw4brains.controller.LoginMgr;
 import com.example.draw4brains.controller.ScoreMgr;
 import com.example.draw4brains.model.Score;
 import com.google.firebase.database.DatabaseReference;
@@ -60,17 +61,20 @@ public class EndGameActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 FirebaseDatabase userDb = FirebaseDatabase.getInstance("https://draw4brains-default-rtdb.asia-southeast1.firebasedatabase.app/");
-                DatabaseReference userRef = userDb.getReference("Score").child(LoginActivity.userScore.getUserId())
+                Score score = LoginMgr.currentUser.getScore();
+                DatabaseReference userRef = userDb.getReference("Score").child(score.getUserId())
                         .child(GameLevelActivity.gameType)
                         .child(GameLevelActivity.gameDifficulty);
 
-                Integer diffucultyIndex = LoginActivity.userScore.getGameDifficulty().indexOf(GameLevelActivity.gameDifficulty);
 
-                ArrayList<Integer> newNumPlayed = LoginActivity.userScore.getGamesPlayed();
-                ArrayList<ArrayList<String>> newDots = LoginActivity.userScore.getDots();
-                ArrayList<ArrayList<String>> newGuess = LoginActivity.userScore.getGuess();
 
-                if (LoginActivity.userScore.getGamesPlayed().get(diffucultyIndex) != 0){
+                Integer diffucultyIndex = score.getGameDifficulty().indexOf(GameLevelActivity.gameDifficulty);
+
+                ArrayList<Integer> newNumPlayed = score.getGamesPlayed();
+                ArrayList<ArrayList<String>> newDots = score.getDots();
+                ArrayList<ArrayList<String>> newGuess = score.getGuess();
+
+                if (score.getGamesPlayed().get(diffucultyIndex) != 0){
                     newDots.get(diffucultyIndex).add(currentDotScore);
                     newGuess.get(diffucultyIndex).add(currentGuessScore);
 
@@ -88,9 +92,9 @@ public class EndGameActivity extends AppCompatActivity {
                 userRef.child("guess").setValue(guessStr);
                 userRef.child("gamesPlayed").setValue(Integer.toString(numPlayed));
 
-                LoginActivity.userScore.setGamesPlayed(newNumPlayed);
-                LoginActivity.userScore.setDots(newDots);
-                LoginActivity.userScore.setDots(newGuess);
+                score.setGamesPlayed(newNumPlayed);
+                score.setDots(newDots);
+                score.setDots(newGuess);
                 intent = new Intent(EndGameActivity.this, UserHomeActivity.class);
                 startActivity(intent);
             }

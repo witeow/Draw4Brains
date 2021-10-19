@@ -9,6 +9,7 @@ import android.widget.ImageButton;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.draw4brains.R;
+import com.example.draw4brains.controller.LoginMgr;
 
 import java.security.AccessControlContext;
 
@@ -32,6 +33,7 @@ public class UserHomeActivity extends AppCompatActivity {
             isAdmin = extras.getBoolean("isAdmin");
             //The key argument here must match that used in the other activity
         }
+
 
         btnSelectGame = findViewById(R.id.btn_select_game);
         btnAccInfo = findViewById(R.id.btn_acc_info);
