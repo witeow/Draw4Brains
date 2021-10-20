@@ -2,10 +2,11 @@ package com.example.draw4brains.main.view;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.example.draw4brains.R;
@@ -80,10 +81,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_login:
-                String emailString = email.getText().toString();
-                String passwordString = password.getText().toString();
-                boolean isAdmin = btnAccType.isChecked() ? true : false;
-                authenticationMgr.login(LoginActivity.this, emailString, passwordString, isAdmin);
+                login(email, password);
                 break;
             case R.id.btn_register:
                 intent = new Intent(getApplicationContext(), RegisterActivity.class);
@@ -94,6 +92,65 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 startActivity(intent);
                 break;
         }
+    }
+
+    private void login(EditText email, EditText password) {
+        if (hasValidLoginFields(email, password)) {
+            String emailString = email.getText().toString();
+            String passwordString = password.getText().toString();
+            boolean isAdmin = btnAccType.isChecked() ? true : false;
+            authenticationMgr.login(emailString, passwordString, isAdmin, new AuthenticationMgr.callBackOnLoginAttempt() {
+                @Override
+                public void onSuccess(String message, boolean isAdmin) {
+                    Toast.makeText(LoginActivity.this, message, Toast.LENGTH_SHORT).show();
+                    if (isAdmin) {
+                        Log.d("AdminDEBUG", "Admin has logged in!");
+                        intent = new Intent(LoginActivity.this, AdminHomeActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        Log.d("UserDEBUG", "User has logged in!");
+                        Log.d("UserDEBUG", authenticationMgr.getCurrentUser().getAddress());
+                        intent = new Intent(LoginActivity.this, UserHomeActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                        finish();
+                    }
+                }
+
+                @Override
+                public void onFailure(String message) {
+                    Log.d("LoginFail", "Login failed");
+                    Toast.makeText(LoginActivity.this, message, Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else {
+            Toast.makeText(LoginActivity.this, "Invalid login fields", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private boolean hasValidLoginFields(EditText email, EditText password) {
+        boolean isValid = true;
+        String emailString = email.getText().toString().trim();
+        String passwordString = password.getText().toString();
+        if (emailString.contains(" ")) {
+            email.setError("Email cannot contain spaces!");
+            isValid = false;
+        }
+        if (emailString.equalsIgnoreCase("")) {
+            email.setError("Email cannot be blank!");
+            isValid = false;
+        }
+        if (passwordString.contains(" ")) {
+            password.setError("Password cannot contain spaces!");
+            isValid = false;
+        }
+        if (passwordString.trim().equalsIgnoreCase("")){
+            password.setError("Password cannot be empty!");
+            isValid = false;
+        }
+        return true ? isValid : false;
     }
 
     public void onStart() {

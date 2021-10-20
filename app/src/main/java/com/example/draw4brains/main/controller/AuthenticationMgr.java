@@ -78,7 +78,16 @@ public class AuthenticationMgr {
         }
     }
 
-    public void login(Activity loginActivity, String email, String password, boolean isAdmin) {
+    /**
+     * Interface used to handle callBacks and manipulate Account objects
+     */
+    public interface callBackOnLoginAttempt {
+        void onSuccess(String message, boolean isAdmin);
+
+        void onFailure(String message);
+    }
+
+    public void login(String email, String password, boolean isAdmin, callBackOnLoginAttempt callBackOnLoginAttempt) {
         String str_email = email.trim();
         String str_pass = password.trim();
         Log.d("Debug email:", str_email);
@@ -97,18 +106,20 @@ public class AuthenticationMgr {
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                 if (snapshot.exists()) {
                                     currentAdmin = new Admin();
-                                    adminLogin(loginActivity, str_email);
+                                    adminLogin(str_email, callBackOnLoginAttempt);
                                 } else {
                                     Log.d("LoginDEBUG", "Account Type not specified!");
-                                    Toast.makeText(loginActivity, "Account Type not specified!", Toast.LENGTH_SHORT).show();
+                                    callBackOnLoginAttempt.onFailure("Account type not specified!");
                                 }
                             }
 
                             @Override
                             public void onCancelled(@NonNull DatabaseError error) {
-                                Toast.makeText(loginActivity, "Databse could not be accessed!", Toast.LENGTH_SHORT).show();
+                                callBackOnLoginAttempt.onFailure("Database error!");
                             }
                         });
+                    } else {
+                        callBackOnLoginAttempt.onFailure("Sign in failed!");
                     }
                 }
             });
@@ -130,18 +141,20 @@ public class AuthenticationMgr {
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                                     if (snapshot.exists()) {
                                         currentUser = new User();
-                                        userLogin(loginActivity, str_email);
+                                        userLogin(str_email, callBackOnLoginAttempt);
                                     } else {
                                         Log.d("LoginDEBUG", "Account Type not specified!");
-                                        Toast.makeText(loginActivity, "Account Type not specified!", Toast.LENGTH_SHORT).show();
+                                        callBackOnLoginAttempt.onFailure("Account type not specified!");
                                     }
                                 }
 
                                 @Override
                                 public void onCancelled(@NonNull DatabaseError error) {
-                                    Toast.makeText(loginActivity, "Databse could not be accessed!", Toast.LENGTH_SHORT).show();
+                                    callBackOnLoginAttempt.onFailure("Database error!");
                                 }
                             });
+                        } else {
+                            callBackOnLoginAttempt.onFailure("Sign in failed!");
                         }
                     }
                 });
@@ -151,10 +164,7 @@ public class AuthenticationMgr {
         }
     }
 
-    private void adminLogin(Activity loginActivity, String email) {
-        Toast.makeText(loginActivity, "Login Successful!", Toast.LENGTH_SHORT).show();
-        intent = new Intent(loginActivity.getApplicationContext(), AdminHomeActivity.class);
-        intent.putExtra("isAdmin", true);
+    private void adminLogin(String email, callBackOnLoginAttempt callBackOnLoginAttempt) {
         Log.d("AdminDEBUG", "Accessing Firebase");
         FirebaseDatabase userDb = FirebaseDatabase.getInstance("https://draw4brains-default-rtdb.asia-southeast1.firebasedatabase.app/");
         DatabaseReference userRef = userDb.getReference("Admin");
@@ -178,37 +188,28 @@ public class AuthenticationMgr {
                         currentAdmin.setAdminName(ds.child("adminName").getValue().toString());
                         currentAdmin.setPhoneNo(ds.child("adminMobile").getValue().toString());
                         currentAdmin.setEmailAddress(email);
-                        ;
                         currentAdmin.setAdminPass(ds.child("adminPassword").getValue().toString());
                         String dbArrayUser = ds.child("arrayUserId").getValue().toString();
                         String[] arrayUserId = TextUtils.split(dbArrayUser, ",");
                         currentAdmin.setAdminUserId(arrayUserId);
 
                     }
-                    Log.d("AdminDEBUG", "Admin has logged in!");
-                    intent = new Intent(loginActivity.getApplicationContext(), AdminHomeActivity.class);
-//                    intent.putExtra("isAdmin", true);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     setCurrentlyAdmin(true);
-                    loginActivity.startActivity(intent);
-                    loginActivity.finish();
+                    callBackOnLoginAttempt.onSuccess("Successful Admin Login!", true);
                 } else {
-                    Toast.makeText(loginActivity, "No User found!", Toast.LENGTH_SHORT).show();
                     Log.d("LoginDEBUG", "Task Unsuccessful!");
+                    callBackOnLoginAttempt.onFailure("No user found!");
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(loginActivity, "Database could not be accessed!", Toast.LENGTH_SHORT).show();
+                callBackOnLoginAttempt.onFailure("Database error!");
             }
         });
     }
 
-    private void userLogin(Activity loginActivity, String email) {
-        final ProgressDialog progressDialog = new ProgressDialog(loginActivity);
-        progressDialog.setTitle("Logging in");
-        Toast.makeText(loginActivity, "Login Successful!", Toast.LENGTH_SHORT).show();
+    private void userLogin(String email, callBackOnLoginAttempt callBackOnLoginAttempt) {
         Log.d("UserDEBUG", "Accessing Firebase");
         FirebaseDatabase userDb = FirebaseDatabase.getInstance("https://draw4brains-default-rtdb.asia-southeast1.firebasedatabase.app/");
         DatabaseReference userRef = userDb.getReference("User");
@@ -243,36 +244,32 @@ public class AuthenticationMgr {
                         currentUser.setTotalScore(currentUser.getscore(), currentUser.getNumber_played());
                         Log.d("userName", snapshot.child(userUid).child("userName").getValue().toString());
                         currentUser.setUserName(snapshot.child(userUid).child("userName").getValue().toString());
-
-//                        currentUser.retrieveScore(userUid);
                     }
-                    // Login after getting score.
-                    intent = new Intent(loginActivity.getApplicationContext(), UserHomeActivity.class);
-//                            intent.putExtra("isAdmin", false);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     setCurrentlyAdmin(false);
-                    loginActivity.startActivity(intent);
-                    loginActivity.finish();
-//                    Log.d("UserDEBUG", "User has logged in!");
-//                    Log.d("UserDEBUG", currentUser.getAddress());
+                    callBackOnLoginAttempt.onSuccess("User Login Successful!", false);
                 } else {
-                    Toast.makeText(loginActivity, "No User found!", Toast.LENGTH_SHORT).show();
                     Log.d("LoginDEBUG", "Task Unsuccessful!");
+                    callBackOnLoginAttempt.onFailure("No user found!");
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(loginActivity, "Database could not be accessed!", Toast.LENGTH_SHORT).show();
+                callBackOnLoginAttempt.onFailure("Database error!");
             }
         });
     }
 
-    public void logout(Activity accountActivity) {
+    /**
+     * Interface used to handle callBacks and manipulate Account objects
+     */
+    public interface callBackOnLogout {
+        void onComplete();
+    }
+
+    public void logout(callBackOnLogout onLogout) {
         auth.signOut();
-        intent = new Intent(accountActivity, LoginActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        accountActivity.startActivity(intent);
+        onLogout.onComplete();
     }
 
 }

@@ -41,8 +41,6 @@ public class ConnectDotsActivity extends AppCompatActivity implements View.OnCli
     // For Game Logic Checking & Interaction
     private int offset;
     private int startNode;
-    private Node currentNode;
-    private Node nextNode;
     private int startX = 0;
     private int startY = 0;
     private int circleToCheckX;
@@ -95,8 +93,6 @@ public class ConnectDotsActivity extends AppCompatActivity implements View.OnCli
                 offset = getYOffset(relLayout);
                 nodeList = gameMgr.getNodeList();
                 startNode = 0;
-                currentNode = nodeList.get(startNode);
-                nextNode = nodeList.get(startNode + 1);
                 radiusIntForGame = gameMgr.getRadiusOfNodes();
 
                 // Start timer
@@ -130,7 +126,9 @@ public class ConnectDotsActivity extends AppCompatActivity implements View.OnCli
                 canvasView.onClickUndo();
                 gameMgr.getNodeList().get(startNode).setNodeBackgroundColor(Color.TRANSPARENT);
                 if (startNode != 0) {
+                    Log.d("startNode", "StartNode Value during undo (i): " + String.valueOf(startNode));
                     startNode--;
+                    Log.d("startNode", "StartNode Value during undo (ii): " + String.valueOf(startNode));
                 }
         }
     }
@@ -184,13 +182,13 @@ public class ConnectDotsActivity extends AppCompatActivity implements View.OnCli
         switch (event.getActionMasked()) {
             case MotionEvent.ACTION_DOWN:
                 this.canvasView.startTouch(x, y);
-                circleToCheckX = (int) currentNode.getNodeImagePosX() + radiusIntForGame;
-                circleToCheckY = (int) currentNode.getNodeImagePosY() + radiusIntForGame;
+                circleToCheckX = (int) gameMgr.getNodeList().get(startNode).getNodeImagePosX() + radiusIntForGame;
+                circleToCheckY = (int) gameMgr.getNodeList().get(startNode).getNodeImagePosY() + radiusIntForGame;
                 Log.d("CircleCheck", String.valueOf(circleToCheckX) + "," + String.valueOf(circleToCheckY));
                 // If touch within then highlight in Yellow to show current starting point
                 if ((circleToCheckX - radiusIntForGame <= x && x <= circleToCheckX + radiusIntForGame) &&
                         (circleToCheckY - radiusIntForGame <= y && y <= circleToCheckY + radiusIntForGame)) {
-                    currentNode.setNodeBackgroundColor(Color.YELLOW);
+                    gameMgr.getNodeList().get(startNode).setNodeBackgroundColor(Color.YELLOW);
                     startX = (int) x;
                     startY = (int) y;
                     Log.d("Pos X: ", String.valueOf(x));
@@ -205,18 +203,17 @@ public class ConnectDotsActivity extends AppCompatActivity implements View.OnCli
             case MotionEvent.ACTION_UP:
                 Log.d("previousCx", String.valueOf(startX));
                 Log.d("previousCy", String.valueOf(startY));
-                nextCircleToCheckX = (int) nextNode.getNodeImagePosX() + radiusIntForGame;
-                nextCircleToCheckY = (int) nextNode.getNodeImagePosY() + radiusIntForGame;
+                nextCircleToCheckX = (int) gameMgr.getNodeList().get(startNode+1).getNodeImagePosX() + radiusIntForGame;
+                nextCircleToCheckY = (int) gameMgr.getNodeList().get(startNode+1).getNodeImagePosY() + radiusIntForGame;
                 if ((nextCircleToCheckX - radiusIntForGame <= x && x <= nextCircleToCheckX + radiusIntForGame) &&
                         (nextCircleToCheckY - radiusIntForGame <= y && y <= nextCircleToCheckY + radiusIntForGame) &&
                         (circleToCheckX - radiusIntForGame <= startX && startX <= circleToCheckX + radiusIntForGame) &&
                         (circleToCheckY - radiusIntForGame <= startY && startY <= circleToCheckY + radiusIntForGame)) {
 
                     this.canvasView.upTouch(); // Keep path drawn
-                    currentNode.setNodeBackgroundColor(Color.GREEN);
-                    nextNode.setNodeBackgroundColor(Color.GREEN);
+                    gameMgr.getNodeList().get(startNode).setNodeBackgroundColor(Color.GREEN); // Current Node
+                    gameMgr.getNodeList().get(startNode+1).setNodeBackgroundColor(Color.GREEN);
                     startNode++; // Increment
-
 
                     // Completion Condition Check
                     if (startNode == nodeList.size() - 1) { // Check if reach final node
@@ -230,20 +227,14 @@ public class ConnectDotsActivity extends AppCompatActivity implements View.OnCli
                         intent.putExtra(Constants.INTENT_KEY_GAME_MANAGER, gameMgr);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
-                    } else {
-                        // Update nodes
-                        currentNode = nextNode;
-                        nextNode = nodeList.get(startNode+1);
-                        Log.d("BeforeInc", "Index of updated current Node: " + String.valueOf(startNode));
-                        Log.d("BeforeInc", "Index of updated next Node: " + String.valueOf(startNode+1));
                     }
                 } else {
                     // Do not record action and revert back the highlights
                     this.canvasView.doNotRecordAction();
                     if (startNode == 0) {
-                        currentNode.setNodeBackgroundColor(Color.TRANSPARENT);
+                        gameMgr.getNodeList().get(startNode).setNodeBackgroundColor(Color.TRANSPARENT);
                     } else {
-                        currentNode.setNodeBackgroundColor(Color.GREEN);
+                        gameMgr.getNodeList().get(startNode).setNodeBackgroundColor(Color.GREEN);
                     }
                 }
                 break;

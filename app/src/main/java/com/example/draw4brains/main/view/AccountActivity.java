@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.draw4brains.R;
 import com.example.draw4brains.games.connectthedots.model.Score;
@@ -114,9 +115,21 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
                 this.backToHomeScreen(authenticationMgr.isCurrentlyAdmin());
                 break;
             case R.id.btn_logout:
-                authenticationMgr.logout(AccountActivity.this);
+                this.logout();
                 break;
         }
+    }
+
+    private void logout() {
+        authenticationMgr.logout(new AuthenticationMgr.callBackOnLogout() {
+            @Override
+            public void onComplete() {
+                Toast.makeText(AccountActivity.this, "Logging out!", Toast.LENGTH_SHORT).show();
+                intent = new Intent(AccountActivity.this, LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+            }
+        });
     }
 
     private void backToHomeScreen(boolean isAdmin) {
