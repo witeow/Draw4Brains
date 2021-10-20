@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 
 import com.example.draw4brains.games.connectthedots.model.Node;
 import com.example.draw4brains.games.connectthedots.model.Score;
+import com.example.draw4brains.main.controller.MasterMgr;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -21,7 +22,6 @@ public class ConnectDotDatabaseMgr {
 
     public ConnectDotDatabaseMgr() {
     }
-
     ;
 
 
@@ -183,5 +183,42 @@ public class ConnectDotDatabaseMgr {
 
         };
         query.addListenerForSingleValueEvent(newTest);
+    }
+
+    public void updateScore(GameMgr gameMgr, String currentDotScore, String currentGuessScore) {
+        FirebaseDatabase userDb = FirebaseDatabase.getInstance("https://draw4brains-default-rtdb.asia-southeast1.firebasedatabase.app/");
+        Score score = MasterMgr.authenticationMgr.getCurrentUser().getScore();
+        DatabaseReference userRef = userDb.getReference("Score").child(score.getUserId())
+                .child(gameMgr.getLevelInfo().getGameType())
+                .child(gameMgr.getLevelInfo().getGameDifficulty());
+
+
+        Integer diffucultyIndex = score.getGameDifficulty().indexOf(gameMgr.getLevelInfo().getGameDifficulty());
+
+        ArrayList<Integer> newNumPlayed = score.getGamesPlayed();
+        ArrayList<ArrayList<String>> newDots = score.getDots();
+        ArrayList<ArrayList<String>> newGuess = score.getGuess();
+
+        if (score.getGamesPlayed().get(diffucultyIndex) != 0) {
+            newDots.get(diffucultyIndex).add(currentDotScore);
+            newGuess.get(diffucultyIndex).add(currentGuessScore);
+
+        } else {
+            newDots.get(diffucultyIndex).set(0, currentDotScore);
+            newGuess.get(diffucultyIndex).set(0, currentGuessScore);
+        }
+
+        String dotsStr = TextUtils.join(",", newDots.get(diffucultyIndex));
+        String guessStr = TextUtils.join(",", newGuess.get(diffucultyIndex));
+        Integer numPlayed = newNumPlayed.get(diffucultyIndex) + 1;
+        newNumPlayed.set(diffucultyIndex, numPlayed);
+
+        userRef.child("dots").setValue(dotsStr);
+        userRef.child("guess").setValue(guessStr);
+        userRef.child("gamesPlayed").setValue(Integer.toString(numPlayed));
+
+        score.setGamesPlayed(newNumPlayed);
+        score.setDots(newDots);
+        score.setDots(newGuess);
     }
 }

@@ -7,10 +7,39 @@
     android:background="@color/Draw4Brain_MainBG">
 
 
+    <ImageButton
+        android:id="@+id/btn_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@color/transparent"
+        android:src="@drawable/back_arrow"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="425dp"
+        android:layout_height="144dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="51dp"
+        android:src="@drawable/logo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ScrollView
+        android:id="@+id/scroll_register"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        android:layout_marginVertical="25dp"
+        app:layout_constraintTop_toBottomOf="@id/imageView"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/btn_register">
 
 
         <LinearLayout
@@ -22,30 +51,6 @@
             android:orientation="vertical"
             app:layout_constraintTop_toBottomOf="@+id/imageView"
             tools:layout_editor_absoluteX="10dp">
-
-            <ImageButton
-                android:id="@+id/btn_back"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="16dp"
-                android:backgroundTint="@color/transparent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:src="@drawable/back_arrow"/>
-
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="425dp"
-                android:layout_height="144dp"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginTop="51dp"
-                android:src="@drawable/logo"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
 
             <EditText
                 android:id="@+id/et_email"
@@ -79,27 +84,27 @@
                 android:weightSum="2">
 
                 <RadioGroup
+                    android:id="@+id/gender_group"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
-                    android:weightSum="2"
-                    android:id="@+id/gender_group">
+                    android:weightSum="2">
 
                     <RadioButton
+                        android:id="@+id/btn_male"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:checked="true"
-                        android:id="@+id/btn_male"
                         android:text="Male" />
 
 
                     <RadioButton
+                        android:id="@+id/btn_female"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:checked="false"
-                        android:id="@+id/btn_female"
                         android:text="Female" />
 
                 </RadioGroup>
@@ -127,43 +132,6 @@
                 android:inputType="textPassword"
                 android:maxLength="16" />
 
-            <!--        <LinearLayout-->
-            <!--            android:layout_width="match_parent"-->
-            <!--            android:layout_height="match_parent"-->
-            <!--            android:orientation="horizontal"-->
-            <!--            android:weightSum="2">-->
-
-            <!--            <TextView-->
-            <!--                android:id="@+id/tv_password_strength"-->
-            <!--                android:layout_width="0dp"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:layout_marginTop="10dp"-->
-            <!--                android:layout_weight="1"-->
-            <!--                android:ems="10"-->
-            <!--                android:text=" PASSWORD STRENGTH:" />-->
-
-            <!--            <TextView-->
-            <!--                android:id="@+id/tv_password_strength2"-->
-            <!--                android:layout_width="0dp"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:layout_marginTop="10dp"-->
-            <!--                android:layout_weight="1"-->
-            <!--                android:gravity="start"-->
-            <!--                android:hint="PW_STRENGTH"-->
-            <!--                android:textAlignment="viewStart" />-->
-
-            <!--        </LinearLayout>-->
-
-
-            <!--        <ProgressBar-->
-            <!--            android:id="@+id/pb_password_strength"-->
-            <!--            style="?android:attr/progressBarStyleHorizontal"-->
-            <!--            android:layout_width="match_parent"-->
-            <!--            android:layout_height="wrap_content"-->
-            <!--            android:layout_marginLeft="5dp"-->
-            <!--            android:layout_marginRight="35dp"-->
-            <!--            android:max="100"/>-->
-
             <EditText
                 android:id="@+id/et_phone"
                 android:layout_width="match_parent"
@@ -185,7 +153,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="Address"/>
+                android:hint="Address" />
 
             <EditText
                 android:id="@+id/et_birthday"
@@ -200,7 +168,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="Next-Of-Kin Name"/>
+                android:hint="Next-Of-Kin Name" />
 
             <EditText
                 android:id="@+id/et_nok_phone"
@@ -208,7 +176,7 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:hint="Next-Of-Kin Phone Number"
-                android:inputType="phone"/>
+                android:inputType="phone" />
 
 
             <EditText
@@ -216,32 +184,29 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="Personal Caretaker"/>
+                android:hint="Personal Caretaker" />
 
-<!--            <Button-->
-<!--                android:id="@+id/button_chooseadmin"-->
-<!--                android:layout_width="312dp"-->
-<!--                android:layout_height="56dp"-->
-<!--                android:layout_marginTop="4dp"-->
-<!--                android:text="Choose Admin"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintHorizontal_bias="0.494"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintTop_toBottomOf="@+id/linearLayout2"/>-->
-            <ImageButton
-                android:id="@+id/btn_register"
-                android:layout_width="312dp"
-                android:layout_height="56dp"
-                android:layout_marginTop="4dp"
-                android:backgroundTint="@color/transparent"
-                android:src="@drawable/ic_register_long"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.494"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/button_chooseadmin" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:ems="10"
+                android:hint="" />
 
         </LinearLayout>
 
     </ScrollView>
+
+    <ImageButton
+        android:id="@+id/btn_register"
+        android:layout_width="312dp"
+        android:layout_height="56dp"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/transparent"
+        android:src="@drawable/ic_register_long"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

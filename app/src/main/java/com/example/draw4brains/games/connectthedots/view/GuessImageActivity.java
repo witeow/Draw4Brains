@@ -20,6 +20,7 @@ import com.bumptech.glide.Glide;
 import com.example.draw4brains.R;
 import com.example.draw4brains.games.connectthedots.controller.GameMgr;
 import com.example.draw4brains.games.connectthedots.model.ConnectDots;
+import com.example.draw4brains.games.connectthedots.model.Constants;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
@@ -28,31 +29,24 @@ import java.util.Random;
 public class GuessImageActivity extends AppCompatActivity {
 
 
-//    int WORD_LENGTH;
-//
-//    Button buttonList[];
-//    boolean occupied[];
-//    String answerArray[];
-
     private Chronometer chronometer;
 
     Intent intent;
-     private int guessTrial;
-//    int nbPlayed = 0;
-//    int scoreUpdate = 0;
-//    ScoreMgr scoreMgr;
+    ImageView guessImage;
+    GameMgr gameMgr;
+    TextView answerTV;
 
-    public int setGuessTime(){
+    private int guessTrial;
+
+    public int setGuessTime() {
         int guessTime = 0;
         long elapsed = SystemClock.elapsedRealtime() - chronometer.getBase();
-        guessTime = (int) elapsed/1000;
+        guessTime = (int) elapsed / 1000;
         return guessTime;
     }
 
-    ImageView guessImage;
 
-    GameMgr gameMgr;
-    private static final String INTENT_GAME_MANAGER = "GAME_MANAGER";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,13 +55,11 @@ public class GuessImageActivity extends AppCompatActivity {
         guessTrial = 1;
 
         intent = getIntent();
-//        scoreMgr = (ScoreMgr) intent.getSerializableExtra("score");
-        gameMgr = (GameMgr) intent.getSerializableExtra(INTENT_GAME_MANAGER);
+        gameMgr = (GameMgr) intent.getSerializableExtra(Constants.INTENT_KEY_GAME_MANAGER);
 
         setContentView(R.layout.activity_guess_image);
 
         chronometer = findViewById(R.id.chronometer);
-
         guessImage = findViewById(R.id.guess_image);
 
         Log.d("SelectImage", "Enter Function");
@@ -94,29 +86,29 @@ public class GuessImageActivity extends AppCompatActivity {
                 boolean occupied[] = new boolean[WORD_LENGTH];
                 String answerArray[] = new String[WORD_LENGTH];
 
-                for (int i=0; i < WORD_LENGTH; i++) {
+                for (int i = 0; i < WORD_LENGTH; i++) {
                     answerArray[i] = "_";
-                    occupied[i]  = false;
+                    occupied[i] = false;
                 }
 
                 String answerString = formatAnswerString(answerArray);
-                TextView answerTV = findViewById(R.id.answer_field);
+                answerTV = findViewById(R.id.answer_field);
                 answerTV.setText(answerString);
 
                 buttonList[0] = findViewById(R.id.button1);
-                buttonList[1]  = findViewById(R.id.button2);
-                buttonList[2]  = findViewById(R.id.button3);
-                buttonList[3]  = findViewById(R.id.button4);
-                buttonList[4]  = findViewById(R.id.button5);
-                buttonList[5]  = findViewById(R.id.button6);
-                buttonList[6]  = findViewById(R.id.button7);
-                buttonList[7]  = findViewById(R.id.button8);
-                buttonList[8]  = findViewById(R.id.button9);
-                buttonList[9]  = findViewById(R.id.button10);
-                buttonList[10]  = findViewById(R.id.button11);
-                buttonList[11]  = findViewById(R.id.button12);
-                buttonList[12]  = findViewById(R.id.button13);
-                buttonList[13]  = findViewById(R.id.button14);
+                buttonList[1] = findViewById(R.id.button2);
+                buttonList[2] = findViewById(R.id.button3);
+                buttonList[3] = findViewById(R.id.button4);
+                buttonList[4] = findViewById(R.id.button5);
+                buttonList[5] = findViewById(R.id.button6);
+                buttonList[6] = findViewById(R.id.button7);
+                buttonList[7] = findViewById(R.id.button8);
+                buttonList[8] = findViewById(R.id.button9);
+                buttonList[9] = findViewById(R.id.button10);
+                buttonList[10] = findViewById(R.id.button11);
+                buttonList[11] = findViewById(R.id.button12);
+                buttonList[12] = findViewById(R.id.button13);
+                buttonList[13] = findViewById(R.id.button14);
                 Button resetButton = findViewById(R.id.resetButton);
                 Button submitButton = findViewById(R.id.submitButton);
                 Button giveUp = findViewById(R.id.btn_give_up);
@@ -124,7 +116,7 @@ public class GuessImageActivity extends AppCompatActivity {
 
                 tempSetButtonText(buttonList, wordToGuess); // Temporary for testing. Assign letter to button
 
-                for(int buttonNum = 0; buttonNum<buttonList.length; buttonNum++){
+                for (int buttonNum = 0; buttonNum < buttonList.length; buttonNum++) {
                     setSelectionButtton(buttonList[buttonNum], answerTV, WORD_LENGTH, answerArray, occupied);
                 }
 
@@ -153,12 +145,12 @@ public class GuessImageActivity extends AppCompatActivity {
 //                    currentUser.setTotalScore(scoreUpdate,nbPlayed);
                             intent = new Intent(GuessImageActivity.this, EndGameActivity.class);
 //                            intent.putExtra("score", scoreMgr);
-                            intent.putExtra(INTENT_GAME_MANAGER, gameMgr);
+                            intent.putExtra(Constants.INTENT_KEY_GAME_MANAGER, gameMgr);
                             startActivity(intent);
                         } else {
                             Log.d("output", "toasting");
-                            Toast.makeText(GuessImageActivity.this, "Try Again!", Toast.LENGTH_SHORT).show();
-                            guessTrial +=1;
+//                            Toast.makeText(GuessImageActivity.this, "Try Again!", Toast.LENGTH_SHORT).show();
+                            guessTrial += 1;
                             resetStates(answerTV, WORD_LENGTH, occupied, answerArray, buttonList);
                         }
                     }
@@ -175,16 +167,13 @@ public class GuessImageActivity extends AppCompatActivity {
 //                        Log.d("scoreMgrDots", String.valueOf(scoreMgr.getDotScore()));
                         intent = new Intent(GuessImageActivity.this, EndGameActivity.class);
 //                        intent.putExtra("score", scoreMgr);
-                        intent.putExtra(INTENT_GAME_MANAGER, gameMgr);
+                        intent.putExtra(Constants.INTENT_KEY_GAME_MANAGER, gameMgr);
                         startActivity(intent);
                     }
                 });
             }
         });
 //        SelectImage();
-
-
-
 
 
     }
@@ -212,7 +201,7 @@ public class GuessImageActivity extends AppCompatActivity {
 
     }
 
-    private boolean checkAnswer(String[] checkAnswerArray ,String guessingWord){
+    private boolean checkAnswer(String[] checkAnswerArray, String guessingWord) {
         String userAnswer = "";
         for (String s : checkAnswerArray) {
             userAnswer += s;
@@ -222,7 +211,7 @@ public class GuessImageActivity extends AppCompatActivity {
 
     private void resetStates(TextView answerTV, Integer wordLength, boolean[] occupiedStates
             , String[] resetAnswerArray, Button[] resetButtonList) {
-        for (int i=0; i < wordLength; i++) {
+        for (int i = 0; i < wordLength; i++) {
             occupiedStates[i] = false;
             resetAnswerArray[i] = "_";
         }
@@ -236,17 +225,17 @@ public class GuessImageActivity extends AppCompatActivity {
         int index = 0;
         String letters = "abcdefghijklmnopqrstuvwxyz";
         Random rand = new Random();
-        while (wordToGuess.length()<14){
+        while (wordToGuess.length() < 14) {
             wordToGuess += letters.charAt(rand.nextInt(25));
         }
-        int[] array = {0,1,2,3,4,5,6,7,8,9,10,11,12,13};
+        int[] array = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13};
         for (int i = 0; i < array.length; i++) {
             int randomIndexToSwap = rand.nextInt(array.length);
             int temp = array[randomIndexToSwap];
             array[randomIndexToSwap] = array[i];
             array[i] = temp;
         }
-        for (int i : array){
+        for (int i : array) {
             Button button = arr[i];
             button.setText(String.valueOf(wordToGuess.charAt(index)));
             index++;
@@ -290,7 +279,7 @@ public class GuessImageActivity extends AppCompatActivity {
 
     }
 
-    private void updateAnswerTextView(TextView answer_tv, String[] strAnswerArray){
+    private void updateAnswerTextView(TextView answer_tv, String[] strAnswerArray) {
         String getAnswerString = formatAnswerString(strAnswerArray);
         answer_tv.setText(getAnswerString);
     }

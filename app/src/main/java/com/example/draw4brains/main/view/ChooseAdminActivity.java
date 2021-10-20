@@ -144,29 +144,20 @@ public class ChooseAdminActivity extends AppCompatActivity {
 
     }
 
-
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-
-        int id = item.getItemId();
-
-
-        if(id == R.id.searchView){
-
-            return true;
-        }
-        if(id==R.id.arrangebyalphabetical) {
-
-            Collections.sort(User, (p1, p2) -> p1.getUserName().compareTo(p2.getUserName()));
-            //mAdminController.clear();
-            // mAdminController.addAll(User);
-            mAdminController.notifyDataSetChanged();
-
-            return true;
-        }
-        else{
-//            Intent myIntent = new Intent(getApplicationContext(), mainactivityAdmin.class);
-//            startActivityForResult(myIntent, 0);
+        switch (item.getItemId()) {
+            case R.id.searchView:
+                return true;
+            case R.id.arrangebyalphabetical:
+                Collections.sort(User, (p1, p2) -> p1.getUserName().compareTo(p2.getUserName()));
+                //mAdminController.clear();
+                // mAdminController.addAll(User);
+                mAdminController.notifyDataSetChanged();
+                return true;
+            case android.R.id.home:
+                this.finish();
+                return true;
         }
         return super.onOptionsItemSelected(item);
 

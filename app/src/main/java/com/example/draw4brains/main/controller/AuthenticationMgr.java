@@ -246,24 +246,15 @@ public class AuthenticationMgr {
 
 //                        currentUser.retrieveScore(userUid);
                     }
+                    // Login after getting score.
+                    intent = new Intent(loginActivity.getApplicationContext(), UserHomeActivity.class);
+//                            intent.putExtra("isAdmin", false);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    setCurrentlyAdmin(false);
+                    loginActivity.startActivity(intent);
+                    loginActivity.finish();
 //                    Log.d("UserDEBUG", "User has logged in!");
 //                    Log.d("UserDEBUG", currentUser.getAddress());
-                    ConnectDotDatabaseMgr connectDotDatabaseMgr = new ConnectDotDatabaseMgr();
-                    connectDotDatabaseMgr.getScoreFromDatabase(currentUser.getUserID(), new ConnectDotDatabaseMgr.onCallBackUserScore() {
-                        @Override
-                        public void onCallback(Score score) {
-                            currentUser.setScore(score);
-                            // Login after getting score.
-                            intent = new Intent(loginActivity.getApplicationContext(), UserHomeActivity.class);
-//                            intent.putExtra("isAdmin", false);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            setCurrentlyAdmin(false);
-                            loginActivity.startActivity(intent);
-                            loginActivity.finish();
-                        }
-                    });
-
-
                 } else {
                     Toast.makeText(loginActivity, "No User found!", Toast.LENGTH_SHORT).show();
                     Log.d("LoginDEBUG", "Task Unsuccessful!");

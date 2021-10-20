@@ -11,23 +11,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Hard"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/ll_stat"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.882"
+        app:layout_constraintHorizontal_bias="0.85"
+        app:layout_constraintVertical_bias="0.1"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.617" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_name" />
 
     <Button
         android:id="@+id/button_med"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Medium"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/ll_stat"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintVertical_bias="0.1"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.617" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_name" />
 
     <TextView
         android:id="@+id/tv_name"
@@ -47,15 +48,15 @@
         android:id="@+id/tv_stats_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
         android:gravity="center"
         android:text="Average Score"
         android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/no_games_played_title"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.168"
+        app:layout_constraintHorizontal_bias="0.123"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.312" />
+        app:layout_constraintTop_toBottomOf="@+id/button_med" />
 
     <TextView
         android:id="@+id/tv_stats"
@@ -64,12 +65,12 @@
         android:gravity="center"
         android:text="TextView"
         android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_stats_title"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.866"
+        app:layout_constraintHorizontal_bias="0.865"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.313" />
+        app:layout_constraintTop_toTopOf="@+id/tv_stats_title"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/no_games_played_title"
@@ -80,10 +81,10 @@
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.137"
+        app:layout_constraintHorizontal_bias="0.122"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.448" />
+        app:layout_constraintVertical_bias="0.45" />
 
     <TextView
         android:id="@+id/no_games_played"
@@ -92,12 +93,11 @@
         android:gravity="center"
         android:text="TextView"
         android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/no_games_played_title"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.866"
+        app:layout_constraintHorizontal_bias="0.833"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.449" />
+        app:layout_constraintTop_toTopOf="@+id/no_games_played_title" />
 
     <Button
         android:id="@+id/button_easy"
@@ -105,24 +105,24 @@
         android:layout_height="wrap_content"
         android:text="Easy"
         app:backgroundTint="#673AB7"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.114"
+        app:layout_constraintHorizontal_bias="0.13"
+        app:layout_constraintVertical_bias="0.1"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.617" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_name"
+        app:layout_constraintBottom_toTopOf="@+id/ll_stat"/>
 
     <LinearLayout
+        android:id="@+id/ll_stat"
         android:layout_width="416dp"
-        android:layout_height="251dp"
-        android:background="#ADD7F8"
+        android:layout_height="350dp"
+        android:background="@color/sky_blue"
         android:orientation="vertical"
         android:weightSum="3"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_med"
+        app:layout_constraintTop_toBottomOf="@+id/no_games_played_title"
         app:layout_constraintVertical_bias="1.0">
 
         <TextView
@@ -155,7 +155,6 @@
             android:layout_weight="1"
             android:gravity="center|start"
             android:layout_marginHorizontal="30dp"
-
             android:text="Last 3 Guess score:"
             android:textSize="30sp" />
 <!--        android:paddingLeft="12dp"-->

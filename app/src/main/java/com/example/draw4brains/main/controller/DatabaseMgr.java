@@ -3,7 +3,6 @@ package com.example.draw4brains.main.controller;
 import static com.google.firebase.database.FirebaseDatabase.getInstance;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -15,8 +14,6 @@ import androidx.annotation.NonNull;
 import com.example.draw4brains.games.connectthedots.controller.ConnectDotDatabaseMgr;
 import com.example.draw4brains.games.connectthedots.model.Score;
 import com.example.draw4brains.main.model.User;
-import com.example.draw4brains.main.view.StatisticsPageActivity;
-import com.example.draw4brains.main.view.UsersListActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;

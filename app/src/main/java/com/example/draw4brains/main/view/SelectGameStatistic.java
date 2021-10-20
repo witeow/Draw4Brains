@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -12,9 +13,9 @@ import com.example.draw4brains.games.connectthedots.controller.ConnectDotDatabas
 import com.example.draw4brains.games.connectthedots.model.Score;
 import com.example.draw4brains.main.controller.MasterMgr;
 
-public class SelectGameActivity extends AppCompatActivity implements View.OnClickListener {
+public class SelectGameStatistic extends AppCompatActivity implements View.OnClickListener {
 
-    private static final Class CONNECT_THE_DOT_REFERENCE_POINT = com.example.draw4brains.games.connectthedots.view.GameMenuActivity.class;
+    private static final Class CONNECT_THE_DOT_STATISTICS = com.example.draw4brains.games.connectthedots.view.StatisticsPageActivity.class;
 
     private ImageButton btnConnectDot, btnBackHome;
     Intent intent;
@@ -23,10 +24,11 @@ public class SelectGameActivity extends AppCompatActivity implements View.OnClic
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().hide();
-        setContentView(R.layout.activity_select_game);
+        setContentView(R.layout.activity_select_game_stat);
 
         btnConnectDot = findViewById(R.id.connectDotGame);
         btnBackHome = findViewById(R.id.back_button);
+
 
         btnConnectDot.setOnClickListener(this);
         btnBackHome.setOnClickListener(this);
@@ -41,13 +43,15 @@ public class SelectGameActivity extends AppCompatActivity implements View.OnClic
                     @Override
                     public void onCallback(Score score) {
                         MasterMgr.authenticationMgr.getCurrentUser().setScore(score);
-                        intent = new Intent(SelectGameActivity.this, CONNECT_THE_DOT_REFERENCE_POINT);
+                        intent = new Intent(SelectGameStatistic.this, CONNECT_THE_DOT_STATISTICS);
+                        intent.putExtra("User Score", MasterMgr.authenticationMgr.getCurrentUser().userScore);
+                        intent.putExtra("Name", MasterMgr.authenticationMgr.getCurrentUser().getUserName());
                         startActivity(intent);
                     }
                 });
                 break;
             case R.id.back_button:
-                intent = new Intent(SelectGameActivity.this, UserHomeActivity.class);
+                intent = new Intent(SelectGameStatistic.this, UserHomeActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
                 break;

@@ -50,9 +50,7 @@ public class UserHomeActivity extends AppCompatActivity implements View.OnClickL
                 startActivity(intent);
                 break;
             case R.id.btn_stats:
-                intent = new Intent(UserHomeActivity.this, StatisticsPageActivity.class);
-                intent.putExtra("User Score", MasterMgr.authenticationMgr.getCurrentUser().userScore);
-                intent.putExtra("Name", MasterMgr.authenticationMgr.getCurrentUser().getUserName());
+                intent = new Intent(UserHomeActivity.this, SelectGameStatistic.class);
                 startActivity(intent);
                 break;
         }

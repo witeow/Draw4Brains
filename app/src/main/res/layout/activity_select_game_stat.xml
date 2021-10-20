@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginVertical="10dp"
         android:gravity="center_horizontal"
-        android:text="Select Game to Play"
+        android:text="Select Game to View Statistics"
         android:textSize="25dp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"

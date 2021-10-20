@@ -31,7 +31,6 @@ public class CanvasView extends View {
     private float startX, startY, stopX, stopY;
 
     ArrayList<Path> paths = new ArrayList<Path>();
-    ArrayList<Path> undonePaths = new ArrayList<Path>();
 
 
     public CanvasView(Context c, AttributeSet attrs) {
@@ -50,7 +49,7 @@ public class CanvasView extends View {
         mPaint.setStrokeWidth(12f);
     }
 
-    public void createCanvas(RelativeLayout relLayout, int canvasWidth, int canvasHeight){
+    public void createCanvas(RelativeLayout relLayout, int canvasWidth, int canvasHeight) {
         this.relLayout = relLayout;
         mBitmap = Bitmap.createBitmap(canvasWidth, canvasHeight, Bitmap.Config.ARGB_8888);
         mCanvas = new Canvas(mBitmap);
@@ -61,7 +60,7 @@ public class CanvasView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        for (Path p : paths){
+        for (Path p : paths) {
             canvas.drawPath(p, mPaint);
         }
         // draw the mPath with the mPaint on the canvas when onDraw
@@ -71,10 +70,10 @@ public class CanvasView extends View {
 
     // when ACTION_DOWN start touch according to the x,y values
     public void startTouch(float x, float y) {
-        undonePaths.clear();
         mPath.moveTo(x, y);
         mX = x;
         mY = y;
+        invalidate();
     }
 
     // when ACTION_MOVE move touch according to the x,y values
@@ -86,6 +85,7 @@ public class CanvasView extends View {
             mX = x;
             mY = y;
         }
+        invalidate();
     }
 
     public void clearCanvas() {
@@ -94,15 +94,16 @@ public class CanvasView extends View {
     }
 
     // when ACTION_UP stop touch
-    public void upTouch(boolean drawPath) {
-        if (drawPath) {
-            mPath.lineTo(mX, mY);
-            paths.add(mPath);
-            mPath = new Path();
+    public void upTouch() {
+        mPath.lineTo(mX, mY);
+        paths.add(mPath);
+        mPath = new Path();
+        invalidate();
+    }
 
-        } else {
-            // Do nothing
-        }
+    public void doNotRecordAction() {
+        mPath = new Path();
+        invalidate();
     }
 
     public void drawLine(float startX, float startY, float stopX, float stopY) {
@@ -120,16 +121,13 @@ public class CanvasView extends View {
         mCanvas.drawLine(startX, startY, stopX, stopY, temp);
     }
 
-    public void onClickUndo () {
-        if (paths.size()>0)
-        {
-            undonePaths.add(paths.remove(paths.size()-1));
+    public void onClickUndo() {
+        if (paths.size() > 0) {
+            paths.remove(paths.size() - 1);
             invalidate();
-        }
-        else
-        {
+        } else {
             Toast.makeText(context, "No more strokes to undo!", Toast.LENGTH_LONG).show();
-            Log.d("undoNomore","no");
+            Log.d("undoNomore", "no");
         }
     }
 

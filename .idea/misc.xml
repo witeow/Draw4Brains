@@ -7,9 +7,9 @@
         <entry key="..\:/Users/limqi/Documents/GitHub/Draw4Brains/app/src/main/res/drawable/ic_forgetpassword.xml" value="0.20885416666666667" />
         <entry key="..\:/Users/limqi/Documents/GitHub/Draw4Brains/app/src/main/res/drawable/ic_launcher_background.xml" value="0.21458333333333332" />
         <entry key="..\:/Users/limqi/Documents/GitHub/Draw4Brains/app/src/main/res/drawable/ic_selectgame.xml" value="0.3828125" />
-        <entry key="..\:/Users/limqi/Documents/GitHub/Draw4Brains/app/src/main/res/layout/activity_account_settings.xml" value="0.26666666666666666" />
+        <entry key="..\:/Users/limqi/Documents/GitHub/Draw4Brains/app/src/main/res/layout/activity_account_settings.xml" value="0.33" />
         <entry key="..\:/Users/limqi/Documents/GitHub/Draw4Brains/app/src/main/res/layout/activity_connect_dots.xml" value="0.25" />
-        <entry key="..\:/Users/limqi/Documents/GitHub/Draw4Brains/app/src/main/res/layout/activity_end_game.xml" value="0.25" />
+        <entry key="..\:/Users/limqi/Documents/GitHub/Draw4Brains/app/src/main/res/layout/activity_end_game.xml" value="0.35909090909090907" />
         <entry key="..\:/Users/limqi/Documents/GitHub/Draw4Brains/app/src/main/res/layout/activity_forget_password.xml" value="0.1984375" />
         <entry key="..\:/Users/limqi/Documents/GitHub/Draw4Brains/app/src/main/res/layout/activity_guess_image.xml" value="0.33" />
         <entry key="..\:/Users/limqi/Documents/GitHub/Draw4Brains/app/src/main/res/layout/activity_home_admin.xml" value="0.1984375" />
@@ -19,7 +19,8 @@
         <entry key="..\:/Users/limqi/Documents/GitHub/Draw4Brains/app/src/main/res/layout/activity_register.xml" value="0.22" />
         <entry key="..\:/Users/limqi/Documents/GitHub/Draw4Brains/app/src/main/res/layout/activity_select_game.xml" value="0.33" />
         <entry key="..\:/Users/limqi/Documents/GitHub/Draw4Brains/app/src/main/res/layout/activity_select_game_level.xml" value="0.33" />
-        <entry key="..\:/Users/limqi/Documents/GitHub/Draw4Brains/app/src/main/res/layout/activity_statistics.xml" value="0.19270833333333334" />
+        <entry key="..\:/Users/limqi/Documents/GitHub/Draw4Brains/app/src/main/res/layout/activity_select_game_stat.xml" value="0.2265625" />
+        <entry key="..\:/Users/limqi/Documents/GitHub/Draw4Brains/app/src/main/res/layout/activity_statistics.xml" value="0.33" />
         <entry key="..\:/Users/limqi/Documents/GitHub/Draw4Brains/app/src/main/res/layout/activity_user_login.xml" value="0.33" />
         <entry key="..\:/Users/limqi/Documents/GitHub/Draw4Brains/app/src/main/res/layout/item_layout_in_list.xml" value="0.5" />
         <entry key="..\:/Users/limqi/Documents/GitHub/Draw4Brains/app/src/main/res/layout/register_page.xml" value="0.20572916666666666" />

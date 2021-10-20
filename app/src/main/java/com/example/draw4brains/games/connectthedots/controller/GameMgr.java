@@ -1,6 +1,14 @@
 package com.example.draw4brains.games.connectthedots.controller;
 
+import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
+import android.widget.ImageView;
 
 
 import com.example.draw4brains.games.connectthedots.model.ConnectDots;
@@ -25,7 +33,7 @@ public class GameMgr implements Serializable {
     private ArrayList<Node> nodeList;
     private String startNode = null;
     private String endNode = null;
-
+    private int radiusOfNodes;
 
     public GameMgr(Level levelInfo) {
         this.levelInfo = levelInfo;
@@ -53,6 +61,7 @@ public class GameMgr implements Serializable {
     }
 
 
+
     /////// Score Calculation for scoreConnect and scoreGuess
 
     public void calculateConnectScore(long connectTime, int numCircle) {
@@ -61,22 +70,21 @@ public class GameMgr implements Serializable {
             averageCircleTime = 1;
         }
         Log.d("averageT", String.valueOf(averageCircleTime));
-        int scoreConnect = (int) ((1.0 / averageCircleTime) * 50.0);
+        int scoreConnect = (int) ((1.0 / averageCircleTime) * Constants.MAX_SCORE_CONNECT_DOT);
         this.scoreConnect = scoreConnect;
     }
 
     public void calculateGuessScore(long guessTime, int guessTrials, String wordToGuess) {
-        double timePerLetter = 2.0;
-        double totalWordTime = timePerLetter * wordToGuess.length();
+        double totalWordTime = Constants.AVERAGE_TIME_PER_LETTER * wordToGuess.length();
         int guessScore = 0;
         double scoreMatrix = totalWordTime / guessTime;
         if (scoreMatrix > 1) {
             scoreMatrix = 1;
         }
-        if (guessTrials <= 5) {
-            guessScore = (int) ((scoreMatrix) * 25 + 25 - (guessTrials - 1) * 5);
+        if (guessTrials <= Constants.NO_OF_GUESSES_ALLOWED) {
+            guessScore = (int) ((scoreMatrix) * Constants.MAX_SCORE_GUESS - ((guessTrials - 1) * Constants.MAX_SCORE_GUESS/Constants.NO_OF_GUESSES_ALLOWED));
         } else {
-            guessScore = (int) ((scoreMatrix) * 25);
+            guessScore = (int) ((scoreMatrix) * Constants.MAX_SCORE_GUESS);
         }
         this.scoreGuess = guessScore;
         Log.d("guessScore", String.valueOf(guessScore));
@@ -91,8 +99,24 @@ public class GameMgr implements Serializable {
         return scoreGuess;
     }
 
+    //// Related to node information
 
+    public void updateNodeInformation(String nodeName, int radius, ImageView imageView) {
+        this.setRadiusOfNodes(radius);
+        for (Node node : this.nodeList) {
+            if (node.getName().equalsIgnoreCase(nodeName)) {
+                node.setNodeImage(imageView);
+            }
+        }
+    }
 
+    public int getRadiusOfNodes() {
+        return radiusOfNodes;
+    }
+
+    public void setRadiusOfNodes(int radiusOfNodes) {
+        this.radiusOfNodes = radiusOfNodes;
+    }
 
     public void setStartNode(String startNode) {
         this.startNode = startNode;
@@ -120,7 +144,7 @@ public class GameMgr implements Serializable {
 
     public void dropImageViewsAfterGameEnd() {
         // Because ImageView is not serializable (For convenience sake)
-        for (Node node: nodeList) {
+        for (Node node: this.nodeList) {
             node.setNodeImage(null);
         }
     }
@@ -390,7 +414,71 @@ public class GameMgr implements Serializable {
         return new int[]{boundWidth, boundHeight};
     }
 
+    /**
+     * Create circles and display them on a relative layout.
+     * @param connectDotActivity To get resources of activity
+     */
+    public void createCircles(Activity connectDotActivity) {
 
+        ArrayList<Node> nodesListIn = this.nodeList;
 
+        int noOfNodes = nodesListIn.size();
+        Log.d("Initialization", String.format("Node Size of scaledNodes: %d", nodesListIn.size()));
+
+        String nodeName;
+        float diameter = this.getDiameterForNodes(nodesListIn);
+
+        // Styling Code
+        Paint nodePaint = new Paint();
+        int nodeColor = Color.rgb(0, 150, 150);
+        nodePaint.setColor(nodeColor);
+        nodePaint.setStyle(Paint.Style.FILL_AND_STROKE);
+
+        Paint nodeTextPaint = new Paint();
+        int textColor = Color.rgb(0, 0, 0); // Black
+        nodeTextPaint.setColor(textColor);
+        nodeTextPaint.setTextSize(diameter / 2);
+        nodeTextPaint.setAntiAlias(true);
+        nodeTextPaint.setTextAlign(Paint.Align.CENTER);
+        nodeTextPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+
+        // Iterate through scaled node list to create circle.
+        for (int i = 1; i <= noOfNodes; i++) {
+            Node currentNode = nodesListIn.get(i - 1);
+
+            nodeName = currentNode.getName();
+            Log.d("Scaling", "Diameter: " + String.valueOf(diameter));
+
+            // Set first and last nodes
+            int currentNodeNumber = Integer.valueOf(nodeName);
+            if (currentNodeNumber == 1) {
+                this.setStartNode(currentNode.getName());
+            } else if (currentNodeNumber == nodesListIn.size()) {
+                this.setEndNode(currentNode.getName());
+            }
+
+            int diameterInInt = Math.round(diameter); // Since bitmap only except integer
+            float ecfHalfDiameter = (diameterInInt / 2f); // Error carry forward from rounding of diameter
+
+            // Create bitmap based on diameter required for circle
+            Bitmap bmp = Bitmap.createBitmap(diameterInInt, diameterInInt, Bitmap.Config.ARGB_8888); // Draws the white color part
+            Canvas canvas = new Canvas(bmp);
+
+            // Draw Circle & Text
+            float startingPositionOnBitMapX = ecfHalfDiameter;
+            float startingPositionOnBitMapY = ecfHalfDiameter;
+
+            canvas.drawCircle(ecfHalfDiameter, ecfHalfDiameter, ecfHalfDiameter, nodePaint); // Parameter: center of x on bitmap, center of y on bitmap, radius size, dotPaint style
+            canvas.drawText(nodeName, startingPositionOnBitMapX, startingPositionOnBitMapY, nodeTextPaint);
+
+            // Convert circle and draw to drawable and set to image view
+            Drawable drawable = new BitmapDrawable(connectDotActivity.getResources(), bmp);
+            ImageView imgView = new ImageView(connectDotActivity);
+            imgView.setImageDrawable(drawable);
+
+            // Update attributes of existing nodes: radius, image
+            this.updateNodeInformation(nodeName, diameterInInt / 2, imgView);
+        }
+    }
 
 }

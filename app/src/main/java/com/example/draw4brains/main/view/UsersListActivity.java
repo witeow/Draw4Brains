@@ -12,6 +12,7 @@ import android.widget.SearchView;
 
 import com.example.draw4brains.R;
 import com.example.draw4brains.games.connectthedots.model.Score;
+import com.example.draw4brains.games.connectthedots.view.StatisticsPageActivity;
 import com.example.draw4brains.main.controller.AdminController;
 import com.example.draw4brains.main.controller.DatabaseMgr;
 import com.example.draw4brains.main.model.User;

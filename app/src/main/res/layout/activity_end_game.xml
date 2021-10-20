@@ -1,78 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/Draw4Brain_MainBG">
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="350dp"
-        android:layout_height="320dp"
-        android:layout_marginTop="24dp"
-        android:src="@drawable/logo"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_marginTop="30dp"
+        android:src="@drawable/connect_dot_logo"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tv_end_game"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="==== Game Score ===="
-        android:textSize="25dp"
+        android:text="=== Connect-The-Dot ==="
+        android:gravity="center"
+        android:textSize="30dp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        tools:layout_editor_absoluteX="46dp" />
+
 
     <TextView
         android:id="@+id/connectDotScoreTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Connect Dot Score"
-        android:textSize="18dp"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:gravity="center"
+        android:text="Connect Score"
+        android:textSize="25dp"
+        app:layout_constraintBottom_toTopOf="@+id/btn_main_menu"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_end_game" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_end_game"
+        app:layout_constraintVertical_bias="0.075" />
 
     <TextView
         android:id="@+id/connectDotScoreText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginVertical="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="24dp"
+        android:gravity="center"
+        android:layout_marginTop="12dp"
         android:text="Dot Text"
-        android:textSize="14dp"
+        android:textSize="20dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/connectDotScoreTitle" />
 
     <TextView
         android:id="@+id/guessScoreTitle"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="16dp"
+        android:layout_marginVertical="20dp"
+        android:gravity="center"
         android:text="GuessImage Score"
-        android:textSize="18dp"
+        android:textSize="25dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.511"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/connectDotScoreText" />
 
+
     <TextView
         android:id="@+id/guessScoreText"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="8dp"
+        android:layout_marginTop="12dp"
+        android:gravity="center"
         android:text="GuessText"
-        android:textSize="14dp"
+        android:textSize="20dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/guessScoreTitle" />
+
+    <TextView
+        android:id="@+id/total_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Total Text"
+        android:textSize="20dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/total_title" />
+
+
+    <TextView
+        android:id="@+id/total_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="20dp"
+        android:text="Total Score"
+        android:textSize="25dp"
+        android:gravity="center"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/guessScoreText" />
+
 
     <Button
         android:id="@+id/btn_main_menu"
@@ -83,6 +116,7 @@
         android:text="RETURN TO MAIN MENU"
         android:textColor="@color/black"
         android:textStyle="bold"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

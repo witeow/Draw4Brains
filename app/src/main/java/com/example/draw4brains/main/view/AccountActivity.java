@@ -6,15 +6,27 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.draw4brains.R;
+import com.example.draw4brains.games.connectthedots.model.Score;
 import com.example.draw4brains.main.controller.AuthenticationMgr;
 import com.example.draw4brains.main.controller.MasterMgr;
 
 public class AccountActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private TextView tvEmail, tvName, tvBirthday, tvPhone;
+    private LinearLayout linearLayout;
+    private TextView tvName;
+    private TextView tvGender;
+    private TextView tvBirthday;
+    private TextView tvPhone;
+    private TextView tvHouseNum;
+    private TextView tvAddress;
+    private TextView tvEmail;
+    private TextView tvCaretakerEmail;
+    private TextView tvNextOfKinName;
+    private TextView tvNextOfKinNum;
     private ImageButton btnBack, btnLogout;
     private Intent intent;
     private AuthenticationMgr authenticationMgr;
@@ -30,11 +42,18 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
 
         // Initialize XML Elements to use
         btnBack = findViewById(R.id.btn_back);
-        tvEmail = findViewById(R.id.tv_email);
+        btnLogout = findViewById(R.id.btn_logout);
+        linearLayout = findViewById(R.id.linear_layout_account);
         tvName = findViewById(R.id.tv_name);
+        tvGender = findViewById(R.id.tv_gender);
         tvBirthday = findViewById(R.id.tv_birthday);
         tvPhone = findViewById(R.id.tv_phone);
-        btnLogout = findViewById(R.id.btn_logout);
+        tvHouseNum = findViewById(R.id.tv_house_num);
+        tvAddress = findViewById(R.id.tv_address);
+        tvEmail = findViewById(R.id.tv_email);
+        tvCaretakerEmail = findViewById(R.id.tv_caretaker_email);
+        tvNextOfKinName = findViewById(R.id.tv_nok_name);
+        tvNextOfKinNum = findViewById(R.id.tv_nok_num);
 
         // Set listeners
         btnBack.setOnClickListener(this);
@@ -44,16 +63,38 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         if (authenticationMgr.isCurrentlyAdmin()) {
 
             // Display information of admin
-            tvEmail.setText(authenticationMgr.getCurrentAdmin().getEmailAddress());
             tvName.setText(authenticationMgr.getCurrentAdmin().getAdminName());
-            tvBirthday.setText("Not available");
             tvPhone.setText(authenticationMgr.getCurrentAdmin().getPhoneNo());
+            tvEmail.setText(authenticationMgr.getCurrentAdmin().getEmailAddress());
+
+            linearLayout.removeView(tvGender);
+            linearLayout.removeView(tvBirthday);
+            linearLayout.removeView(tvHouseNum);
+            linearLayout.removeView(tvAddress);
+            linearLayout.removeView(tvCaretakerEmail);
+            linearLayout.removeView(tvNextOfKinName);
+            linearLayout.removeView(tvNextOfKinNum);
+
+            linearLayout.removeView(findViewById(R.id.tv_gender_title));
+            linearLayout.removeView(findViewById(R.id.tv_birthday_title));
+            linearLayout.removeView(findViewById(R.id.tv_house_num_title));
+            linearLayout.removeView(findViewById(R.id.tv_address_title));
+            linearLayout.removeView(findViewById(R.id.tv_caretaker_email_title));
+            linearLayout.removeView(findViewById(R.id.tv_nok_name_title));
+            linearLayout.removeView(findViewById(R.id.tv_nok_num_title));
+
         } else {
             // Display information of normal user
-            tvEmail.setText(authenticationMgr.getCurrentUser().getEmailAddress());
             tvName.setText(authenticationMgr.getCurrentUser().getUserName());
+            tvGender.setText(authenticationMgr.getCurrentUser().getGender());
             tvBirthday.setText(authenticationMgr.getCurrentUser().getBirthday());
             tvPhone.setText(authenticationMgr.getCurrentUser().getPhoneNo());
+            tvHouseNum.setText(authenticationMgr.getCurrentUser().getHouseNo());
+            tvAddress.setText(authenticationMgr.getCurrentUser().getAddress());
+            tvEmail.setText(authenticationMgr.getCurrentUser().getEmailAddress());
+            tvCaretakerEmail.setText(authenticationMgr.getCurrentUser().getCaretaker_email());
+            tvNextOfKinName.setText(authenticationMgr.getCurrentUser().getNokName());
+            tvNextOfKinNum.setText(authenticationMgr.getCurrentUser().getNokNum());
         }
 
     }
