@@ -149,9 +149,9 @@ public class StatisticsPageActivity extends AppCompatActivity implements View.On
                 buttonMed.setBackgroundColor(Color.argb(100, 203, 58, 103));
                 buttonHard.setBackgroundColor(Color.argb(100, 203, 58, 103));
 
-                latestThreeDotScore.setText("Last 3 Dots Score: " + easyDot);
-                latestThreeGuessScore.setText("Last 3 Guess Score: " + easyGuess);
-                gamesPlayed.setText("Games: " + easyGame);
+                latestThreeDotScore.setText("Last 3 Dots Score: \n" + easyDot);
+                latestThreeGuessScore.setText("Last 3 Guess Score: \n" + easyGuess);
+                gamesPlayed.setText("Games: \n" + easyGame);
                 tScore.setText(Integer.toString(avgScoreEasy));
                 tGamesPlayed.setText(Integer.toString(easyGamesPlayed));
                 break;
@@ -160,9 +160,9 @@ public class StatisticsPageActivity extends AppCompatActivity implements View.On
                 buttonEasy.setBackgroundColor(Color.argb(100, 203, 58, 103));
                 buttonHard.setBackgroundColor(Color.argb(100, 203, 58, 103));
 
-                latestThreeDotScore.setText("Last 3 Dots Score: " + mediumDot);
-                latestThreeGuessScore.setText("Last 3 Guess Score: " + mediumGuess);
-                gamesPlayed.setText("Games: " + mediumGame);
+                latestThreeDotScore.setText("Last 3 Dots Score: \n" + mediumDot);
+                latestThreeGuessScore.setText("Last 3 Guess Score: \n" + mediumGuess);
+                gamesPlayed.setText("Games: \n" + mediumGame);
                 tScore.setText(Integer.toString(avgScoreMedium));
                 tGamesPlayed.setText(Integer.toString(mediumGamesPlayed));
                 break;
@@ -171,9 +171,9 @@ public class StatisticsPageActivity extends AppCompatActivity implements View.On
                 buttonMed.setBackgroundColor(Color.argb(100, 203, 58, 103));
                 buttonEasy.setBackgroundColor(Color.argb(100, 203, 58, 103));
 
-                latestThreeDotScore.setText("Last 3 Dots Score: " + hardDot);
-                latestThreeGuessScore.setText("Last 3 Guess Score: " + hardGuess);
-                gamesPlayed.setText("Games: " + hardGame);
+                latestThreeDotScore.setText("Last 3 Dots Score: \n" + hardDot);
+                latestThreeGuessScore.setText("Last 3 Guess Score: \n" + hardGuess);
+                gamesPlayed.setText("Games: \n" + hardGame);
                 tScore.setText(Integer.toString(avgScoreHard));
                 tGamesPlayed.setText(Integer.toString(hardGamesPlayed));
                 break;

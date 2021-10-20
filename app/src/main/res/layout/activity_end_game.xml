@@ -15,96 +15,111 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/tv_end_game"/>
 
     <TextView
         android:id="@+id/tv_end_game"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="=== Connect-The-Dot ==="
         android:gravity="center"
+        android:text="=== Connect-The-Dot ==="
         android:textSize="30dp"
         android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
-        tools:layout_editor_absoluteX="46dp" />
-
-
-    <TextView
-        android:id="@+id/connectDotScoreTitle"
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:gravity="center"
-        android:text="Connect Score"
-        android:textSize="25dp"
-        app:layout_constraintBottom_toTopOf="@+id/btn_main_menu"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_end_game"
-        app:layout_constraintVertical_bias="0.075" />
-
-    <TextView
-        android:id="@+id/connectDotScoreText"
-        android:layout_width="match_parent"
-        android:layout_height="24dp"
-        android:gravity="center"
-        android:layout_marginTop="12dp"
-        android:text="Dot Text"
-        android:textSize="20dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.504"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/connectDotScoreTitle" />
+        app:layout_constraintTop_toBottomOf="@id/imageView"
+        app:layout_constraintBottom_toTopOf="@id/cl_score"/>
 
-    <TextView
-        android:id="@+id/guessScoreTitle"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_score"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="20dp"
-        android:gravity="center"
-        android:text="GuessImage Score"
-        android:textSize="25dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@color/biege"
+        android:layout_marginHorizontal="32dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/connectDotScoreText" />
-
-
-    <TextView
-        android:id="@+id/guessScoreText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:gravity="center"
-        android:text="GuessText"
-        android:textSize="20dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/guessScoreTitle" />
+        app:layout_constraintTop_toBottomOf="@id/tv_end_game"
+        app:layout_constraintBottom_toTopOf="@id/btn_main_menu">
 
-    <TextView
-        android:id="@+id/total_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="Total Text"
-        android:textSize="20dp"
-        android:layout_marginTop="12dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/total_title" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="10dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:gravity="center"
+            app:layout_constraintBottom_toBottomOf="parent">
 
+            <TextView
+                android:id="@+id/connectDotScoreTitle"
+                android:layout_width="match_parent"
+                android:padding="7dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:background="@color/sky_blue"
+                android:text="Connect Score"
+                android:textSize="20dp" />
 
-    <TextView
-        android:id="@+id/total_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginVertical="20dp"
-        android:text="Total Score"
-        android:textSize="25dp"
-        android:gravity="center"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/guessScoreText" />
+            <TextView
+                android:id="@+id/connectDotScoreText"
+                android:layout_width="match_parent"
+                android:padding="7dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:background="@color/light_grey"
+                android:text="Dot Text"
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/guessScoreTitle"
+                android:layout_width="match_parent"
+                android:padding="7dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:background="@color/sky_blue"
+                android:text="GuessImage Score"
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/guessScoreText"
+                android:layout_width="match_parent"
+                android:padding="7dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:background="@color/light_grey"
+                android:text="GuessText"
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/total_title"
+                android:layout_width="match_parent"
+                android:padding="7dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:background="@color/sky_blue"
+                android:text="Total Score"
+                android:textSize="20dp"
+                />
+
+            <TextView
+                android:id="@+id/total_text"
+                android:layout_width="match_parent"
+                android:padding="7dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:background="@color/light_grey"
+                android:text="Total Text"
+                android:textSize="20dp" />
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     <Button

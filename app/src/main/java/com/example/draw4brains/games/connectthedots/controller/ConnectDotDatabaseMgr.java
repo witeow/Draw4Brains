@@ -1,27 +1,35 @@
 package com.example.draw4brains.games.connectthedots.controller;
 
+import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.example.draw4brains.games.connectthedots.model.ConnectDots;
 import com.example.draw4brains.games.connectthedots.model.Node;
 import com.example.draw4brains.games.connectthedots.model.Score;
 import com.example.draw4brains.main.controller.MasterMgr;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class ConnectDotDatabaseMgr {
 
+    private FirebaseStorage firebaseStorage;
+
     public ConnectDotDatabaseMgr() {
     }
+
     ;
 
 
@@ -36,6 +44,10 @@ public class ConnectDotDatabaseMgr {
 
     public interface onCompleteDataLoad {
         void onComplete(ArrayList<Node> preprocessedNodes, String[] cordString, int gameLevel);
+    }
+
+    public interface onCompleteGetImageURL{
+        void onComplete(Uri url);
     }
 
 
@@ -220,5 +232,17 @@ public class ConnectDotDatabaseMgr {
         score.setGamesPlayed(newNumPlayed);
         score.setDots(newDots);
         score.setDots(newGuess);
+    }
+
+    public void loadImageFromDatabase(GameMgr gameMgr, onCompleteGetImageURL completeGetImageURL) {
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        storage.getReferenceFromUrl(gameMgr.getConnectDotsLevelObject().getStorageStringRef())
+                .getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
+                Uri url = task.getResult();
+                completeGetImageURL.onComplete(url);
+            }
+        });
     }
 }

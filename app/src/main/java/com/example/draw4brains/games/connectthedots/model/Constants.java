@@ -17,4 +17,7 @@ public final class Constants {
     public static final float MAX_SCORE_GUESS = 50f;
     public static final int NO_OF_GUESSES_ALLOWED = 5;
     public static final double AVERAGE_TIME_PER_LETTER = 2.0;
+
+    // Firebase URLs
+    public static final String FIREBASE_STORAGE_URL = "gs://draw4brains.appspot.com/";
 }

@@ -228,6 +228,7 @@ public class ConnectDotsActivity extends AppCompatActivity implements View.OnCli
                         intent = new Intent(ConnectDotsActivity.this, GuessImageActivity.class);
                         gameMgr.dropImageViewsAfterGameEnd();
                         intent.putExtra(Constants.INTENT_KEY_GAME_MANAGER, gameMgr);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
                     } else {
                         // Update nodes
@@ -249,4 +250,11 @@ public class ConnectDotsActivity extends AppCompatActivity implements View.OnCli
         }
         return true;
     }
+
+    @Override
+    public void onBackPressed()
+    {
+        // super.onBackPressed(); // Comment this super call to avoid calling finish() or fragmentmanager's backstack pop operation.
+    }
+
 }

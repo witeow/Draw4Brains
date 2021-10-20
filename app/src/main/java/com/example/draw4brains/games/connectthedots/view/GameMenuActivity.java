@@ -130,12 +130,11 @@ public class GameMenuActivity extends AppCompatActivity implements View.OnClickL
             @Override
             public void onComplete(ArrayList<Node> preprocessedNodes, String[] cordString, int gameLevel) {
                 // Load game level object to ConenctDot attribute inside gameMgr and change activity.
-                Log.d("ArrayNode", preprocessedNodes.toString());
+                // Save image URL for guess part
                 String gameName = gameMgr.getLevelInfo().getGameName();
-                String storageUrl = ConnectDots.firebaseStorageUrl + gameName + ".jpg";
+                String storageUrl = Constants.FIREBASE_STORAGE_URL + gameName + ".jpg";
                 ConnectDots levelObject = new ConnectDots(gameName, cordString, gameLevel, storageUrl);
                 gameMgr.setConnectDotsLevelObject(levelObject);
-                Log.d("ConnectDotsgameName", levelObject.getStorageStringRef());
                 gameMgr.setNodeList(preprocessedNodes); // Get from database first but cannot scale yet
                 Intent intent = new Intent(GameMenuActivity.this, ConnectDotsActivity.class);
                 intent.putExtra(Constants.INTENT_KEY_GAME_MANAGER, gameMgr);

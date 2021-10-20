@@ -8,6 +8,30 @@ import com.google.firebase.storage.StorageReference;
 import java.io.Serializable;
 
 public class ConnectDots implements Serializable {
+
+    private String imageName;
+    private ImageView imageDisplay;
+    private String[] dotsArray;
+    private Integer level;
+    private String storageStringRef;
+
+    public Node[] getNodesArray() {
+        return nodesArray;
+    }
+
+    public void setNodesArray(Node[] nodesArray) {
+        this.nodesArray = nodesArray;
+    }
+
+    private Node[] nodesArray;
+
+//    public static String firebaseStorageUrl = "gs://draw4brains.appspot.com/";
+//    public static String firebaseDbUrl = "https://draw4brains-default-rtdb.asia-southeast1.firebasedatabase.app/";
+//    public static FirebaseStorage storage = FirebaseStorage.getInstance();
+//    public static StorageReference storageReference;
+
+    private static ConnectDots DotsInstance = new ConnectDots();
+
     public String getImageName() {
         return imageName;
     }
@@ -48,30 +72,6 @@ public class ConnectDots implements Serializable {
         this.storageStringRef = storageStringRef;
     }
 
-    private String imageName;
-    private ImageView imageDisplay;
-    private String[] dotsArray;
-    private Integer level;
-    private String storageStringRef;
-
-    public Node[] getNodesArray() {
-        return nodesArray;
-    }
-
-    public void setNodesArray(Node[] nodesArray) {
-        this.nodesArray = nodesArray;
-    }
-
-    private Node[] nodesArray;
-
-    public static String firebaseStorageUrl = "gs://draw4brains.appspot.com/";
-    public static String firebaseDbUrl = "https://draw4brains-default-rtdb.asia-southeast1.firebasedatabase.app/";
-    public static FirebaseStorage storage = FirebaseStorage.getInstance();
-    public static StorageReference storageReference;
-
-
-    private static ConnectDots DotsInstance = new ConnectDots();
-
     /**
      * Constructor for Schedule class.
      * Made private.
@@ -90,16 +90,11 @@ public class ConnectDots implements Serializable {
 
     /**
      * Used to get the instance of schedule.
+     *
      * @return the one schedule instance in the application
      */
     public static ConnectDots getInstance() {
         return DotsInstance;
     }
 
-
-    /*URL iconURL = new URL("");
-    // iconURL is null when not found
-    ImageIcon icon = new ImageIcon(iconURL);
-    Image i = icon.getImage();
-     */
 }
