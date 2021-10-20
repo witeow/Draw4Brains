@@ -53,15 +53,15 @@ public class StatisticsPageActivity extends AppCompatActivity implements View.On
 
         easyDotArray = score.getDots().get(score.getGameDifficulty().indexOf("easy"));
         easyGamesPlayed = score.getGamesPlayed().get(score.getGameDifficulty().indexOf("easy"));
-        easyGuessArray = score.getDots().get(score.getGameDifficulty().indexOf("easy"));
+        easyGuessArray = score.getGuess().get(score.getGameDifficulty().indexOf("easy"));
 
         mediumDotArray = score.getDots().get(score.getGameDifficulty().indexOf("medium"));
         mediumGamesPlayed = score.getGamesPlayed().get(score.getGameDifficulty().indexOf("medium"));
-        mediumGuessArray = score.getDots().get(score.getGameDifficulty().indexOf("medium"));
+        mediumGuessArray = score.getGuess().get(score.getGameDifficulty().indexOf("medium"));
 
         hardDotArray = score.getDots().get(score.getGameDifficulty().indexOf("hard"));
         hardGamesPlayed = score.getGamesPlayed().get(score.getGameDifficulty().indexOf("hard"));
-        hardGuessArray = score.getDots().get(score.getGameDifficulty().indexOf("hard"));
+        hardGuessArray = score.getGuess().get(score.getGameDifficulty().indexOf("hard"));
 
         // Get avg score for easy difficulty level
         if (easyGamesPlayed != 0) {
@@ -124,9 +124,9 @@ public class StatisticsPageActivity extends AppCompatActivity implements View.On
 
 
         // Default is easy
-        latestThreeDotScore.setText("Last 3 Dots Score: " + easyDot);
-        latestThreeGuessScore.setText("Last 3 Guess Score: " + easyGuess);
-        gamesPlayed.setText("Games: " + easyGame);
+        latestThreeDotScore.setText("Last 3 Dots Score: \n" + easyDot);
+        latestThreeGuessScore.setText("Last 3 Guess Score: \n" + easyGuess);
+        gamesPlayed.setText("Games: \n" + easyGame);
         tScore.setText(Integer.toString(avgScoreEasy));
         tGamesPlayed.setText(Integer.toString(easyGamesPlayed));
         tName.setText(Name);
