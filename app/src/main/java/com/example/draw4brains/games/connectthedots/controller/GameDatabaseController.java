@@ -6,10 +6,9 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.example.draw4brains.games.connectthedots.model.ConnectDots;
-import com.example.draw4brains.games.connectthedots.model.Node;
-import com.example.draw4brains.games.connectthedots.model.Score;
-import com.example.draw4brains.main.controller.MasterMgr;
+import com.example.draw4brains.games.connectthedots.object.Node;
+import com.example.draw4brains.games.connectthedots.object.Score;
+import com.example.draw4brains.main.controller.MasterController;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
@@ -23,11 +22,11 @@ import com.google.firebase.storage.FirebaseStorage;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class ConnectDotDatabaseMgr {
+public class GameDatabaseController {
 
     private FirebaseStorage firebaseStorage;
 
-    public ConnectDotDatabaseMgr() {
+    public GameDatabaseController() {
     }
 
     ;
@@ -130,8 +129,8 @@ public class ConnectDotDatabaseMgr {
     }
 
 
-    public void loadNodeData(GameMgr currentGameManagerInstance, onCompleteDataLoad completeDataLoad) {
-        Log.d("LoadNode", "Inside function loadNodeData-DatabaseMgr");
+    public void loadNodeData(GameController currentGameManagerInstance, onCompleteDataLoad completeDataLoad) {
+        Log.d("LoadNode", "Inside function loadNodeData-DatabaseController");
         ArrayList<Node> preprocessedArray = new ArrayList<Node>();
         DatabaseReference dotsDb = FirebaseDatabase.getInstance("https://draw4brains-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("ConnectDots");
         String gameName = currentGameManagerInstance.getLevelInfo().getGameName();
@@ -197,15 +196,15 @@ public class ConnectDotDatabaseMgr {
         query.addListenerForSingleValueEvent(newTest);
     }
 
-    public void updateScore(GameMgr gameMgr, String currentDotScore, String currentGuessScore) {
+    public void updateScore(GameController gameController, String currentDotScore, String currentGuessScore) {
         FirebaseDatabase userDb = FirebaseDatabase.getInstance("https://draw4brains-default-rtdb.asia-southeast1.firebasedatabase.app/");
-        Score score = MasterMgr.authenticationMgr.getCurrentUser().getScore();
+        Score score = MasterController.authenticationController.getCurrentUser().getScore();
         DatabaseReference userRef = userDb.getReference("Score").child(score.getUserId())
-                .child(gameMgr.getLevelInfo().getGameType())
-                .child(gameMgr.getLevelInfo().getGameDifficulty());
+                .child(gameController.getLevelInfo().getGameType())
+                .child(gameController.getLevelInfo().getGameDifficulty());
 
 
-        Integer diffucultyIndex = score.getGameDifficulty().indexOf(gameMgr.getLevelInfo().getGameDifficulty());
+        Integer diffucultyIndex = score.getGameDifficulty().indexOf(gameController.getLevelInfo().getGameDifficulty());
 
         ArrayList<Integer> newNumPlayed = score.getGamesPlayed();
         ArrayList<ArrayList<String>> newDots = score.getDots();
@@ -234,9 +233,9 @@ public class ConnectDotDatabaseMgr {
         score.setDots(newGuess);
     }
 
-    public void loadImageFromDatabase(GameMgr gameMgr, onCompleteGetImageURL completeGetImageURL) {
+    public void loadImageFromDatabase(GameController gameController, onCompleteGetImageURL completeGetImageURL) {
         FirebaseStorage storage = FirebaseStorage.getInstance();
-        storage.getReferenceFromUrl(gameMgr.getConnectDotsLevelObject().getStorageStringRef())
+        storage.getReferenceFromUrl(gameController.getConnectDotsLevelObject().getStorageStringRef())
                 .getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
             @Override
             public void onComplete(@NonNull Task<Uri> task) {

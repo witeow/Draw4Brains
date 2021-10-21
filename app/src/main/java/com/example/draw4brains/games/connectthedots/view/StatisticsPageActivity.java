@@ -10,7 +10,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.draw4brains.R;
-import com.example.draw4brains.games.connectthedots.model.Score;
+import com.example.draw4brains.games.connectthedots.object.Score;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;

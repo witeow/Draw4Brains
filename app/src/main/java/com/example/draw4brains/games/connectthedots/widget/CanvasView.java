@@ -1,4 +1,4 @@
-package com.example.draw4brains.games.connectthedots.view;
+package com.example.draw4brains.games.connectthedots.widget;
 
 import android.content.Context;
 import android.graphics.Bitmap;

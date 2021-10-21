@@ -4,35 +4,28 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.draw4brains.R;
-import com.example.draw4brains.games.connectthedots.controller.ConnectDotDatabaseMgr;
-import com.example.draw4brains.games.connectthedots.controller.GameMgr;
-import com.example.draw4brains.games.connectthedots.model.Constants;
-import com.example.draw4brains.main.controller.AuthenticationMgr;
-import com.example.draw4brains.main.controller.MasterMgr;
-import com.example.draw4brains.games.connectthedots.model.Score;
-import com.example.draw4brains.main.view.UserHomeActivity;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
-import java.util.ArrayList;
+import com.example.draw4brains.games.connectthedots.controller.GameController;
+import com.example.draw4brains.games.connectthedots.controller.GameDatabaseController;
+import com.example.draw4brains.games.connectthedots.object.Constants;
+import com.example.draw4brains.main.controller.AuthenticationController;
+import com.example.draw4brains.main.controller.MasterController;
 
 public class EndGameActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Button btnMainMenu;
     private TextView dotScore, guessScore, totalScore;
     Intent intent;
-    AuthenticationMgr authenticationMgr;
+    AuthenticationController authenticationController;
     String currentDotScoreString, currentGuessScoreString;
 
-    ConnectDotDatabaseMgr connectDotDatabaseMgr;
-    GameMgr gameMgr;
+    GameDatabaseController gameDatabaseController;
+    GameController gameController;
 
     private static final Class REFERENCE_TO_USER_HOME = com.example.draw4brains.main.view.UserHomeActivity.class;
 
@@ -43,27 +36,27 @@ public class EndGameActivity extends AppCompatActivity implements View.OnClickLi
         setContentView(R.layout.activity_end_game);
 
         // Get reference to controller classes needed.
-        authenticationMgr = MasterMgr.authenticationMgr;
-        connectDotDatabaseMgr = new ConnectDotDatabaseMgr();
+        authenticationController = MasterController.authenticationController;
+        gameDatabaseController = new GameDatabaseController();
 
 
         intent = getIntent();
-        gameMgr = (GameMgr) intent.getSerializableExtra(Constants.INTENT_KEY_GAME_MANAGER);
-        Log.d("scoreMgrDots", String.valueOf(gameMgr.getConnectScore()));
-        Log.d("scoreMgrDots", String.valueOf(gameMgr.getGuessScore()));
+        gameController = (GameController) intent.getSerializableExtra(Constants.INTENT_KEY_GAME_MANAGER);
+        Log.d("scoreMgrDots", String.valueOf(gameController.getConnectScore()));
+        Log.d("scoreMgrDots", String.valueOf(gameController.getGuessScore()));
 
         dotScore = findViewById(R.id.connectDotScoreText);
         guessScore = findViewById(R.id.guessScoreText);
         totalScore = findViewById(R.id.total_text);
-        currentDotScoreString = String.valueOf(gameMgr.getConnectScore());
-        currentGuessScoreString = String.valueOf(gameMgr.getGuessScore());
+        currentDotScoreString = String.valueOf(gameController.getConnectScore());
+        currentGuessScoreString = String.valueOf(gameController.getGuessScore());
 
         Log.d("currentDotScore", currentDotScoreString);
         Log.d("currentGuessScore", currentGuessScoreString);
 
         dotScore.setText(currentDotScoreString + "/" + String.valueOf((int) Constants.MAX_SCORE_CONNECT_DOT));
         guessScore.setText(currentGuessScoreString + "/" + String.valueOf((int) Constants.MAX_SCORE_GUESS));
-        totalScore.setText(String.valueOf(gameMgr.getConnectScore() + gameMgr.getGuessScore() + "/" +
+        totalScore.setText(String.valueOf(gameController.getConnectScore() + gameController.getGuessScore() + "/" +
                 String.valueOf((int) (Constants.MAX_SCORE_GUESS + Constants.MAX_SCORE_CONNECT_DOT))));
         btnMainMenu = findViewById(R.id.btn_main_menu);
         btnMainMenu.setOnClickListener(this);
@@ -83,7 +76,7 @@ public class EndGameActivity extends AppCompatActivity implements View.OnClickLi
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_main_menu:
-                connectDotDatabaseMgr.updateScore(gameMgr, currentDotScoreString, currentGuessScoreString);
+                gameDatabaseController.updateScore(gameController, currentDotScoreString, currentGuessScoreString);
                 intent = new Intent(EndGameActivity.this, REFERENCE_TO_USER_HOME);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);

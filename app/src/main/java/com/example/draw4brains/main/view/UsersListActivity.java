@@ -11,10 +11,10 @@ import android.widget.ListView;
 import android.widget.SearchView;
 
 import com.example.draw4brains.R;
-import com.example.draw4brains.games.connectthedots.model.Score;
+import com.example.draw4brains.games.connectthedots.object.Score;
 import com.example.draw4brains.games.connectthedots.view.StatisticsPageActivity;
 import com.example.draw4brains.main.controller.AdminController;
-import com.example.draw4brains.main.controller.DatabaseMgr;
+import com.example.draw4brains.main.controller.DatabaseController;
 import com.example.draw4brains.main.model.User;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -49,9 +49,9 @@ public class UsersListActivity extends AppCompatActivity {
         lvUsers = (ListView) findViewById(R.id.lv_users);
         lvUsers.setEmptyView(findViewById(R.id.tv_empty));
 
-        DatabaseMgr databaseMgr = new DatabaseMgr();
+        DatabaseController databaseController = new DatabaseController();
 
-        databaseMgr.getUserScoreForList(UsersListActivity.this, lvUsers, new DatabaseMgr.callbackUserScoreForAdmin() {
+        databaseController.getUserScoreForList(UsersListActivity.this, lvUsers, new DatabaseController.callbackUserScoreForAdmin() {
             @Override
             public void onCallback(Score score, ArrayList<User> usersList, int position) {
                 Intent intent = new Intent(UsersListActivity.this, StatisticsPageActivity.class);

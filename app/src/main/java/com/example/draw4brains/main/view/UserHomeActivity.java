@@ -8,7 +8,6 @@ import android.widget.ImageButton;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.draw4brains.R;
-import com.example.draw4brains.main.controller.MasterMgr;
 
 public class UserHomeActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -50,7 +49,7 @@ public class UserHomeActivity extends AppCompatActivity implements View.OnClickL
                 startActivity(intent);
                 break;
             case R.id.btn_stats:
-                intent = new Intent(UserHomeActivity.this, SelectGameStatistic.class);
+                intent = new Intent(UserHomeActivity.this, GameStatisticActivity.class);
                 startActivity(intent);
                 break;
         }

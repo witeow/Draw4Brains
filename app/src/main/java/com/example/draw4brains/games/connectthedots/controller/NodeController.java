@@ -2,11 +2,11 @@ package com.example.draw4brains.games.connectthedots.controller;
 
 import android.widget.ImageView;
 
-import com.example.draw4brains.games.connectthedots.model.Node;
+import com.example.draw4brains.games.connectthedots.object.Node;
 
 import java.util.ArrayList;
 
-public class NodeMgr {
+public class NodeController {
 
 
     private ArrayList<Node> nodeOrder;
@@ -14,7 +14,7 @@ public class NodeMgr {
     private String startNode = null;
     private String endNode= null;
 
-    public NodeMgr() {
+    public NodeController() {
         nodeOrder = new ArrayList<>(); // Empty to be added
 //        nodeImages = new ArrayList<>(); // Empty to be added
     }

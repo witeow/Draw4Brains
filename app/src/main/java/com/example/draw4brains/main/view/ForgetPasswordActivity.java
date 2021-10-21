@@ -10,15 +10,15 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.draw4brains.R;
-import com.example.draw4brains.main.controller.MasterMgr;
-import com.example.draw4brains.main.controller.PasswordResetMgr;
+import com.example.draw4brains.main.controller.MasterController;
+import com.example.draw4brains.main.controller.PasswordResetController;
 
 public class ForgetPasswordActivity extends AppCompatActivity implements View.OnClickListener {
 
     private ImageButton btnReset, btnBack;
     private EditText etEmail;
     private Intent intent;
-    private PasswordResetMgr passwordResetMgr;
+    private PasswordResetController passwordResetController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +27,7 @@ public class ForgetPasswordActivity extends AppCompatActivity implements View.On
         setContentView(R.layout.activity_forget_password);
 
         // Get reference to controller classes needed.
-        passwordResetMgr = MasterMgr.passwordResetMgr;
+        passwordResetController = MasterController.passwordResetController;
 
         // Initialize XML Elements to use
         btnReset = findViewById(R.id.btn_reset);
@@ -59,7 +59,7 @@ public class ForgetPasswordActivity extends AppCompatActivity implements View.On
                 String email = etEmail.getText().toString().trim();
                 boolean isValid = checkFieldValid(email);
                 if (isValid) {
-                    passwordResetMgr.resetPassword(email);
+                    passwordResetController.resetPassword(email);
                     showToast("A reset link will be send if email exists!");
                     intent = new Intent(ForgetPasswordActivity.this, LoginActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

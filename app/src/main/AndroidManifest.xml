@@ -40,7 +40,7 @@
             android:name=".main.view.SelectGameActivity"
             android:exported="true" />
         <activity
-            android:name=".main.view.SelectGameStatistic"
+            android:name=".main.view.GameStatisticActivity"
             android:exported="true" />
         <activity
             android:name=".main.view.RegisterActivity"

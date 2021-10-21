@@ -1,4 +1,4 @@
-package com.example.draw4brains.games.connectthedots.model;
+package com.example.draw4brains.games.connectthedots.object;
 
 import java.io.Serializable;
 import java.util.ArrayList;

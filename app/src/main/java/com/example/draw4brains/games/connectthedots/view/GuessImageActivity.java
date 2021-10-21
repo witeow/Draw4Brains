@@ -1,6 +1,5 @@
 package com.example.draw4brains.games.connectthedots.view;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -18,15 +17,9 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 
 import com.example.draw4brains.R;
-import com.example.draw4brains.games.connectthedots.controller.ConnectDotDatabaseMgr;
-import com.example.draw4brains.games.connectthedots.controller.GameMgr;
-import com.example.draw4brains.games.connectthedots.model.ConnectDots;
-import com.example.draw4brains.games.connectthedots.model.Constants;
-import com.example.draw4brains.main.view.ForgetPasswordActivity;
-import com.example.draw4brains.main.view.LoginActivity;
-import com.example.draw4brains.main.view.RegisterActivity;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.example.draw4brains.games.connectthedots.controller.GameController;
+import com.example.draw4brains.games.connectthedots.controller.GameDatabaseController;
+import com.example.draw4brains.games.connectthedots.object.Constants;
 
 import java.util.Random;
 
@@ -37,12 +30,12 @@ public class GuessImageActivity extends AppCompatActivity implements View.OnClic
 
     Intent intent;
     ImageView guessImage;
-    GameMgr gameMgr;
+    GameController gameController;
     TextView answerTV;
     Button resetButton;
     Button submitButton;
     Button giveUp;
-    ConnectDotDatabaseMgr connectDotDatabaseMgr;
+    GameDatabaseController gameDatabaseController;
     Button buttonList[] = new Button[14];
 
     private int guessTrial;
@@ -57,7 +50,7 @@ public class GuessImageActivity extends AppCompatActivity implements View.OnClic
         setContentView(R.layout.activity_guess_image);
 
         // Link to relevant controller
-        connectDotDatabaseMgr = new ConnectDotDatabaseMgr();
+        gameDatabaseController = new GameDatabaseController();
 
         chronometer = findViewById(R.id.chronometer);
         guessImage = findViewById(R.id.guess_image);
@@ -73,20 +66,20 @@ public class GuessImageActivity extends AppCompatActivity implements View.OnClic
         giveUp.setOnClickListener(this);
 
         intent = getIntent();
-        gameMgr = (GameMgr) intent.getSerializableExtra(Constants.INTENT_KEY_GAME_MANAGER);
+        gameController = (GameController) intent.getSerializableExtra(Constants.INTENT_KEY_GAME_MANAGER);
 
 
         Log.d("SelectImage", "Enter Function");
-        Log.d("StringRef", gameMgr.getConnectDotsLevelObject().getStorageStringRef());
+        Log.d("StringRef", gameController.getConnectDotsLevelObject().getStorageStringRef());
 
-        connectDotDatabaseMgr.loadImageFromDatabase(gameMgr, new ConnectDotDatabaseMgr.onCompleteGetImageURL() {
+        gameDatabaseController.loadImageFromDatabase(gameController, new GameDatabaseController.onCompleteGetImageURL() {
             @Override
             public void onComplete(Uri url) {
                 Glide.with(getApplicationContext())
                         .load(url)
                         .fitCenter()
                         .into(guessImage); // Load into imageView
-                wordToGuess = gameMgr.getConnectDotsLevelObject().getImageName();
+                wordToGuess = gameController.getConnectDotsLevelObject().getImageName();
                 WORD_LENGTH = wordToGuess.length();
 
                 occupied = new boolean[WORD_LENGTH];
@@ -149,10 +142,10 @@ public class GuessImageActivity extends AppCompatActivity implements View.OnClic
                     Toast.makeText(GuessImageActivity.this, "Yay! You guessed it", Toast.LENGTH_SHORT).show();
                     Log.d("guessTime", String.valueOf(guessTime));
                     Log.d("guessTrial", String.valueOf(guessTrial));
-                    gameMgr.calculateGuessScore(guessTime, guessTrial, wordToGuess);
+                    gameController.calculateGuessScore(guessTime, guessTrial, wordToGuess);
                     Log.d("output", "toasting");
                     intent = new Intent(GuessImageActivity.this, EndGameActivity.class);
-                    intent.putExtra(Constants.INTENT_KEY_GAME_MANAGER, gameMgr);
+                    intent.putExtra(Constants.INTENT_KEY_GAME_MANAGER, gameController);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                 } else {
@@ -163,9 +156,9 @@ public class GuessImageActivity extends AppCompatActivity implements View.OnClic
                 }
                 break;
             case R.id.btn_give_up:
-                gameMgr.calculateGuessScore(99999999, 6, wordToGuess);
+                gameController.calculateGuessScore(99999999, 6, wordToGuess);
                 intent = new Intent(GuessImageActivity.this, EndGameActivity.class);
-                intent.putExtra(Constants.INTENT_KEY_GAME_MANAGER, gameMgr);
+                intent.putExtra(Constants.INTENT_KEY_GAME_MANAGER, gameController);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
                 break;

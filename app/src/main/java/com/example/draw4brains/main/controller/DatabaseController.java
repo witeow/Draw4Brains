@@ -11,8 +11,8 @@ import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 
-import com.example.draw4brains.games.connectthedots.controller.ConnectDotDatabaseMgr;
-import com.example.draw4brains.games.connectthedots.model.Score;
+import com.example.draw4brains.games.connectthedots.controller.GameDatabaseController;
+import com.example.draw4brains.games.connectthedots.object.Score;
 import com.example.draw4brains.main.model.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -24,9 +24,9 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class DatabaseMgr {
+public class DatabaseController {
 
-    ConnectDotDatabaseMgr connectDotDatabaseMgr = new ConnectDotDatabaseMgr();
+    GameDatabaseController gameDatabaseController = new GameDatabaseController();
 
     /**
      * Interface used to handle callBacks and manipulate Account objects

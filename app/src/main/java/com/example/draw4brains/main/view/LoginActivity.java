@@ -10,8 +10,8 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.example.draw4brains.R;
-import com.example.draw4brains.main.controller.AuthenticationMgr;
-import com.example.draw4brains.main.controller.MasterMgr;
+import com.example.draw4brains.main.controller.AuthenticationController;
+import com.example.draw4brains.main.controller.MasterController;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -22,7 +22,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private ImageButton btnLogin, btnForgotPW, btnRegister;
     private ToggleButton btnAccType;
     private Intent intent;
-    private AuthenticationMgr authenticationMgr;
+    private AuthenticationController authenticationController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +31,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_user_login);
 
         // Get reference to controller classes needed.
-        authenticationMgr = MasterMgr.authenticationMgr;
+        authenticationController = MasterController.authenticationController;
 
         // Initialize XML Elements to use
         email = findViewById(R.id.et_email);
@@ -99,7 +99,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             String emailString = email.getText().toString();
             String passwordString = password.getText().toString();
             boolean isAdmin = btnAccType.isChecked() ? true : false;
-            authenticationMgr.login(emailString, passwordString, isAdmin, new AuthenticationMgr.callBackOnLoginAttempt() {
+            authenticationController.login(emailString, passwordString, isAdmin, new AuthenticationController.callBackOnLoginAttempt() {
                 @Override
                 public void onSuccess(String message, boolean isAdmin) {
                     Toast.makeText(LoginActivity.this, message, Toast.LENGTH_SHORT).show();
@@ -111,7 +111,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         finish();
                     } else {
                         Log.d("UserDEBUG", "User has logged in!");
-                        Log.d("UserDEBUG", authenticationMgr.getCurrentUser().getAddress());
+                        Log.d("UserDEBUG", authenticationController.getCurrentUser().getAddress());
                         intent = new Intent(LoginActivity.this, UserHomeActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
@@ -156,6 +156,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onStart() {
         super.onStart();
         // Check if user is signed in already and then move to main screen, using the correct UI
-        authenticationMgr.signInIfAccountExist(LoginActivity.this);
+        authenticationController.signInIfAccountExist(LoginActivity.this);
     }
 }

@@ -26,7 +26,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 
-public class RegisterMgr {
+public class RegisterController {
 
     private FirebaseAuth auth;
     private FirebaseDatabase db;
@@ -37,7 +37,7 @@ public class RegisterMgr {
     Intent intent;
     private static String realtimedatabase = "https://draw4brains-default-rtdb.asia-southeast1.firebasedatabase.app/";
 
-    public RegisterMgr() {
+    public RegisterController() {
 
     }
 

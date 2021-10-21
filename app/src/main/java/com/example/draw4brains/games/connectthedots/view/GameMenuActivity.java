@@ -4,19 +4,18 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.draw4brains.R;
-import com.example.draw4brains.games.connectthedots.controller.ConnectDotDatabaseMgr;
-import com.example.draw4brains.games.connectthedots.controller.GameMgr;
-import com.example.draw4brains.games.connectthedots.model.ConnectDots;
-import com.example.draw4brains.games.connectthedots.model.Constants;
-import com.example.draw4brains.games.connectthedots.model.Level;
-import com.example.draw4brains.games.connectthedots.model.Node;
+import com.example.draw4brains.games.connectthedots.controller.GameController;
+import com.example.draw4brains.games.connectthedots.controller.GameDatabaseController;
+import com.example.draw4brains.games.connectthedots.object.ConnectDots;
+import com.example.draw4brains.games.connectthedots.object.Constants;
+import com.example.draw4brains.games.connectthedots.object.Level;
+import com.example.draw4brains.games.connectthedots.object.Node;
 import com.example.draw4brains.main.view.SelectGameActivity;
 
 import java.util.ArrayList;
@@ -29,7 +28,7 @@ public class GameMenuActivity extends AppCompatActivity implements View.OnClickL
     private TextView instructionTextView;
 
     Intent intent;
-    GameMgr gameMgr;
+    GameController gameController;
 
     private static final String GAME_TYPE = "connectDots";
     private static final String[] EASY_GAMES = new String[]{"seven", "house"};
@@ -39,7 +38,7 @@ public class GameMenuActivity extends AppCompatActivity implements View.OnClickL
     // Intent Key
     private static final String INTENT_KEY_GAME_MANAGER = "GAME_MANAGER";
 
-    ConnectDotDatabaseMgr connectDotDatabaseMgr;
+    GameDatabaseController gameDatabaseController;
 
 
     @Override
@@ -49,7 +48,7 @@ public class GameMenuActivity extends AppCompatActivity implements View.OnClickL
         setContentView(R.layout.activity_select_game_level);
 
         // Link database manager
-        connectDotDatabaseMgr = new ConnectDotDatabaseMgr();
+        gameDatabaseController = new GameDatabaseController();
 
         // Initialize XML Elements to use
         btnBack = findViewById(R.id.btn_back);
@@ -125,25 +124,25 @@ public class GameMenuActivity extends AppCompatActivity implements View.OnClickL
 
 
     private void startGame(Level levelInfo) {
-        this.gameMgr = new GameMgr(levelInfo);
-        connectDotDatabaseMgr.loadNodeData(gameMgr, new ConnectDotDatabaseMgr.onCompleteDataLoad() {
+        this.gameController = new GameController(levelInfo);
+        gameDatabaseController.loadNodeData(gameController, new GameDatabaseController.onCompleteDataLoad() {
             @Override
             public void onComplete(ArrayList<Node> preprocessedNodes, String[] cordString, int gameLevel) {
-                // Load game level object to ConenctDot attribute inside gameMgr and change activity.
+                // Load game level object to ConenctDot attribute inside gameController and change activity.
                 // Save image URL for guess part
-                String gameName = gameMgr.getLevelInfo().getGameName();
+                String gameName = gameController.getLevelInfo().getGameName();
                 String storageUrl = Constants.FIREBASE_STORAGE_URL + gameName + ".jpg";
                 ConnectDots levelObject = new ConnectDots(gameName, cordString, gameLevel, storageUrl);
-                gameMgr.setConnectDotsLevelObject(levelObject);
-                gameMgr.setNodeList(preprocessedNodes); // Get from database first but cannot scale yet
+                gameController.setConnectDotsLevelObject(levelObject);
+                gameController.setNodeList(preprocessedNodes); // Get from database first but cannot scale yet
                 Intent intent = new Intent(GameMenuActivity.this, ConnectDotsActivity.class);
-                intent.putExtra(Constants.INTENT_KEY_GAME_MANAGER, gameMgr);
+                intent.putExtra(Constants.INTENT_KEY_GAME_MANAGER, gameController);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
             }
         });
 //        intent = new Intent(GameMenuActivity.this, ConnectDotsActivity.class);
-//        intent.putExtra(INTENT_KEY_GAME_MANAGER, gameMgr);
+//        intent.putExtra(INTENT_KEY_GAME_MANAGER, gameController);
 //        startActivity(intent);
 //        Intent intent = new Intent(gameMenuActivity, ConnectDotsActivity.class);
 //        intent.putExtra(Constants.INTENT_KEY_GAME_MANAGER, currentGameManagerInstance);

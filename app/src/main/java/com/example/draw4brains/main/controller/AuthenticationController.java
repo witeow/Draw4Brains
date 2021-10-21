@@ -1,20 +1,15 @@
 package com.example.draw4brains.main.controller;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.text.TextUtils;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import com.example.draw4brains.games.connectthedots.controller.ConnectDotDatabaseMgr;
 import com.example.draw4brains.main.model.Admin;
-import com.example.draw4brains.games.connectthedots.model.Score;
 import com.example.draw4brains.main.model.User;
 import com.example.draw4brains.main.view.AdminHomeActivity;
-import com.example.draw4brains.main.view.LoginActivity;
 import com.example.draw4brains.main.view.UserHomeActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -27,7 +22,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-public class AuthenticationMgr {
+public class AuthenticationController {
 
     private User currentUser;
     private Admin currentAdmin;
@@ -35,7 +30,7 @@ public class AuthenticationMgr {
     private Intent intent;
     private FirebaseAuth auth;
 
-    public AuthenticationMgr() {
+    public AuthenticationController() {
         auth = FirebaseAuth.getInstance();
     }
 

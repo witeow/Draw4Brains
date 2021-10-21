@@ -11,9 +11,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.draw4brains.R;
-import com.example.draw4brains.games.connectthedots.model.Score;
-import com.example.draw4brains.main.controller.AuthenticationMgr;
-import com.example.draw4brains.main.controller.MasterMgr;
+import com.example.draw4brains.main.controller.AuthenticationController;
+import com.example.draw4brains.main.controller.MasterController;
 
 public class AccountActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -30,7 +29,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
     private TextView tvNextOfKinNum;
     private ImageButton btnBack, btnLogout;
     private Intent intent;
-    private AuthenticationMgr authenticationMgr;
+    private AuthenticationController authenticationController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +38,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         setContentView(R.layout.activity_account_settings);
 
         // Get reference to controller classes needed.
-        authenticationMgr = MasterMgr.authenticationMgr;
+        authenticationController = MasterController.authenticationController;
 
         // Initialize XML Elements to use
         btnBack = findViewById(R.id.btn_back);
@@ -61,12 +60,12 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         btnLogout.setOnClickListener(this);
 
         // Retrieve information from static variables to display on screen
-        if (authenticationMgr.isCurrentlyAdmin()) {
+        if (authenticationController.isCurrentlyAdmin()) {
 
             // Display information of admin
-            tvName.setText(authenticationMgr.getCurrentAdmin().getAdminName());
-            tvPhone.setText(authenticationMgr.getCurrentAdmin().getPhoneNo());
-            tvEmail.setText(authenticationMgr.getCurrentAdmin().getEmailAddress());
+            tvName.setText(authenticationController.getCurrentAdmin().getAdminName());
+            tvPhone.setText(authenticationController.getCurrentAdmin().getPhoneNo());
+            tvEmail.setText(authenticationController.getCurrentAdmin().getEmailAddress());
 
             linearLayout.removeView(tvGender);
             linearLayout.removeView(tvBirthday);
@@ -86,16 +85,16 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
 
         } else {
             // Display information of normal user
-            tvName.setText(authenticationMgr.getCurrentUser().getUserName());
-            tvGender.setText(authenticationMgr.getCurrentUser().getGender());
-            tvBirthday.setText(authenticationMgr.getCurrentUser().getBirthday());
-            tvPhone.setText(authenticationMgr.getCurrentUser().getPhoneNo());
-            tvHouseNum.setText(authenticationMgr.getCurrentUser().getHouseNo());
-            tvAddress.setText(authenticationMgr.getCurrentUser().getAddress());
-            tvEmail.setText(authenticationMgr.getCurrentUser().getEmailAddress());
-            tvCaretakerEmail.setText(authenticationMgr.getCurrentUser().getCaretaker_email());
-            tvNextOfKinName.setText(authenticationMgr.getCurrentUser().getNokName());
-            tvNextOfKinNum.setText(authenticationMgr.getCurrentUser().getNokNum());
+            tvName.setText(authenticationController.getCurrentUser().getUserName());
+            tvGender.setText(authenticationController.getCurrentUser().getGender());
+            tvBirthday.setText(authenticationController.getCurrentUser().getBirthday());
+            tvPhone.setText(authenticationController.getCurrentUser().getPhoneNo());
+            tvHouseNum.setText(authenticationController.getCurrentUser().getHouseNo());
+            tvAddress.setText(authenticationController.getCurrentUser().getAddress());
+            tvEmail.setText(authenticationController.getCurrentUser().getEmailAddress());
+            tvCaretakerEmail.setText(authenticationController.getCurrentUser().getCaretaker_email());
+            tvNextOfKinName.setText(authenticationController.getCurrentUser().getNokName());
+            tvNextOfKinNum.setText(authenticationController.getCurrentUser().getNokNum());
         }
 
     }
@@ -112,7 +111,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_back:
-                this.backToHomeScreen(authenticationMgr.isCurrentlyAdmin());
+                this.backToHomeScreen(authenticationController.isCurrentlyAdmin());
                 break;
             case R.id.btn_logout:
                 this.logout();
@@ -121,7 +120,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void logout() {
-        authenticationMgr.logout(new AuthenticationMgr.callBackOnLogout() {
+        authenticationController.logout(new AuthenticationController.callBackOnLogout() {
             @Override
             public void onComplete() {
                 Toast.makeText(AccountActivity.this, "Logging out!", Toast.LENGTH_SHORT).show();

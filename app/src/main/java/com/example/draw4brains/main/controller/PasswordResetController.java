@@ -2,11 +2,11 @@ package com.example.draw4brains.main.controller;
 
 import com.google.firebase.auth.FirebaseAuth;
 
-public class PasswordResetMgr {
+public class PasswordResetController {
 
     FirebaseAuth auth;
 
-    public PasswordResetMgr() {
+    public PasswordResetController() {
         auth = FirebaseAuth.getInstance();
     }
     ;

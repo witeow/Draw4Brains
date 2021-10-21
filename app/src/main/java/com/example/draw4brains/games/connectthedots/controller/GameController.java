@@ -11,15 +11,15 @@ import android.util.Log;
 import android.widget.ImageView;
 
 
-import com.example.draw4brains.games.connectthedots.model.ConnectDots;
-import com.example.draw4brains.games.connectthedots.model.Constants;
-import com.example.draw4brains.games.connectthedots.model.Level;
-import com.example.draw4brains.games.connectthedots.model.Node;
+import com.example.draw4brains.games.connectthedots.object.ConnectDots;
+import com.example.draw4brains.games.connectthedots.object.Constants;
+import com.example.draw4brains.games.connectthedots.object.Level;
+import com.example.draw4brains.games.connectthedots.object.Node;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class GameMgr implements Serializable {
+public class GameController implements Serializable {
 
     // Basic Level Information
     private Level levelInfo;
@@ -35,7 +35,7 @@ public class GameMgr implements Serializable {
     private String endNode = null;
     private int radiusOfNodes;
 
-    public GameMgr(Level levelInfo) {
+    public GameController(Level levelInfo) {
         this.levelInfo = levelInfo;
         scoreConnect = 0;
         scoreGuess = 0;

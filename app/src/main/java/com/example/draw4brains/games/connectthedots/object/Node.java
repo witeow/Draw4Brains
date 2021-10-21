@@ -1,9 +1,5 @@
-package com.example.draw4brains.games.connectthedots.model;
+package com.example.draw4brains.games.connectthedots.object;
 
-import android.graphics.Color;
-import android.os.Parcel;
-import android.os.Parcelable;
-import android.util.Log;
 import android.widget.ImageView;
 
 import androidx.annotation.ColorInt;

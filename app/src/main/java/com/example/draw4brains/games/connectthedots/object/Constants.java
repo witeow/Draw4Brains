@@ -1,4 +1,4 @@
-package com.example.draw4brains.games.connectthedots.model;
+package com.example.draw4brains.games.connectthedots.object;
 
 public final class Constants {
 

@@ -16,8 +16,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.draw4brains.R;
-import com.example.draw4brains.main.controller.MasterMgr;
-import com.example.draw4brains.main.controller.RegisterMgr;
+import com.example.draw4brains.main.controller.MasterController;
+import com.example.draw4brains.main.controller.RegisterController;
 
 import java.util.Calendar;
 
@@ -29,7 +29,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private EditText email, firstName, lastName, pass, rePass, phoneNo, homePhoneNo, address, birthday, nokName, nokPhone, chooseAdmin;
     private DatePickerDialog picker;
     private RadioGroup genderChoice;
-    private RegisterMgr registerMgr;
+    private RegisterController registerController;
     private Intent intent;
 
     // Intent Keys for Fields
@@ -54,8 +54,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         setContentView(R.layout.activity_register);
 
         // Get reference to controller classes needed.
-        MasterMgr.registerMgr.loadActivityAndElements(RegisterActivity.this); // Load activity
-        registerMgr = MasterMgr.registerMgr;
+        MasterController.registerController.loadActivityAndElements(RegisterActivity.this); // Load activity
+        registerController = MasterController.registerController;
 
         // Initialize XML Elements to use
         btnBack = findViewById(R.id.btn_back);
@@ -138,7 +138,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 startActivity(loadUsers);
                 break;
             case R.id.btn_register:
-                registerMgr.registerUser(new RegisterMgr.onCallBackFailRegisterResult() {
+                registerController.registerUser(new RegisterController.onCallBackFailRegisterResult() {
                     @Override
                     public void onFailure() {
                         Log.d("RegisterAttempt", "Failed");

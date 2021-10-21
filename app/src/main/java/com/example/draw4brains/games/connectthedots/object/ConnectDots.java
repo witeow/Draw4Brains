@@ -1,9 +1,6 @@
-package com.example.draw4brains.games.connectthedots.model;
+package com.example.draw4brains.games.connectthedots.object;
 
 import android.widget.ImageView;
-
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import java.io.Serializable;
 

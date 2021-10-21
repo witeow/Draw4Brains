@@ -8,9 +8,9 @@ import android.widget.ImageButton;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.draw4brains.R;
-import com.example.draw4brains.games.connectthedots.controller.ConnectDotDatabaseMgr;
-import com.example.draw4brains.games.connectthedots.model.Score;
-import com.example.draw4brains.main.controller.MasterMgr;
+import com.example.draw4brains.games.connectthedots.controller.GameDatabaseController;
+import com.example.draw4brains.games.connectthedots.object.Score;
+import com.example.draw4brains.main.controller.MasterController;
 
 public class SelectGameActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -36,11 +36,11 @@ public class SelectGameActivity extends AppCompatActivity implements View.OnClic
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.connectDotGame:
-                ConnectDotDatabaseMgr connectDotDatabaseMgr = new ConnectDotDatabaseMgr();
-                connectDotDatabaseMgr.getScoreFromDatabase(MasterMgr.authenticationMgr.getCurrentUser().getUserID(), new ConnectDotDatabaseMgr.onCallBackUserScore() {
+                GameDatabaseController gameDatabaseController = new GameDatabaseController();
+                gameDatabaseController.getScoreFromDatabase(MasterController.authenticationController.getCurrentUser().getUserID(), new GameDatabaseController.onCallBackUserScore() {
                     @Override
                     public void onCallback(Score score) {
-                        MasterMgr.authenticationMgr.getCurrentUser().setScore(score);
+                        MasterController.authenticationController.getCurrentUser().setScore(score);
                         intent = new Intent(SelectGameActivity.this, CONNECT_THE_DOT_REFERENCE_POINT);
                         startActivity(intent);
                     }
