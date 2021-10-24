@@ -8,6 +8,9 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="light_grey">#D0D3C3</color>
+    <color name="dark_grey">#ADADAA</color>
+    <color name="sky_blue">#ADD7F8</color>
+    <color name="biege">#E6C1A1</color>
     <color name="transparent">#00000000</color>
     <color name="red">#FF7777</color>
     <color name="light_blue">#1DD4FC</color>
